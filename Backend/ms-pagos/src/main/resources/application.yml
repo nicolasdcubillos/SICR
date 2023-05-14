@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: dev
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+      format_sql: true
+      dialect: org.hibernate.dialect.MySQL5DBDialect
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    url: jdbc:mysql://database-sicr.cbtbx79jvpr1.us-east-2.rds.amazonaws.com/sicr_db
+    username: admin
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+server:
+  port: 8081
