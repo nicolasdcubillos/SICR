@@ -31,9 +31,7 @@ public class CategoriaController {
     @RequestMapping(value = "/crear", method = RequestMethod.POST)
     public @ResponseBody RespuestaServicioVO crear(@RequestBody Categoria categoria) {
         return service.crear(categoria);
-
     }
-
     @CrossOrigin(origins = origen)
     @RequestMapping(value = "/actualizar", method = RequestMethod.POST)
     public @ResponseBody RespuestaServicioVO actualizar(@RequestBody Categoria categoria) {
