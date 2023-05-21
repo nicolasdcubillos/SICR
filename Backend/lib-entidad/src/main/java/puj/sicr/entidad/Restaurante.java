@@ -1,5 +1,7 @@
 package puj.sicr.entidad;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+
+import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,7 +31,8 @@ public class Restaurante {
     @Column(nullable = false)
     private String nombre;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "restaurante")
-    private Set<SedeRestaurante> restauranteSedeRestaurantes;
+    private List<SedeRestaurante> restauranteSedeRestaurantes;
 
 }

@@ -10,6 +10,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+
+import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,13 +42,14 @@ public class Miembro {
     private String telefono;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sedeRestauranteId", nullable = false)
+    private SedeRestaurante sedeRestaurante;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tipoMiembroId", nullable = false)
     private TipoMiembro tipoMiembro;
 
     @OneToMany(mappedBy = "miembro")
-    private Set<Pedido> miembroPedidos;
-
-    @OneToMany(mappedBy = "miembro")
-    private Set<SedeRestaurante> miembroSedeRestaurantes;
+    private List<Pedido> miembroPedidos;
 
 }

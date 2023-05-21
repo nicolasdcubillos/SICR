@@ -10,6 +10,17 @@ import java.util.List;
 
 
 public interface ItemSedeRestauranteRepository extends JpaRepository<ItemSedeRestaurante, Integer> {
-    @Query("SELECT c FROM EstadoProducto	c ")
+    @Query("SELECT c FROM ItemSedeRestaurante	c ")
     List<ItemSedeRestaurante> getByPage(Pageable pageable);
+
+    @Query("SELECT c FROM ItemSedeRestaurante c" +
+            " WHERE c.cantidad >= :cantidad AND c.item.id = :id " +
+            " AND c.sedeRestaurante.restaurante.id = :restauranteId" +
+            " ORDER BY c.cantidad")
+    List <ItemSedeRestaurante> findByItemIdDisponiblesAndRestauranteId(Integer id, Integer restauranteId, Integer cantidad);
+
+
+    @Query("SELECT c FROM ItemSedeRestaurante c" +
+            " WHERE c.sedeRestaurante.id = :sedeRestauranteId and c.item.id = :itemId")
+    ItemSedeRestaurante getByItemIdAndSedeRestauranteId(Integer itemId, Integer sedeRestauranteId);
 }

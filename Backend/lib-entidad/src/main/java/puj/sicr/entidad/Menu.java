@@ -10,6 +10,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+
+import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,6 +40,6 @@ public class Menu {
     private SedeRestaurante sedeRestaurante;
 
     @OneToMany(mappedBy = "menu")
-    private Set<MenuProducto> menuMenuProductos;
+    private List<MenuProducto> menuMenuProductos;
 
 }

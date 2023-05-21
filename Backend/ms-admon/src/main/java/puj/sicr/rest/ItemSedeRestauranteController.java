@@ -2,6 +2,7 @@ package puj.sicr.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import puj.sicr.dto.SolicitarInventarioDto;
 import puj.sicr.entidad.Item;
 import puj.sicr.entidad.ItemSedeRestaurante;
 import puj.sicr.service.ItemSedeRestauranteService;

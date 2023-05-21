@@ -21,7 +21,7 @@ public class ProductoItem {
     @Id
     @Column(nullable = false, updatable = false)
     @GeneratedValue(
-            strategy = GenerationType.IDENTITY
+        strategy = GenerationType.IDENTITY
     )
     private Integer id;
 

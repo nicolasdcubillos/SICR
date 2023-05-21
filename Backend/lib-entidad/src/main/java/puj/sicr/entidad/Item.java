@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+
+import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,12 +33,12 @@ public class Item {
     private Double costoUnitario;
 
     @OneToMany(mappedBy = "item")
-    private Set<TransferenciaItem> itemTransferenciaItems;
+    private List<TransferenciaItem> itemTransferenciaItems;
 
     @OneToMany(mappedBy = "item")
-    private Set<ItemSedeRestaurante> itemItemSedeRestaurantes;
+    private List<ItemSedeRestaurante> itemItemSedeRestaurantes;
 
     @OneToMany(mappedBy = "item")
-    private Set<ProductoItem> itemProductoItems;
+    private List<ProductoItem> itemProductoItems;
 
 }

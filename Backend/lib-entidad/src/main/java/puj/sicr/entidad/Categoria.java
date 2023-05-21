@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+
+import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,13 +21,15 @@ public class Categoria {
 
     @Id
     @Column(nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+        strategy = GenerationType.IDENTITY
+    )
     private Integer id;
 
     @Column(nullable = false)
     private String nombre;
 
     @OneToMany(mappedBy = "categoria")
-    private Set<Producto> categoriaProductos;
+    private List<Producto> categoriaProductos;
 
 }

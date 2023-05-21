@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+
+import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,6 +33,6 @@ public class EstadoProducto {
     private String descripcion;
 
     @OneToMany(mappedBy = "estadoProducto")
-    private Set<Producto> estadoProductoProductos;
+    private List<Producto> estadoProductoProductos;
 
 }

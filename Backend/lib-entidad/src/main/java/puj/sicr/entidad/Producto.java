@@ -10,6 +10,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+
+import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,20 +36,20 @@ public class Producto {
     private String nombre;
 
     @OneToMany(mappedBy = "producto")
-    private Set<MenuProducto> productoMenuProductos;
+    private List<MenuProducto> productoMenuProductos;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoriaId", nullable = false)
     private Categoria categoria;
 
     @OneToMany(mappedBy = "producto")
-    private Set<ProductoPedido> productoProductoPedidos;
+    private List<ProductoPedido> productoProductoPedidos;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estadoProductoId", nullable = false)
     private EstadoProducto estadoProducto;
 
     @OneToMany(mappedBy = "producto")
-    private Set<ProductoItem> productoProductoItems;
+    private List<ProductoItem> productoProductoItems;
 
 }

@@ -1,5 +1,7 @@
 package puj.sicr.entidad;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,30 +52,37 @@ public class SedeRestaurante {
     @Column(nullable = false)
     private Integer capacidad;
 
+    @OneToMany(mappedBy = "sedeRestaurante")
+    @JsonIgnore
+    private List<Miembro> sedeRestauranteMiembros;
+
     @OneToMany(mappedBy = "sedeRestauranteDestino")
-    private Set<TransferenciaItem> sedeRestauranteDestinoTransferenciaItems;
+    @JsonIgnore
+    private List<TransferenciaItem> sedeRestauranteDestinoTransferenciaItems;
 
     @OneToMany(mappedBy = "sedeRestauranteOrigen")
-    private Set<TransferenciaItem> sedeRestauranteOrigenTransferenciaItems;
+    @JsonIgnore
+    private List<TransferenciaItem> sedeRestauranteOrigenTransferenciaItems;
 
     @OneToMany(mappedBy = "sedeRestaurante")
-    private Set<Menu> sedeRestauranteMenus;
+    @JsonIgnore
+    private List<Menu> sedeRestauranteMenus;
 
     @OneToMany(mappedBy = "sedeRestaurante")
-    private Set<ItemSedeRestaurante> sedeRestauranteItemSedeRestaurantes;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "miembroId", nullable = false)
-    private Miembro miembro;
+    @JsonIgnore
+    private List<ItemSedeRestaurante> sedeRestauranteItemSedeRestaurantes;
 
     @OneToMany(mappedBy = "sedeRestaurante")
-    private Set<Pedido> sedeRestaurantePedidos;
+    @JsonIgnore
+    private List<Pedido> sedeRestaurantePedidos;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restauranteId", nullable = false)
+    @JsonIgnore
     private Restaurante restaurante;
 
     @OneToMany(mappedBy = "sedeRestaurante")
-    private Set<Reserva> sedeRestauranteReservas;
+    @JsonIgnore
+    private List<Reserva> sedeRestauranteReservas;
 
 }
