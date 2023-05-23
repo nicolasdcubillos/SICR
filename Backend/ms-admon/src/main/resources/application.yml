@@ -20,3 +20,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 server:
   port: 8080
+sicr:
+  seguridad:
+    semilla: 'ae717188d95641b046cfeef1c5c13e7c32e45a2e6a1179344cb91092f39f620c'
