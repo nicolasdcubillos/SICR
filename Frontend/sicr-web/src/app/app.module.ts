@@ -19,7 +19,6 @@ import { GestionarCategoriaComponent } from './components/gestionar-categoria/ge
 import { GestionarRestaurantesComponent } from './components/gestionar-restaurantes/gestionar-restaurantes.component';
 import { GestionarSedesComponent } from './components/gestionar-sedes/gestionar-sedes.component';
 import { HomeClienteComponent } from './components/home-cliente/home-cliente.component';
-import { LeftNavbarComponent } from './components/left-navbar/left-navbar.component';
 
 @NgModule({
   declarations: [
@@ -36,8 +35,7 @@ import { LeftNavbarComponent } from './components/left-navbar/left-navbar.compon
     GestionarCategoriaComponent,
     GestionarRestaurantesComponent,
     GestionarSedesComponent,
-    HomeClienteComponent,
-    LeftNavbarComponent
+    HomeClienteComponent
   ],
   imports: [
     BrowserModule,
