@@ -19,9 +19,37 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     - 
-      name: Build and push
+      name: Build and push ms-seguridad
       uses: docker/build-push-action@v4
       with:
         context: ./Backend/ms-seguridad/
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/img-ms-seguridad:v1.0
+    - 
+      name: Build and push ms-admon
+      uses: docker/build-push-action@v4
+      with:
+        context: ./Backend/ms-admon/
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/img-ms-admon:v1.0
+    - 
+      name: Build and push ms-reservas
+      uses: docker/build-push-action@v4
+      with:
+        context: ./Backend/ms-reservas/
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/img-ms-reservas:v1.0
+    - 
+      name: Build and push ms-pedidos
+      uses: docker/build-push-action@v4
+      with:
+        context: ./Backend/ms-pedidos/
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/img-ms-pedidos:v1.0
+    - 
+      name: Build and push ms-pagos
+      uses: docker/build-push-action@v4
+      with:
+        context: ./Backend/ms-pagos/
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/img-ms-pagos:v1.0
