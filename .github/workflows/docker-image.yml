@@ -24,4 +24,4 @@ jobs:
       with:
         context: ./Backend/ms-seguridad/
         push: true
-        tags: nicolasdcubillos/img-ms-seguridad:v1.0
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/img-ms-seguridad:v1.0
