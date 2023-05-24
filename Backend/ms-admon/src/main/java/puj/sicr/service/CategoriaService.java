@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import puj.sicr.entidad.Categoria;
+import puj.sicr.entidad.Menu;
 import puj.sicr.repository.CategoriaRepository;
 import puj.sicr.vo.RespuestaServicioVO;
 
@@ -20,7 +21,6 @@ public class CategoriaService {
 
     @Autowired
     private CategoriaRepository repository;
-
     public RespuestaServicioVO getById(Integer id) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
@@ -33,7 +33,6 @@ public class CategoriaService {
             respuesta.setExitosa(false);
             logger.error(e.getMessage());
         } catch (Exception e) {
-
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
             respuesta.setDescripcionExcepcion(e.getMessage());

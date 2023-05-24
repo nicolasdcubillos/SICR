@@ -9,9 +9,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import puj.sicr.dto.SolicitarInventarioDto;
+import puj.sicr.entidad.Item;
 import puj.sicr.entidad.ItemSedeRestaurante;
+import puj.sicr.entidad.Restaurante;
+import puj.sicr.entidad.SedeRestaurante;
 import puj.sicr.repository.ItemSedeRestauranteRepository;
 import puj.sicr.vo.RespuestaServicioVO;
+
+import java.util.List;
 
 @Service
 public class ItemSedeRestauranteService {
@@ -55,7 +61,6 @@ public class ItemSedeRestauranteService {
             respuesta.setDescripcionExcepcion(e.getMessage());
             logger.error(e.getMessage());
         }
-        ;
         return respuesta;
     }
 
@@ -192,4 +197,47 @@ public class ItemSedeRestauranteService {
         respuesta.setDescripcionRespuesta("Transacción exitosa.");
         return respuesta;
     }
+
+    public RespuestaServicioVO findByItemIdDisponiblesAndRestauranteId(Integer id, Integer restauranteId, Integer cantidad) {
+        RespuestaServicioVO respuesta = new RespuestaServicioVO();
+        try {
+            List <ItemSedeRestaurante> itemSedeRestaurante = repository.findByItemIdDisponiblesAndRestauranteId(id, restauranteId, cantidad);
+            respuesta.setObjeto(itemSedeRestaurante);
+            respuesta.setExitosa(true);
+            respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
+        } catch (DataAccessException e) {
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            logger.error(e.getMessage());
+        } catch (Exception e) {
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            respuesta.setDescripcionExcepcion(e.getMessage());
+            logger.error(e.getMessage());
+        }
+        return respuesta;
+    }
+
+    public RespuestaServicioVO getByItemIdAndSedeRestauranteId(Integer itemId, Integer sedeRestauranteId) {
+        RespuestaServicioVO respuesta = new RespuestaServicioVO();
+        try {
+            ItemSedeRestaurante itemSedeRestaurante = repository.getByItemIdAndSedeRestauranteId(itemId, sedeRestauranteId);
+            respuesta.setObjeto(itemSedeRestaurante);
+            respuesta.setExitosa(true);
+            respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
+        } catch (DataAccessException e) {
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            logger.error(e.getMessage());
+        } catch (Exception e) {
+
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            respuesta.setDescripcionExcepcion(e.getMessage());
+            logger.error(e.getMessage());
+        }
+        return respuesta;
+    }
+
+
 }

@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,6 +55,6 @@ public class Pedido {
     private Usuario usuario;
 
     @OneToMany(mappedBy = "pedido")
-    private Set<ProductoPedido> pedidoProductoPedidos;
+    private List<ProductoPedido> pedidoProductoPedidos;
 
 }

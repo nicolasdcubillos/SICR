@@ -37,7 +37,7 @@ public class TransferenciaItem {
     private Item item;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sedeRestauranteDestinoId", nullable = false)
+    @JoinColumn(name = "sedeRestaurantedestinoId", nullable = false)
     private SedeRestaurante sedeRestauranteDestino;
 
     @ManyToOne(fetch = FetchType.LAZY)

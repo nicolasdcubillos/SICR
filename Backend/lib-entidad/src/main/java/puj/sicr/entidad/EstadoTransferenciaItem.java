@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+
+import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,9 +27,9 @@ public class EstadoTransferenciaItem {
     private Integer id;
 
     @Column(nullable = false)
-    private Integer nombre;
+    private String nombre;
 
     @OneToMany(mappedBy = "estadoTransferenciaItem")
-    private Set<TransferenciaItem> estadoTransferenciaItemTransferenciaItems;
+    private List<TransferenciaItem> estadoTransferenciaItemTransferenciaItems;
 
 }

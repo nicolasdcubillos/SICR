@@ -96,6 +96,7 @@ public class UsuarioService {
     public RespuestaServicioVO crear(Usuario usuario) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
+            usuario.setUsername(usuario.getUsername().toUpperCase());
             respuesta = crearTX(usuario);
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);

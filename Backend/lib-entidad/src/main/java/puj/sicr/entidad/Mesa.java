@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+
+import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +30,6 @@ public class Mesa {
     private Integer asientos;
 
     @OneToMany(mappedBy = "mesa")
-    private Set<ReservaMesa> mesaReservaMesas;
+    private List<ReservaMesa> mesaReservaMesas;
 
 }

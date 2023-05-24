@@ -31,7 +31,6 @@ public class UsuarioController {
     @RequestMapping(value = "/crear", method = RequestMethod.POST)
     public @ResponseBody RespuestaServicioVO crear(@RequestBody Usuario usuario) {
         return service.crear(usuario);
-
     }
 
     @CrossOrigin(origins = origen)

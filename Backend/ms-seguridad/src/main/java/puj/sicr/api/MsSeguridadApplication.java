@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan({"puj.sicr.*"})
 @EntityScan(basePackages = {"puj.sicr.entidad"})
 @EnableJpaRepositories(basePackages = {"puj.sicr.repository"})
-
 public class MsSeguridadApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MsSeguridadApplication.class, args);

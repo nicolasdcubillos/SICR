@@ -1,5 +1,6 @@
 package puj.sicr.entidad;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,6 +11,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+
+import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +26,7 @@ public class Usuario {
     @Id
     @Column(nullable = false, updatable = false)
     @GeneratedValue(
-        strategy = GenerationType.IDENTITY
+            strategy = GenerationType.IDENTITY
     )
     private Integer id;
 
@@ -55,13 +58,13 @@ public class Usuario {
     private String longitud;
 
     @OneToMany(mappedBy = "usuario")
-    private Set<Pedido> usuarioPedidos;
+    private List<Pedido> usuarioPedidos;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tipoUsuarioId", nullable = false)
     private TipoUsuario tipoUsuario;
 
     @OneToMany(mappedBy = "usuario")
-    private Set<Reserva> usuarioReservas;
+    private List<Reserva> usuarioReservas;
 
 }

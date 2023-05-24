@@ -11,7 +11,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 @ComponentScan({"puj.sicr.*"})
 @EntityScan(basePackages = {"puj.sicr.entidad"})
 @EnableJpaRepositories(basePackages = {"puj.sicr.repository"})
-@EnableSwagger2WebMvc
 public class MsPagosApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MsPagosApplication.class, args);

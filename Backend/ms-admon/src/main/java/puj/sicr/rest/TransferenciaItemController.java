@@ -2,6 +2,7 @@ package puj.sicr.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import puj.sicr.dto.SolicitarInventarioDto;
 import puj.sicr.entidad.TransferenciaItem;
 import puj.sicr.service.TransferenciaItemService;
 import puj.sicr.vo.RespuestaServicioVO;
@@ -44,5 +45,15 @@ public class TransferenciaItemController {
     @RequestMapping(value = "/eliminar", method = RequestMethod.GET)
     public @ResponseBody RespuestaServicioVO eliminar(Integer id) {
         return service.eliminar(id);
+    }
+    @CrossOrigin(origins = origen)
+    @RequestMapping(value = "/solicitarInventario", method = RequestMethod.POST)
+    public @ResponseBody RespuestaServicioVO solicitarInventario(@RequestBody SolicitarInventarioDto solicitarInventarioDto) {
+        return service.solicitarInventario(solicitarInventarioDto);
+    }
+    @CrossOrigin(origins = origen)
+    @RequestMapping(value = "/actualizarEstadoTransferencia", method = RequestMethod.POST)
+    public @ResponseBody RespuestaServicioVO actualizarEstadoTransferencia(Integer id) {
+        return service.actualizarEstadoTransferencia(id);
     }
 }
