@@ -1,5 +1,7 @@
 package puj.sicr.entidad;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,6 +32,7 @@ public class Categoria {
     private String nombre;
 
     @OneToMany(mappedBy = "categoria")
-    private List<Producto> categoriaProductos;
+     @JsonIgnore
+     private List<Producto> categoriaProductos;
 
 }

@@ -1,5 +1,6 @@
 package puj.sicr.entidad;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,6 +31,7 @@ public class EstadoTransferenciaItem {
     private String nombre;
 
     @OneToMany(mappedBy = "estadoTransferenciaItem")
-    private List<TransferenciaItem> estadoTransferenciaItemTransferenciaItems;
+    @JsonIgnore
+     private List<TransferenciaItem> estadoTransferenciaItemTransferenciaItems;
 
 }

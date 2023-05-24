@@ -1,5 +1,6 @@
 package puj.sicr.entidad;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,12 +34,15 @@ public class Item {
     private Double costoUnitario;
 
     @OneToMany(mappedBy = "item")
-    private List<TransferenciaItem> itemTransferenciaItems;
+    @JsonIgnore
+     private List<TransferenciaItem> itemTransferenciaItems;
 
     @OneToMany(mappedBy = "item")
-    private List<ItemSedeRestaurante> itemItemSedeRestaurantes;
+    @JsonIgnore
+     private List<ItemSedeRestaurante> itemItemSedeRestaurantes;
 
     @OneToMany(mappedBy = "item")
-    private List<ProductoItem> itemProductoItems;
+    @JsonIgnore
+     private List<ProductoItem> itemProductoItems;
 
 }
