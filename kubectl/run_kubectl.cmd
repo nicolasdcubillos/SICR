@@ -1,1 +1,1 @@
-kubectl apply -f ms-seguridad.yml
+kubectl apply -f yml/ms-seguridad.yml
