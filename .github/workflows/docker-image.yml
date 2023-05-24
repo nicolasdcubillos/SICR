@@ -22,6 +22,7 @@ jobs:
       name: Build and push
       uses: docker/build-push-action@v4
       with:
-        context: "{{defaultContext}}:Backend/ms-seguridad/"
+        context: .
+        file: Backend/ms-seguridad/Dockerfile
         push: true
         tags: nicolasdcubillos/img-ms-seguridad:v1.0
