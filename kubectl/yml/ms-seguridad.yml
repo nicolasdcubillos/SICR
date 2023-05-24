@@ -9,7 +9,7 @@ spec:
     - protocol: TCP
       port: 8085
       targetPort: 8085
-  type: NodePort
+  type: LoadBalancer
 
 ---
 apiVersion: apps/v1
@@ -31,3 +31,8 @@ spec:
           image: nicolasdcubillos/img-ms-seguridad:v1.0
           ports:
             - containerPort: 8085
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              memory: 512Mi
