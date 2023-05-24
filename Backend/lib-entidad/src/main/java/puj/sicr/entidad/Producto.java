@@ -1,5 +1,6 @@
 package puj.sicr.entidad;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -36,20 +37,25 @@ public class Producto {
     private String nombre;
 
     @OneToMany(mappedBy = "producto")
-    private List<MenuProducto> productoMenuProductos;
+    @JsonIgnore
+     private List<MenuProducto> productoMenuProductos;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoriaId", nullable = false)
+    @JsonIgnore
     private Categoria categoria;
 
     @OneToMany(mappedBy = "producto")
-    private List<ProductoPedido> productoProductoPedidos;
+    @JsonIgnore
+     private List<ProductoPedido> productoProductoPedidos;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estadoProductoId", nullable = false)
+    @JsonIgnore
     private EstadoProducto estadoProducto;
 
     @OneToMany(mappedBy = "producto")
-    private List<ProductoItem> productoProductoItems;
+    @JsonIgnore
+     private List<ProductoItem> productoProductoItems;
 
 }

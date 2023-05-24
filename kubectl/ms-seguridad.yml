@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-seguridad-service
+spec:
+  selector:
+    app: ms-seguridad
+  ports:
+    - protocol: TCP
+      port: 8085
+      targetPort: 8085
+  type: NodePort
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-seguridad-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ms-seguridad
+  template:
+    metadata:
+      labels:
+        app: ms-seguridad
+    spec:
+      containers:
+        - name: ms-seguridad-container
+          image: nicolasdcubillos/img-ms-seguridad:v1.0
+          ports:
+            - containerPort: 8085

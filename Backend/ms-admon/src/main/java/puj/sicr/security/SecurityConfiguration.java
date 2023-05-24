@@ -39,7 +39,7 @@ public class SecurityConfiguration {
         http.cors().and().csrf().disable().authorizeHttpRequests()
                 .requestMatchers("/actuator/health**").permitAll()
                 .requestMatchers("/v3/api-docs", "/swagger-ui/**", "/configuration/ui", "/swagger-resources/**",
-                        "/configuration/security", "/swagger-ui.html", "/webjars/**")
+                        "/configuration/security", "/swagger-ui.html", "/webjars/**", "/error")
                 .permitAll().anyRequest().authenticated().and().exceptionHandling()
                 .authenticationEntryPoint(jwtEntryPoint).and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

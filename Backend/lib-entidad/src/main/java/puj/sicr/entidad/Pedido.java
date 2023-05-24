@@ -1,5 +1,6 @@
 package puj.sicr.entidad;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -40,21 +41,26 @@ public class Pedido {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "miembroId", nullable = false)
+    @JsonIgnore
     private Miembro miembro;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estadoPedidoId", nullable = false)
+    @JsonIgnore
     private EstadoPedido estadoPedido;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sedeRestauranteId", nullable = false)
+    @JsonIgnore
     private SedeRestaurante sedeRestaurante;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuarioId", nullable = false)
+    @JsonIgnore
     private Usuario usuario;
 
     @OneToMany(mappedBy = "pedido")
-    private List<ProductoPedido> pedidoProductoPedidos;
+    @JsonIgnore
+     private List<ProductoPedido> pedidoProductoPedidos;
 
 }
