@@ -40,13 +40,12 @@ body {
   .cards-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 20px; /* Ajuste del margen superior para evitar superposición */
-    margin-left: 200px;
+    justify-content: flex-end;
+    margin-top: 20px;
   }
   
   .card {
-    width: calc(33.33% - 20px);
+    width: 200px;
     height: 200px;
     background-color: #000;
     color: #fff;

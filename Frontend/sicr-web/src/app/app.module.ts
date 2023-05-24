@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule} from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,6 +19,7 @@ import { GestionarCategoriaComponent } from './components/gestionar-categoria/ge
 import { GestionarRestaurantesComponent } from './components/gestionar-restaurantes/gestionar-restaurantes.component';
 import { GestionarSedesComponent } from './components/gestionar-sedes/gestionar-sedes.component';
 import { HomeClienteComponent } from './components/home-cliente/home-cliente.component';
+import { LeftNavbarComponent } from './components/left-navbar/left-navbar.component';
 
 @NgModule({
   declarations: [
@@ -32,11 +36,16 @@ import { HomeClienteComponent } from './components/home-cliente/home-cliente.com
     GestionarCategoriaComponent,
     GestionarRestaurantesComponent,
     GestionarSedesComponent,
-    HomeClienteComponent
+    HomeClienteComponent,
+    LeftNavbarComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
