@@ -217,6 +217,7 @@ public class ProductoPedidoService {
 
     private ProductoPedido mapToEntity(final ProductoPedidoDTO productoPedidoDTO) {
         ProductoPedido productoPedido = new ProductoPedido();
+        productoPedido.setId(productoPedidoDTO.getId());
         productoPedido.setCantidad(productoPedidoDTO.getCantidad());
         final Producto producto = productoPedidoDTO.getProducto() == null ? null : productoRepository.findById(productoPedidoDTO.getProducto()).get();
         productoPedido.setProducto(producto);

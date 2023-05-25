@@ -216,6 +216,7 @@ public class ReservaMesaService {
 
     private ReservaMesa mapToEntity(final ReservaMesaDTO reservaMesaDTO) {
         ReservaMesa reservaMesa = new ReservaMesa();
+        reservaMesa.setId(reservaMesaDTO.getId());
         final Reserva reserva = reservaMesaDTO.getReserva() == null ? null : reservaRepository.findById(reservaMesaDTO.getReserva()).get();
         reservaMesa.setReserva(reserva);
         final Mesa mesa = reservaMesaDTO.getMesa() == null ? null : mesaRepository.findById(reservaMesaDTO.getMesa()).get();

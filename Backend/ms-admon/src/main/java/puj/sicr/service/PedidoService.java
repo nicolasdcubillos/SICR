@@ -228,6 +228,7 @@ public class PedidoService {
 
     private Pedido mapToEntity(final PedidoDTO pedidoDTO) {
         Pedido pedido = new Pedido();
+        pedido.setId(pedidoDTO.getId());
         pedido.setSubtotal(pedidoDTO.getSubtotal());
         pedido.setTotal(pedidoDTO.getTotal());
         pedido.setFecha(pedidoDTO.getFecha());

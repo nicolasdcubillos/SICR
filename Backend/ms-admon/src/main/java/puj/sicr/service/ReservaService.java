@@ -220,6 +220,7 @@ public class ReservaService {
 
     private Reserva mapToEntity(final ReservaDTO reservaDTO) {
         Reserva reserva = new Reserva();
+        reserva.setId(reservaDTO.getId());
         reserva.setAsientos(reservaDTO.getAsientos());
         reserva.setFecha(reservaDTO.getFecha());
         reserva.setHoras(reservaDTO.getHoras());

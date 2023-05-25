@@ -218,6 +218,7 @@ public class MenuProductoService {
 
     private MenuProducto mapToEntity(final MenuProductoDTO menuProductoDTO) {
         MenuProducto menuProducto = new MenuProducto();
+        menuProducto.setId(menuProductoDTO.getId());
         menuProducto.setNombre(menuProductoDTO.getNombre());
         menuProducto.setDescripcion(menuProductoDTO.getDescripcion());
         final Producto producto = menuProductoDTO.getProducto() == null ? null : productoRepository.findById(menuProductoDTO.getProducto()).get();
