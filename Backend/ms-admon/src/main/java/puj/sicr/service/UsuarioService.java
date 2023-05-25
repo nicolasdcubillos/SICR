@@ -220,6 +220,7 @@ public class UsuarioService {
 
     private Usuario mapToEntity(final UsuarioDTO usuarioDTO) {
         Usuario usuario = new Usuario();
+        usuario.setId(usuarioDTO.getId());
         usuario.setUsername(usuarioDTO.getUsername());
         usuario.setPassword(usuarioDTO.getPassword());
         usuario.setNombres(usuarioDTO.getNombres());
