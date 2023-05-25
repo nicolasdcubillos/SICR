@@ -9,9 +9,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import puj.sicr.dto.UsuarioDTO;
+import puj.sicr.entidad.TipoUsuario;
 import puj.sicr.entidad.Usuario;
+import puj.sicr.repository.TipoUsuarioRepository;
 import puj.sicr.repository.UsuarioRepository;
 import puj.sicr.vo.RespuestaServicioVO;
+
+import java.util.List;
 
 @Service
 public class UsuarioService {
@@ -21,11 +26,14 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository repository;
 
+    @Autowired
+    private TipoUsuarioRepository tipoUsuarioRepository;
+
     public RespuestaServicioVO getById(Integer id) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
             Usuario usuario = repository.findById(id).get();
-            respuesta.setObjeto(usuario);
+            respuesta.setObjeto(mapToDTO(usuario));
             respuesta.setExitosa(true);
             respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
         } catch (DataAccessException e) {
@@ -45,9 +53,9 @@ public class UsuarioService {
     public RespuestaServicioVO getAll() {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            Iterable<Usuario> coldatos = repository.findAll();
-            System.out.println(coldatos);
-            respuesta.setObjeto(coldatos);
+            List <Usuario> coldatos = repository.findAll();
+            List <UsuarioDTO> respuestaObj = coldatos.stream().map((usuario) -> mapToDTO(usuario)).toList();
+            respuesta.setObjeto(respuestaObj);
             respuesta.setExitosa(true);
         } catch (Exception e) {
             respuesta.setObjeto(null);
@@ -93,11 +101,11 @@ public class UsuarioService {
         return respuesta;
     }
 
-    public RespuestaServicioVO crear(Usuario usuario) {
+    public RespuestaServicioVO crear(UsuarioDTO usuarioDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            usuario.setUsername(usuario.getUsername().toUpperCase());
-            respuesta = crearTX(usuario);
+            usuarioDTO.setUsername(usuarioDTO.getUsername().toUpperCase());
+            respuesta = crearTX(mapToEntity(usuarioDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -121,10 +129,10 @@ public class UsuarioService {
         return respuesta;
     }
 
-    public RespuestaServicioVO actualizar(Usuario usuario) {
+    public RespuestaServicioVO actualizar(UsuarioDTO usuarioDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = actualizarTX(usuario);
+            respuesta = actualizarTX(mapToEntity(usuarioDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -192,5 +200,37 @@ public class UsuarioService {
         respuesta.setExitosa(true);
         respuesta.setDescripcionRespuesta("Transacción exitosa.");
         return respuesta;
+    }
+
+    private UsuarioDTO mapToDTO(final Usuario usuario) {
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId(usuario.getId());
+        usuarioDTO.setUsername(usuario.getUsername());
+        usuarioDTO.setPassword(usuario.getPassword());
+        usuarioDTO.setNombres(usuario.getNombres());
+        usuarioDTO.setApellidos(usuario.getApellidos());
+        usuarioDTO.setEmail(usuario.getEmail());
+        usuarioDTO.setTelefono(usuario.getTelefono());
+        usuarioDTO.setDireccion(usuario.getDireccion());
+        usuarioDTO.setLatitud(usuario.getLatitud());
+        usuarioDTO.setLongitud(usuario.getLongitud());
+        usuarioDTO.setTipoUsuario(usuario.getTipoUsuario() == null ? null : usuario.getTipoUsuario().getId());
+        return usuarioDTO;
+    }
+
+    private Usuario mapToEntity(final UsuarioDTO usuarioDTO) {
+        Usuario usuario = new Usuario();
+        usuario.setUsername(usuarioDTO.getUsername());
+        usuario.setPassword(usuarioDTO.getPassword());
+        usuario.setNombres(usuarioDTO.getNombres());
+        usuario.setApellidos(usuarioDTO.getApellidos());
+        usuario.setEmail(usuarioDTO.getEmail());
+        usuario.setTelefono(usuarioDTO.getTelefono());
+        usuario.setDireccion(usuarioDTO.getDireccion());
+        usuario.setLatitud(usuarioDTO.getLatitud());
+        usuario.setLongitud(usuarioDTO.getLongitud());
+        final TipoUsuario tipoUsuario = usuarioDTO.getTipoUsuario() == null ? null : tipoUsuarioRepository.findById(usuarioDTO.getTipoUsuario()).get();
+        usuario.setTipoUsuario(tipoUsuario);
+        return usuario;
     }
 }

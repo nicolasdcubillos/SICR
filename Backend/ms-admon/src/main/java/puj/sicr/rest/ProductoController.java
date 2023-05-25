@@ -2,6 +2,7 @@ package puj.sicr.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import puj.sicr.dto.ProductoDTO;
 import puj.sicr.entidad.Producto;
 import puj.sicr.service.ProductoService;
 import puj.sicr.vo.RespuestaServicioVO;
@@ -29,14 +30,13 @@ public class ProductoController {
 
     @CrossOrigin(origins = origen)
     @RequestMapping(value = "/crear", method = RequestMethod.POST)
-    public @ResponseBody RespuestaServicioVO crear(@RequestBody Producto producto) {
+    public @ResponseBody RespuestaServicioVO crear(@RequestBody ProductoDTO producto) {
         return service.crear(producto);
-
     }
 
     @CrossOrigin(origins = origen)
     @RequestMapping(value = "/actualizar", method = RequestMethod.POST)
-    public @ResponseBody RespuestaServicioVO actualizar(@RequestBody Producto producto) {
+    public @ResponseBody RespuestaServicioVO actualizar(@RequestBody ProductoDTO producto) {
         return service.actualizar(producto);
     }
 

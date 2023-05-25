@@ -9,9 +9,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import puj.sicr.dto.ProductoDTO;
+import puj.sicr.entidad.Categoria;
+import puj.sicr.entidad.EstadoProducto;
 import puj.sicr.entidad.Producto;
+import puj.sicr.repository.CategoriaRepository;
+import puj.sicr.repository.EstadoProductoRepository;
 import puj.sicr.repository.ProductoRepository;
 import puj.sicr.vo.RespuestaServicioVO;
+
+import java.util.List;
 
 @Service
 public class ProductoService {
@@ -21,11 +28,17 @@ public class ProductoService {
     @Autowired
     private ProductoRepository repository;
 
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
+    @Autowired
+    private EstadoProductoRepository estadoProductoRepository;
+
     public RespuestaServicioVO getById(Integer id) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
             Producto producto = repository.findById(id).get();
-            respuesta.setObjeto(producto);
+            respuesta.setObjeto(mapToDTO(producto));
             respuesta.setExitosa(true);
             respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
         } catch (DataAccessException e) {
@@ -45,9 +58,9 @@ public class ProductoService {
     public RespuestaServicioVO getAll() {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            Iterable<Producto> coldatos = repository.findAll();
-            System.out.println(coldatos);
-            respuesta.setObjeto(coldatos);
+            List<Producto> coldatos = repository.findAll();
+            List<ProductoDTO> respuestaObj = coldatos.stream().map((producto) -> mapToDTO(producto)).toList();
+            respuesta.setObjeto(respuestaObj);
             respuesta.setExitosa(true);
         } catch (Exception e) {
             respuesta.setObjeto(null);
@@ -93,10 +106,10 @@ public class ProductoService {
         return respuesta;
     }
 
-    public RespuestaServicioVO crear(Producto producto) {
+    public RespuestaServicioVO crear(ProductoDTO productoDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = crearTX(producto);
+            respuesta = crearTX(mapToEntity(productoDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -120,10 +133,10 @@ public class ProductoService {
         return respuesta;
     }
 
-    public RespuestaServicioVO actualizar(Producto producto) {
+    public RespuestaServicioVO actualizar(ProductoDTO productoDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = actualizarTX(producto);
+            respuesta = actualizarTX(mapToEntity(productoDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -191,5 +204,26 @@ public class ProductoService {
         respuesta.setExitosa(true);
         respuesta.setDescripcionRespuesta("Transacción exitosa.");
         return respuesta;
+    }
+
+    private ProductoDTO mapToDTO(final Producto producto) {
+        ProductoDTO productoDTO = new ProductoDTO();
+        productoDTO.setId(producto.getId());
+        productoDTO.setSedeRestauranteId(producto.getSedeRestauranteId());
+        productoDTO.setNombre(producto.getNombre());
+        productoDTO.setCategoria(producto.getCategoria() == null ? null : producto.getCategoria().getId());
+        productoDTO.setEstadoProducto(producto.getEstadoProducto() == null ? null : producto.getEstadoProducto().getId());
+        return productoDTO;
+    }
+
+    private Producto mapToEntity(final ProductoDTO productoDTO) {
+        Producto producto = new Producto();
+        producto.setSedeRestauranteId(productoDTO.getSedeRestauranteId());
+        producto.setNombre(productoDTO.getNombre());
+        final Categoria categoria = productoDTO.getCategoria() == null ? null : categoriaRepository.findById(productoDTO.getCategoria()).get();
+        producto.setCategoria(categoria);
+        final EstadoProducto estadoProducto = productoDTO.getEstadoProducto() == null ? null : estadoProductoRepository.findById(productoDTO.getEstadoProducto()).get();
+        producto.setEstadoProducto(estadoProducto);
+        return producto;
     }
 }

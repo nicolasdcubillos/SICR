@@ -9,9 +9,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import puj.sicr.dto.MenuProductoDTO;
+import puj.sicr.entidad.Menu;
 import puj.sicr.entidad.MenuProducto;
+import puj.sicr.entidad.Producto;
 import puj.sicr.repository.MenuProductoRepository;
+import puj.sicr.repository.MenuRepository;
+import puj.sicr.repository.ProductoRepository;
 import puj.sicr.vo.RespuestaServicioVO;
+
+import java.util.List;
 
 @Service
 public class MenuProductoService {
@@ -21,11 +28,17 @@ public class MenuProductoService {
     @Autowired
     private MenuProductoRepository repository;
 
+    @Autowired
+    private MenuRepository menuRepository;
+
+    @Autowired
+    private ProductoRepository productoRepository;
+
     public RespuestaServicioVO getById(Integer id) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
             MenuProducto menuProducto = repository.findById(id).get();
-            respuesta.setObjeto(menuProducto);
+            respuesta.setObjeto(mapToDTO(menuProducto));
             respuesta.setExitosa(true);
             respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
         } catch (DataAccessException e) {
@@ -45,9 +58,9 @@ public class MenuProductoService {
     public RespuestaServicioVO getAll() {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            Iterable<MenuProducto> coldatos = repository.findAll();
-            System.out.println(coldatos);
-            respuesta.setObjeto(coldatos);
+            List<MenuProducto> coldatos = repository.findAll();
+            List<MenuProductoDTO> respuestaObj = coldatos.stream().map((menuProducto) -> mapToDTO(menuProducto)).toList();
+            respuesta.setObjeto(respuestaObj);
             respuesta.setExitosa(true);
         } catch (Exception e) {
             respuesta.setObjeto(null);
@@ -93,10 +106,10 @@ public class MenuProductoService {
         return respuesta;
     }
 
-    public RespuestaServicioVO crear(MenuProducto menuProducto) {
+    public RespuestaServicioVO crear(MenuProductoDTO menuProductoDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = crearTX(menuProducto);
+            respuesta = crearTX(mapToEntity(menuProductoDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -120,10 +133,10 @@ public class MenuProductoService {
         return respuesta;
     }
 
-    public RespuestaServicioVO actualizar(MenuProducto menuProducto) {
+    public RespuestaServicioVO actualizar(MenuProductoDTO menuProductoDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = actualizarTX(menuProducto);
+            respuesta = actualizarTX(mapToEntity(menuProductoDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -191,5 +204,26 @@ public class MenuProductoService {
         respuesta.setExitosa(true);
         respuesta.setDescripcionRespuesta("Transacción exitosa.");
         return respuesta;
+    }
+
+    private MenuProductoDTO mapToDTO(final MenuProducto menuProducto) {
+        MenuProductoDTO menuProductoDTO = new MenuProductoDTO();
+        menuProductoDTO.setId(menuProducto.getId());
+        menuProductoDTO.setNombre(menuProducto.getNombre());
+        menuProductoDTO.setDescripcion(menuProducto.getDescripcion());
+        menuProductoDTO.setProducto(menuProducto.getProducto() == null ? null : menuProducto.getProducto().getId());
+        menuProductoDTO.setMenu(menuProducto.getMenu() == null ? null : menuProducto.getMenu().getId());
+        return menuProductoDTO;
+    }
+
+    private MenuProducto mapToEntity(final MenuProductoDTO menuProductoDTO) {
+        MenuProducto menuProducto = new MenuProducto();
+        menuProducto.setNombre(menuProductoDTO.getNombre());
+        menuProducto.setDescripcion(menuProductoDTO.getDescripcion());
+        final Producto producto = menuProductoDTO.getProducto() == null ? null : productoRepository.findById(menuProductoDTO.getProducto()).get();
+        menuProducto.setProducto(producto);
+        final Menu menu = menuProductoDTO.getMenu() == null ? null : menuRepository.findById(menuProductoDTO.getMenu()).get();
+        menuProducto.setMenu(menu);
+        return menuProducto;
     }
 }

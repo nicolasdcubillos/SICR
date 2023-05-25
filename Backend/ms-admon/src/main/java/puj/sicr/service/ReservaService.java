@@ -9,9 +9,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import puj.sicr.dto.ReservaDTO;
 import puj.sicr.entidad.Reserva;
+import puj.sicr.entidad.SedeRestaurante;
+import puj.sicr.entidad.Usuario;
 import puj.sicr.repository.ReservaRepository;
+import puj.sicr.repository.SedeRestauranteRepository;
+import puj.sicr.repository.UsuarioRepository;
 import puj.sicr.vo.RespuestaServicioVO;
+
+import java.util.List;
 
 @Service
 public class ReservaService {
@@ -21,11 +28,17 @@ public class ReservaService {
     @Autowired
     private ReservaRepository repository;
 
+    @Autowired
+    private SedeRestauranteRepository sedeRestauranteRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     public RespuestaServicioVO getById(Integer id) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
             Reserva reserva = repository.findById(id).get();
-            respuesta.setObjeto(reserva);
+            respuesta.setObjeto(mapToDTO(reserva));
             respuesta.setExitosa(true);
             respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
         } catch (DataAccessException e) {
@@ -45,7 +58,8 @@ public class ReservaService {
     public RespuestaServicioVO getAll() {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            Iterable<Reserva> coldatos = repository.findAll();
+            List<Reserva> coldatos = repository.findAll();
+            List<ReservaDTO> respuestaObj = coldatos.stream().map((reserva) -> mapToDTO(reserva)).toList();
             System.out.println(coldatos);
             respuesta.setObjeto(coldatos);
             respuesta.setExitosa(true);
@@ -93,10 +107,10 @@ public class ReservaService {
         return respuesta;
     }
 
-    public RespuestaServicioVO crear(Reserva reserva) {
+    public RespuestaServicioVO crear(ReservaDTO reservaDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = crearTX(reserva);
+            respuesta = crearTX(mapToEntity(reservaDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -120,10 +134,10 @@ public class ReservaService {
         return respuesta;
     }
 
-    public RespuestaServicioVO actualizar(Reserva reserva) {
+    public RespuestaServicioVO actualizar(ReservaDTO reservaDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = actualizarTX(reserva);
+            respuesta = actualizarTX(mapToEntity(reservaDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -191,5 +205,28 @@ public class ReservaService {
         respuesta.setExitosa(true);
         respuesta.setDescripcionRespuesta("Transacción exitosa.");
         return respuesta;
+    }
+
+    private ReservaDTO mapToDTO(final Reserva reserva) {
+        ReservaDTO reservaDTO = new ReservaDTO();
+        reservaDTO.setId(reserva.getId());
+        reservaDTO.setAsientos(reserva.getAsientos());
+        reservaDTO.setFecha(reserva.getFecha());
+        reservaDTO.setHoras(reserva.getHoras());
+        reservaDTO.setUsuario(reserva.getUsuario() == null ? null : reserva.getUsuario().getId());
+        reservaDTO.setSedeRestaurante(reserva.getSedeRestaurante() == null ? null : reserva.getSedeRestaurante().getId());
+        return reservaDTO;
+    }
+
+    private Reserva mapToEntity(final ReservaDTO reservaDTO) {
+        Reserva reserva = new Reserva();
+        reserva.setAsientos(reservaDTO.getAsientos());
+        reserva.setFecha(reservaDTO.getFecha());
+        reserva.setHoras(reservaDTO.getHoras());
+        final Usuario usuario = reservaDTO.getUsuario() == null ? null : usuarioRepository.findById(reservaDTO.getUsuario()).get();
+        reserva.setUsuario(usuario);
+        final SedeRestaurante sedeRestaurante = reservaDTO.getSedeRestaurante() == null ? null : sedeRestauranteRepository.findById(reservaDTO.getSedeRestaurante()).get();
+        reserva.setSedeRestaurante(sedeRestaurante);
+        return reserva;
     }
 }

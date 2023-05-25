@@ -1,8 +1,13 @@
 HELP.md
-target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+
+# Ignorar todo dentro de la carpeta target
+target/*
+
+# Incluir archivos que comiencen con ms-
+!target/ms-*
 
 ### STS ###
 .apt_generated
