@@ -9,8 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import puj.sicr.dto.MenuDTO;
 import puj.sicr.entidad.Menu;
+import puj.sicr.entidad.SedeRestaurante;
 import puj.sicr.repository.MenuRepository;
+import puj.sicr.repository.SedeRestauranteRepository;
 import puj.sicr.vo.RespuestaServicioVO;
 
 @Service
@@ -21,11 +24,14 @@ public class MenuService {
     @Autowired
     private MenuRepository repository;
 
+    @Autowired
+    private SedeRestauranteRepository sedeRestauranteRepository;
+
     public RespuestaServicioVO getById(Integer id) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
             Menu menu = repository.findById(id).get();
-            respuesta.setObjeto(menu);
+            respuesta.setObjeto(mapToDTO(menu));
             respuesta.setExitosa(true);
             respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
         } catch (DataAccessException e) {
@@ -46,7 +52,7 @@ public class MenuService {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
             Iterable<Menu> coldatos = repository.findAll();
-            System.out.println(coldatos);
+
             respuesta.setObjeto(coldatos);
             respuesta.setExitosa(true);
         } catch (Exception e) {
@@ -93,10 +99,10 @@ public class MenuService {
         return respuesta;
     }
 
-    public RespuestaServicioVO crear(Menu menu) {
+    public RespuestaServicioVO crear(MenuDTO menuDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = crearTX(menu);
+            respuesta = crearTX(mapToEntity(menuDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -120,10 +126,10 @@ public class MenuService {
         return respuesta;
     }
 
-    public RespuestaServicioVO actualizar(Menu menu) {
+    public RespuestaServicioVO actualizar(MenuDTO menuDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = actualizarTX(menu);
+            respuesta = actualizarTX(mapToEntity(menuDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -191,5 +197,23 @@ public class MenuService {
         respuesta.setExitosa(true);
         respuesta.setDescripcionRespuesta("Transacción exitosa.");
         return respuesta;
+    }
+
+    private MenuDTO mapToDTO(final Menu menu) {
+        MenuDTO menuDTO = new MenuDTO();
+        menuDTO.setId(menu.getId());
+        menuDTO.setNombre(menu.getNombre());
+        menuDTO.setDescripcion(menu.getDescripcion());
+        menuDTO.setSedeRestaurante(menu.getSedeRestaurante() == null ? null : menu.getSedeRestaurante().getId());
+        return menuDTO;
+    }
+
+    private Menu mapToEntity(final MenuDTO menuDTO) {
+        Menu menu = new Menu();
+        menu.setNombre(menuDTO.getNombre());
+        menu.setDescripcion(menuDTO.getDescripcion());
+        final SedeRestaurante sedeRestaurante = menuDTO.getSedeRestaurante() == null ? null : sedeRestauranteRepository.findById(menuDTO.getSedeRestaurante()).get();
+        menu.setSedeRestaurante(sedeRestaurante);
+        return menu;
     }
 }
