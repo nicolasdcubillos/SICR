@@ -216,6 +216,7 @@ public class SedeRestauranteService {
 
     private SedeRestaurante mapToEntity(final SedeRestauranteDTO sedeRestauranteDTO) {
         SedeRestaurante sedeRestaurante = new SedeRestaurante();
+        sedeRestaurante.setId(sedeRestauranteDTO.getId());
         sedeRestaurante.setNombre(sedeRestauranteDTO.getNombre());
         sedeRestaurante.setDireccion(sedeRestauranteDTO.getDireccion());
         sedeRestaurante.setLatitud(sedeRestauranteDTO.getLatitud());

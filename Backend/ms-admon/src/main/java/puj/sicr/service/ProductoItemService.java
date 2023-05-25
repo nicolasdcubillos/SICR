@@ -216,6 +216,7 @@ public class ProductoItemService {
 
     private ProductoItem mapToEntity(final ProductoItemDTO productoItemDTO) {
         ProductoItem productoItem = new ProductoItem();
+        productoItem.setId(productoItemDTO.getId());
         productoItem.setCantidad(productoItemDTO.getCantidad());
         productoItem.setUnidadMedida(productoItemDTO.getUnidadMedida());
         final Item item = productoItemDTO.getItem() == null ? null : itemRepository.findById(productoItemDTO.getItem()).get();

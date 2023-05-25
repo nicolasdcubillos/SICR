@@ -220,6 +220,7 @@ public class MiembroService {
 
     private Miembro mapToEntity(final MiembroDTO miembroDTO) {
         Miembro miembro = new Miembro();
+        miembro.setId(miembroDTO.getId());
         miembro.setNombre(miembroDTO.getNombre());
         miembro.setApellido(miembroDTO.getApellido());
         miembro.setSalario(miembroDTO.getSalario());
