@@ -9,9 +9,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import puj.sicr.dto.ReservaMesaDTO;
+import puj.sicr.entidad.Mesa;
+import puj.sicr.entidad.Reserva;
 import puj.sicr.entidad.ReservaMesa;
+import puj.sicr.repository.MesaRepository;
 import puj.sicr.repository.ReservaMesaRepository;
+import puj.sicr.repository.ReservaRepository;
 import puj.sicr.vo.RespuestaServicioVO;
+
+import java.util.List;
 
 @Service
 public class ReservaMesaService {
@@ -21,11 +28,17 @@ public class ReservaMesaService {
     @Autowired
     private ReservaMesaRepository repository;
 
+    @Autowired
+    private ReservaRepository reservaRepository;
+
+    @Autowired
+    private MesaRepository mesaRepository;
+
     public RespuestaServicioVO getById(Integer id) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
             ReservaMesa reservaMesa = repository.findById(id).get();
-            respuesta.setObjeto(reservaMesa);
+            respuesta.setObjeto(mapToDTO(reservaMesa));
             respuesta.setExitosa(true);
             respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
         } catch (DataAccessException e) {
@@ -45,9 +58,9 @@ public class ReservaMesaService {
     public RespuestaServicioVO getAll() {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            Iterable<ReservaMesa> coldatos = repository.findAll();
-            System.out.println(coldatos);
-            respuesta.setObjeto(coldatos);
+            List<ReservaMesa> coldatos = repository.findAll();
+            List<ReservaMesaDTO> respuestaObj = coldatos.stream().map((reservaMesa) -> mapToDTO(reservaMesa)).toList();
+            respuesta.setObjeto(respuestaObj);
             respuesta.setExitosa(true);
         } catch (Exception e) {
             respuesta.setObjeto(null);
@@ -93,10 +106,10 @@ public class ReservaMesaService {
         return respuesta;
     }
 
-    public RespuestaServicioVO crear(ReservaMesa reservaMesa) {
+    public RespuestaServicioVO crear(ReservaMesaDTO reservaMesaDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = crearTX(reservaMesa);
+            respuesta = crearTX(mapToEntity(reservaMesaDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -120,10 +133,10 @@ public class ReservaMesaService {
         return respuesta;
     }
 
-    public RespuestaServicioVO actualizar(ReservaMesa reservaMesa) {
+    public RespuestaServicioVO actualizar(ReservaMesaDTO reservaMesaDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = actualizarTX(reservaMesa);
+            respuesta = actualizarTX(mapToEntity(reservaMesaDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -191,5 +204,22 @@ public class ReservaMesaService {
         respuesta.setExitosa(true);
         respuesta.setDescripcionRespuesta("Transacción exitosa.");
         return respuesta;
+    }
+
+    private ReservaMesaDTO mapToDTO(final ReservaMesa reservaMesa) {
+        ReservaMesaDTO reservaMesaDTO = new ReservaMesaDTO();
+        reservaMesaDTO.setId(reservaMesa.getId());
+        reservaMesaDTO.setReserva(reservaMesa.getReserva() == null ? null : reservaMesa.getReserva().getId());
+        reservaMesaDTO.setMesa(reservaMesa.getMesa() == null ? null : reservaMesa.getMesa().getId());
+        return reservaMesaDTO;
+    }
+
+    private ReservaMesa mapToEntity(final ReservaMesaDTO reservaMesaDTO) {
+        ReservaMesa reservaMesa = new ReservaMesa();
+        final Reserva reserva = reservaMesaDTO.getReserva() == null ? null : reservaRepository.findById(reservaMesaDTO.getReserva()).get();
+        reservaMesa.setReserva(reserva);
+        final Mesa mesa = reservaMesaDTO.getMesa() == null ? null : mesaRepository.findById(reservaMesaDTO.getMesa()).get();
+        reservaMesa.setMesa(mesa);
+        return reservaMesa;
     }
 }

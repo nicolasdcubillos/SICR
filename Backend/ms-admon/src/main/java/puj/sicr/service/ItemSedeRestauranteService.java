@@ -9,12 +9,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import puj.sicr.dto.ItemSedeRestauranteDTO;
 import puj.sicr.dto.SolicitarInventarioDto;
 import puj.sicr.entidad.Item;
 import puj.sicr.entidad.ItemSedeRestaurante;
 import puj.sicr.entidad.Restaurante;
 import puj.sicr.entidad.SedeRestaurante;
+import puj.sicr.repository.ItemRepository;
 import puj.sicr.repository.ItemSedeRestauranteRepository;
+import puj.sicr.repository.SedeRestauranteRepository;
 import puj.sicr.vo.RespuestaServicioVO;
 
 import java.util.List;
@@ -27,11 +30,17 @@ public class ItemSedeRestauranteService {
     @Autowired
     private ItemSedeRestauranteRepository repository;
 
+    @Autowired
+    private SedeRestauranteRepository sedeRestauranteRepository;
+
+    @Autowired
+    private ItemRepository itemRepository;
+
     public RespuestaServicioVO getById(Integer id) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
             ItemSedeRestaurante itemSedeRestaurante = repository.findById(id).get();
-            respuesta.setObjeto(itemSedeRestaurante);
+            respuesta.setObjeto(mapToDTO(itemSedeRestaurante));
             respuesta.setExitosa(true);
             respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
         } catch (DataAccessException e) {
@@ -51,9 +60,9 @@ public class ItemSedeRestauranteService {
     public RespuestaServicioVO getAll() {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            Iterable<ItemSedeRestaurante> coldatos = repository.findAll();
-            System.out.println(coldatos);
-            respuesta.setObjeto(coldatos);
+            List<ItemSedeRestaurante> coldatos = repository.findAll();
+            List<ItemSedeRestauranteDTO> respuestaObj = coldatos.stream().map((itemSedeRestaurante) -> mapToDTO(itemSedeRestaurante)).toList();
+            respuesta.setObjeto(respuestaObj);
             respuesta.setExitosa(true);
         } catch (Exception e) {
             respuesta.setObjeto(null);
@@ -98,10 +107,10 @@ public class ItemSedeRestauranteService {
         return respuesta;
     }
 
-    public RespuestaServicioVO crear(ItemSedeRestaurante itemSedeRestaurante) {
+    public RespuestaServicioVO crear(ItemSedeRestauranteDTO itemSedeRestauranteDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = crearTX(itemSedeRestaurante);
+            respuesta = crearTX(mapToEntity(itemSedeRestauranteDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -125,10 +134,10 @@ public class ItemSedeRestauranteService {
         return respuesta;
     }
 
-    public RespuestaServicioVO actualizar(ItemSedeRestaurante itemSedeRestaurante) {
+    public RespuestaServicioVO actualizar(ItemSedeRestauranteDTO itemSedeRestauranteDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = actualizarTX(itemSedeRestaurante);
+            respuesta = actualizarTX(mapToEntity(itemSedeRestauranteDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -237,6 +246,25 @@ public class ItemSedeRestauranteService {
             logger.error(e.getMessage());
         }
         return respuesta;
+    }
+
+    private ItemSedeRestauranteDTO mapToDTO(final ItemSedeRestaurante itemSedeRestaurante) {
+        ItemSedeRestauranteDTO itemSedeRestauranteDTO = new ItemSedeRestauranteDTO();
+        itemSedeRestauranteDTO.setId(itemSedeRestaurante.getId());
+        itemSedeRestauranteDTO.setCantidad(itemSedeRestaurante.getCantidad());
+        itemSedeRestauranteDTO.setItem(itemSedeRestaurante.getItem() == null ? null : itemSedeRestaurante.getItem().getId());
+        itemSedeRestauranteDTO.setSedeRestaurante(itemSedeRestaurante.getSedeRestaurante() == null ? null : itemSedeRestaurante.getSedeRestaurante().getId());
+        return itemSedeRestauranteDTO;
+    }
+
+    private ItemSedeRestaurante mapToEntity(final ItemSedeRestauranteDTO itemSedeRestauranteDTO) {
+        ItemSedeRestaurante itemSedeRestaurante = new ItemSedeRestaurante();
+        itemSedeRestaurante.setCantidad(itemSedeRestauranteDTO.getCantidad());
+        final Item item = itemSedeRestauranteDTO.getItem() == null ? null : itemRepository.findById(itemSedeRestauranteDTO.getItem()).get();
+        itemSedeRestaurante.setItem(item);
+        final SedeRestaurante sedeRestaurante = itemSedeRestauranteDTO.getSedeRestaurante() == null ? null : sedeRestauranteRepository.findById(itemSedeRestauranteDTO.getSedeRestaurante()).get();
+        itemSedeRestaurante.setSedeRestaurante(sedeRestaurante);
+        return itemSedeRestaurante;
     }
 
 

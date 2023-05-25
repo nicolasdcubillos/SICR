@@ -2,6 +2,7 @@ package puj.sicr.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import puj.sicr.dto.ReservaDTO;
 import puj.sicr.entidad.Reserva;
 import puj.sicr.service.ReservaService;
 import puj.sicr.vo.RespuestaServicioVO;
@@ -29,17 +30,14 @@ public class ReservaController {
 
     @CrossOrigin(origins = origen)
     @RequestMapping(value = "/crear", method = RequestMethod.POST)
-    public @ResponseBody RespuestaServicioVO crear(@RequestBody Reserva reserva) {
+    public @ResponseBody RespuestaServicioVO crear(@RequestBody ReservaDTO reserva) {
         return service.crear(reserva);
-
     }
-
     @CrossOrigin(origins = origen)
     @RequestMapping(value = "/actualizar", method = RequestMethod.POST)
-    public @ResponseBody RespuestaServicioVO actualizar(@RequestBody Reserva reserva) {
+    public @ResponseBody RespuestaServicioVO actualizar(@RequestBody ReservaDTO reserva) {
         return service.actualizar(reserva);
     }
-
     @CrossOrigin(origins = origen)
     @RequestMapping(value = "/eliminar", method = RequestMethod.GET)
     public @ResponseBody RespuestaServicioVO eliminar(Integer id) {

@@ -16,6 +16,8 @@ import puj.sicr.repository.MenuRepository;
 import puj.sicr.repository.SedeRestauranteRepository;
 import puj.sicr.vo.RespuestaServicioVO;
 
+import java.util.List;
+
 @Service
 public class MenuService {
 
@@ -51,9 +53,9 @@ public class MenuService {
     public RespuestaServicioVO getAll() {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            Iterable<Menu> coldatos = repository.findAll();
-
-            respuesta.setObjeto(coldatos);
+            List<Menu> coldatos = repository.findAll();
+            List<MenuDTO> respuestaObj = coldatos.stream().map((menu) -> mapToDTO(menu)).toList();
+            respuesta.setObjeto(respuestaObj);
             respuesta.setExitosa(true);
         } catch (Exception e) {
             respuesta.setObjeto(null);

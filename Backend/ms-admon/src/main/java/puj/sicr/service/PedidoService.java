@@ -9,9 +9,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import puj.sicr.dto.PedidoDTO;
+import puj.sicr.entidad.Miembro;
 import puj.sicr.entidad.Pedido;
-import puj.sicr.repository.PedidoRepository;
+import puj.sicr.entidad.SedeRestaurante;
+import puj.sicr.entidad.Usuario;
+import puj.sicr.entidad.EstadoPedido;
+import puj.sicr.repository.*;
 import puj.sicr.vo.RespuestaServicioVO;
+
+import java.util.List;
 
 @Service
 public class PedidoService {
@@ -21,11 +28,23 @@ public class PedidoService {
     @Autowired
     private PedidoRepository repository;
 
+    @Autowired
+    private MiembroRepository miembroRepository;
+
+    @Autowired
+    private EstadoPedidoRepository estadoPedidoRepository;
+
+    @Autowired
+    private SedeRestauranteRepository sedeRestauranteRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     public RespuestaServicioVO getById(Integer id) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
             Pedido pedido = repository.findById(id).get();
-            respuesta.setObjeto(pedido);
+            respuesta.setObjeto(mapToDTO(pedido));
             respuesta.setExitosa(true);
             respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
         } catch (DataAccessException e) {
@@ -45,7 +64,8 @@ public class PedidoService {
     public RespuestaServicioVO getAll() {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            Iterable<Pedido> coldatos = repository.findAll();
+            List<Pedido> coldatos = repository.findAll();
+            List<PedidoDTO> respuestaObj = coldatos.stream().map((pedido) -> mapToDTO(pedido)).toList();
             System.out.println(coldatos);
             respuesta.setObjeto(coldatos);
             respuesta.setExitosa(true);
@@ -93,10 +113,10 @@ public class PedidoService {
         return respuesta;
     }
 
-    public RespuestaServicioVO crear(Pedido pedido) {
+    public RespuestaServicioVO crear(PedidoDTO pedidoDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = crearTX(pedido);
+            respuesta = crearTX(mapToEntity(pedidoDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -120,10 +140,10 @@ public class PedidoService {
         return respuesta;
     }
 
-    public RespuestaServicioVO actualizar(Pedido pedido) {
+    public RespuestaServicioVO actualizar(PedidoDTO pedidoDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = actualizarTX(pedido);
+            respuesta = actualizarTX(mapToEntity(pedidoDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -192,4 +212,34 @@ public class PedidoService {
         respuesta.setDescripcionRespuesta("Transacción exitosa.");
         return respuesta;
     }
+
+    private PedidoDTO mapToDTO(final Pedido pedido) {
+        PedidoDTO pedidoDTO = new PedidoDTO();
+        pedidoDTO.setId(pedido.getId());
+        pedidoDTO.setSubtotal(pedido.getSubtotal());
+        pedidoDTO.setTotal(pedido.getTotal());
+        pedidoDTO.setFecha(pedido.getFecha());
+        pedidoDTO.setMiembro(pedido.getMiembro() == null ? null : pedido.getMiembro().getId());
+        pedidoDTO.setEstadoPedido(pedido.getEstadoPedido() == null ? null : pedido.getEstadoPedido().getId());
+        pedidoDTO.setSedeRestaurante(pedido.getSedeRestaurante() == null ? null : pedido.getSedeRestaurante().getId());
+        pedidoDTO.setUsuario(pedido.getUsuario() == null ? null : pedido.getUsuario().getId());
+        return pedidoDTO;
+    }
+
+    private Pedido mapToEntity(final PedidoDTO pedidoDTO) {
+        Pedido pedido = new Pedido();
+        pedido.setSubtotal(pedidoDTO.getSubtotal());
+        pedido.setTotal(pedidoDTO.getTotal());
+        pedido.setFecha(pedidoDTO.getFecha());
+        final Miembro miembro = pedidoDTO.getMiembro() == null ? null : miembroRepository.findById(pedidoDTO.getMiembro()).get();
+        pedido.setMiembro(miembro);
+        final EstadoPedido estadoPedido = pedidoDTO.getEstadoPedido() == null ? null : estadoPedidoRepository.findById(pedidoDTO.getEstadoPedido()).get();
+        pedido.setEstadoPedido(estadoPedido);
+        final SedeRestaurante sedeRestaurante = pedidoDTO.getSedeRestaurante() == null ? null : sedeRestauranteRepository.findById(pedidoDTO.getSedeRestaurante()).get();
+        pedido.setSedeRestaurante(sedeRestaurante);
+        final Usuario usuario = pedidoDTO.getUsuario() == null ? null : usuarioRepository.findById(pedidoDTO.getUsuario()).get();
+        pedido.setUsuario(usuario);
+        return pedido;
+    }
+
 }

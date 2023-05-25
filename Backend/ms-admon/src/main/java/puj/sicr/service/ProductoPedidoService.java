@@ -9,9 +9,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import puj.sicr.dto.ProductoPedidoDTO;
+import puj.sicr.entidad.Pedido;
+import puj.sicr.entidad.Producto;
 import puj.sicr.entidad.ProductoPedido;
+import puj.sicr.repository.PedidoRepository;
 import puj.sicr.repository.ProductoPedidoRepository;
+import puj.sicr.repository.ProductoRepository;
 import puj.sicr.vo.RespuestaServicioVO;
+
+import java.util.List;
 
 @Service
 public class ProductoPedidoService {
@@ -21,11 +28,17 @@ public class ProductoPedidoService {
     @Autowired
     private ProductoPedidoRepository repository;
 
+    @Autowired
+    private ProductoRepository productoRepository;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
+
     public RespuestaServicioVO getById(Integer id) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
             ProductoPedido productoPedido = repository.findById(id).get();
-            respuesta.setObjeto(productoPedido);
+            respuesta.setObjeto(mapToDTO(productoPedido));
             respuesta.setExitosa(true);
             respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
         } catch (DataAccessException e) {
@@ -45,9 +58,9 @@ public class ProductoPedidoService {
     public RespuestaServicioVO getAll() {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            Iterable<ProductoPedido> coldatos = repository.findAll();
-            System.out.println(coldatos);
-            respuesta.setObjeto(coldatos);
+            List<ProductoPedido> coldatos = repository.findAll();
+            List<ProductoPedidoDTO> respuestaObj = coldatos.stream().map((productoPedido) -> mapToDTO(productoPedido)).toList();
+            respuesta.setObjeto(respuestaObj);
             respuesta.setExitosa(true);
         } catch (Exception e) {
             respuesta.setObjeto(null);
@@ -93,10 +106,10 @@ public class ProductoPedidoService {
         return respuesta;
     }
 
-    public RespuestaServicioVO crear(ProductoPedido productoPedido) {
+    public RespuestaServicioVO crear(ProductoPedidoDTO productoPedidoDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = crearTX(productoPedido);
+            respuesta = crearTX(mapToEntity(productoPedidoDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -120,10 +133,10 @@ public class ProductoPedidoService {
         return respuesta;
     }
 
-    public RespuestaServicioVO actualizar(ProductoPedido productoPedido) {
+    public RespuestaServicioVO actualizar(ProductoPedidoDTO productoPedidoDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = actualizarTX(productoPedido);
+            respuesta = actualizarTX(mapToEntity(productoPedidoDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -191,5 +204,24 @@ public class ProductoPedidoService {
         respuesta.setExitosa(true);
         respuesta.setDescripcionRespuesta("Transacción exitosa.");
         return respuesta;
+    }
+
+    private ProductoPedidoDTO mapToDTO(final ProductoPedido productoPedido) {
+        ProductoPedidoDTO productoPedidoDTO = new ProductoPedidoDTO();
+        productoPedidoDTO.setId(productoPedido.getId());
+        productoPedidoDTO.setCantidad(productoPedido.getCantidad());
+        productoPedidoDTO.setProducto(productoPedido.getProducto() == null ? null : productoPedido.getProducto().getId());
+        productoPedidoDTO.setPedido(productoPedido.getPedido() == null ? null : productoPedido.getPedido().getId());
+        return productoPedidoDTO;
+    }
+
+    private ProductoPedido mapToEntity(final ProductoPedidoDTO productoPedidoDTO) {
+        ProductoPedido productoPedido = new ProductoPedido();
+        productoPedido.setCantidad(productoPedidoDTO.getCantidad());
+        final Producto producto = productoPedidoDTO.getProducto() == null ? null : productoRepository.findById(productoPedidoDTO.getProducto()).get();
+        productoPedido.setProducto(producto);
+        final Pedido pedido = productoPedidoDTO.getPedido() == null ? null : pedidoRepository.findById(productoPedidoDTO.getPedido()).get();
+        productoPedido.setPedido(pedido);
+        return productoPedido;
     }
 }

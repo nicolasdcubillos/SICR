@@ -2,6 +2,7 @@ package puj.sicr.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import puj.sicr.dto.ItemSedeRestauranteDTO;
 import puj.sicr.dto.SolicitarInventarioDto;
 import puj.sicr.entidad.Item;
 import puj.sicr.entidad.ItemSedeRestaurante;
@@ -31,15 +32,15 @@ public class ItemSedeRestauranteController {
 
     @CrossOrigin(origins = origen)
     @RequestMapping(value = "/crear", method = RequestMethod.POST)
-    public @ResponseBody RespuestaServicioVO crear(@RequestBody ItemSedeRestaurante itemSedeRestaurante ) {
-        return service.crear(itemSedeRestaurante );
+    public @ResponseBody RespuestaServicioVO crear(@RequestBody ItemSedeRestauranteDTO itemSedeRestaurante ) {
+        return service.crear(itemSedeRestaurante);
 
     }
 
     @CrossOrigin(origins = origen)
     @RequestMapping(value = "/actualizar", method = RequestMethod.POST)
-    public @ResponseBody RespuestaServicioVO actualizar(@RequestBody ItemSedeRestaurante itemSedeRestaurante ) {
-        return service.actualizar(itemSedeRestaurante );
+    public @ResponseBody RespuestaServicioVO actualizar(@RequestBody ItemSedeRestauranteDTO itemSedeRestaurante ) {
+        return service.actualizar(itemSedeRestaurante);
     }
 
     @CrossOrigin(origins = origen)

@@ -9,8 +9,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import puj.sicr.dto.ProductoItemDTO;
+import puj.sicr.entidad.Item;
+import puj.sicr.entidad.Producto;
 import puj.sicr.entidad.ProductoItem;
+import puj.sicr.repository.ItemRepository;
 import puj.sicr.repository.ProductoItemRepository;
+import puj.sicr.repository.ProductoRepository;
 import puj.sicr.vo.RespuestaServicioVO;
 
 @Service
@@ -21,11 +26,17 @@ public class ProductoItemService {
     @Autowired
     private ProductoItemRepository repository;
 
+    @Autowired
+    private ItemRepository itemRepository;
+
+    @Autowired
+    private ProductoRepository productoRepository;
+
     public RespuestaServicioVO getById(Integer id) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
             ProductoItem productoItem = repository.findById(id).get();
-            respuesta.setObjeto(productoItem);
+            respuesta.setObjeto(mapToDTO(productoItem));
             respuesta.setExitosa(true);
             respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
         } catch (DataAccessException e) {
@@ -93,10 +104,10 @@ public class ProductoItemService {
         return respuesta;
     }
 
-    public RespuestaServicioVO crear(ProductoItem productoItem) {
+    public RespuestaServicioVO crear(ProductoItemDTO productoItemDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = crearTX(productoItem);
+            respuesta = crearTX(mapToEntity(productoItemDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -120,10 +131,10 @@ public class ProductoItemService {
         return respuesta;
     }
 
-    public RespuestaServicioVO actualizar(ProductoItem productoItem) {
+    public RespuestaServicioVO actualizar(ProductoItemDTO productoItemDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = actualizarTX(productoItem);
+            respuesta = actualizarTX(mapToEntity(productoItemDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -191,5 +202,26 @@ public class ProductoItemService {
         respuesta.setExitosa(true);
         respuesta.setDescripcionRespuesta("Transacción exitosa.");
         return respuesta;
+    }
+
+    private ProductoItemDTO mapToDTO(final ProductoItem productoItem) {
+        ProductoItemDTO productoItemDTO = new ProductoItemDTO();
+        productoItemDTO.setId(productoItem.getId());
+        productoItemDTO.setCantidad(productoItem.getCantidad());
+        productoItemDTO.setUnidadMedida(productoItem.getUnidadMedida());
+        productoItemDTO.setItem(productoItem.getItem() == null ? null : productoItem.getItem().getId());
+        productoItemDTO.setProducto(productoItem.getProducto() == null ? null : productoItem.getProducto().getId());
+        return productoItemDTO;
+    }
+
+    private ProductoItem mapToEntity(final ProductoItemDTO productoItemDTO) {
+        ProductoItem productoItem = new ProductoItem();
+        productoItem.setCantidad(productoItemDTO.getCantidad());
+        productoItem.setUnidadMedida(productoItemDTO.getUnidadMedida());
+        final Item item = productoItemDTO.getItem() == null ? null : itemRepository.findById(productoItemDTO.getItem()).get();
+        productoItem.setItem(item);
+        final Producto producto = productoItemDTO.getProducto() == null ? null : productoRepository.findById(productoItemDTO.getProducto()).get();
+        productoItem.setProducto(producto);
+        return productoItem;
     }
 }
