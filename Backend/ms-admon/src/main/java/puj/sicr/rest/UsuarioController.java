@@ -2,6 +2,7 @@ package puj.sicr.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import puj.sicr.dto.UsuarioDTO;
 import puj.sicr.entidad.Usuario;
 import puj.sicr.service.UsuarioService;
 import puj.sicr.vo.RespuestaServicioVO;
@@ -29,14 +30,14 @@ public class UsuarioController {
 
     @CrossOrigin(origins = origen)
     @RequestMapping(value = "/crear", method = RequestMethod.POST)
-    public @ResponseBody RespuestaServicioVO crear(@RequestBody Usuario usuario) {
-        return service.crear(usuario);
+    public @ResponseBody RespuestaServicioVO crear(@RequestBody UsuarioDTO usuarioDTO) {
+        return service.crear(usuarioDTO);
     }
 
     @CrossOrigin(origins = origen)
     @RequestMapping(value = "/actualizar", method = RequestMethod.POST)
-    public @ResponseBody RespuestaServicioVO actualizar(@RequestBody Usuario usuario) {
-        return service.actualizar(usuario);
+    public @ResponseBody RespuestaServicioVO actualizar(@RequestBody UsuarioDTO usuarioDTO) {
+        return service.actualizar(usuarioDTO);
     }
 
     @CrossOrigin(origins = origen)

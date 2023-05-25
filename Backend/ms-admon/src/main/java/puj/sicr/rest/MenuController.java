@@ -2,6 +2,7 @@ package puj.sicr.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import puj.sicr.dto.MenuDTO;
 import puj.sicr.entidad.Menu;
 import puj.sicr.service.MenuService;
 import puj.sicr.vo.RespuestaServicioVO;
@@ -29,15 +30,13 @@ public class MenuController {
 
     @CrossOrigin(origins = origen)
     @RequestMapping(value = "/crear", method = RequestMethod.POST)
-    public @ResponseBody RespuestaServicioVO crear(@RequestBody Menu menu) {
-        return service.crear(menu);
-
+    public @ResponseBody RespuestaServicioVO crear(@RequestBody MenuDTO menuDTO) {
+        return service.crear(menuDTO);
     }
-
     @CrossOrigin(origins = origen)
     @RequestMapping(value = "/actualizar", method = RequestMethod.POST)
-    public @ResponseBody RespuestaServicioVO actualizar(@RequestBody Menu menu) {
-        return service.actualizar(menu);
+    public @ResponseBody RespuestaServicioVO actualizar(@RequestBody MenuDTO menuDTO) {
+        return service.actualizar(menuDTO);
     }
 
     @CrossOrigin(origins = origen)
