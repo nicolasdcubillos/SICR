@@ -9,9 +9,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import puj.sicr.dto.SedeRestauranteDTO;
 import puj.sicr.entidad.SedeRestaurante;
+import puj.sicr.entidad.Restaurante;
+import puj.sicr.repository.RestauranteRepository;
 import puj.sicr.repository.SedeRestauranteRepository;
 import puj.sicr.vo.RespuestaServicioVO;
+
+import java.util.List;
 
 @Service
 public class SedeRestauranteService {
@@ -21,11 +26,14 @@ public class SedeRestauranteService {
     @Autowired
     private SedeRestauranteRepository repository;
 
+    @Autowired
+    private RestauranteRepository restauranteRepository;
+
     public RespuestaServicioVO getById(Integer id) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
             SedeRestaurante sedeRestaurante = repository.findById(id).get();
-            respuesta.setObjeto(sedeRestaurante);
+            respuesta.setObjeto(mapToDTO(sedeRestaurante));
             respuesta.setExitosa(true);
             respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
         } catch (DataAccessException e) {
@@ -45,9 +53,8 @@ public class SedeRestauranteService {
     public RespuestaServicioVO getAll() {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            Iterable<SedeRestaurante> coldatos = repository.findAll();
-            System.out.println(coldatos);
-            respuesta.setObjeto(coldatos);
+            List<SedeRestaurante> coldatos = repository.findAll();
+            List<SedeRestauranteDTO> respuestaObj = coldatos.stream().map((sedeRestaurante) -> mapToDTO(sedeRestaurante)).toList();
             respuesta.setExitosa(true);
         } catch (Exception e) {
             respuesta.setObjeto(null);
@@ -93,10 +100,10 @@ public class SedeRestauranteService {
         return respuesta;
     }
 
-    public RespuestaServicioVO crear(SedeRestaurante sedeRestaurante) {
+    public RespuestaServicioVO crear(SedeRestauranteDTO sedeRestauranteDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = crearTX(sedeRestaurante);
+            respuesta = crearTX(mapToEntity(sedeRestauranteDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -120,10 +127,10 @@ public class SedeRestauranteService {
         return respuesta;
     }
 
-    public RespuestaServicioVO actualizar(SedeRestaurante sedeRestaurante) {
+    public RespuestaServicioVO actualizar(SedeRestauranteDTO sedeRestauranteDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = actualizarTX(sedeRestaurante);
+            respuesta = actualizarTX(mapToEntity(sedeRestauranteDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -191,5 +198,33 @@ public class SedeRestauranteService {
         respuesta.setExitosa(true);
         respuesta.setDescripcionRespuesta("Transacción exitosa.");
         return respuesta;
+    }
+
+    private SedeRestauranteDTO mapToDTO(final SedeRestaurante sedeRestaurante) {
+        SedeRestauranteDTO sedeRestauranteDTO = new SedeRestauranteDTO();
+        sedeRestauranteDTO.setId(sedeRestaurante.getId());
+        sedeRestauranteDTO.setNombre(sedeRestaurante.getNombre());
+        sedeRestauranteDTO.setDireccion(sedeRestaurante.getDireccion());
+        sedeRestauranteDTO.setLatitud(sedeRestaurante.getLatitud());
+        sedeRestauranteDTO.setLongitud(sedeRestaurante.getLongitud());
+        sedeRestauranteDTO.setFechaApertura(sedeRestaurante.getFechaApertura());
+        sedeRestauranteDTO.setFechaCierre(sedeRestaurante.getFechaCierre());
+        sedeRestauranteDTO.setCapacidad(sedeRestaurante.getCapacidad());
+        sedeRestauranteDTO.setRestaurante(sedeRestaurante.getRestaurante() == null ? null : sedeRestaurante.getRestaurante().getId());
+        return sedeRestauranteDTO;
+    }
+
+    private SedeRestaurante mapToEntity(final SedeRestauranteDTO sedeRestauranteDTO) {
+        SedeRestaurante sedeRestaurante = new SedeRestaurante();
+        sedeRestaurante.setNombre(sedeRestauranteDTO.getNombre());
+        sedeRestaurante.setDireccion(sedeRestauranteDTO.getDireccion());
+        sedeRestaurante.setLatitud(sedeRestauranteDTO.getLatitud());
+        sedeRestaurante.setLongitud(sedeRestauranteDTO.getLongitud());
+        sedeRestaurante.setFechaApertura(sedeRestauranteDTO.getFechaApertura());
+        sedeRestaurante.setFechaCierre(sedeRestauranteDTO.getFechaCierre());
+        sedeRestaurante.setCapacidad(sedeRestauranteDTO.getCapacidad());
+        final Restaurante restaurante = sedeRestauranteDTO.getRestaurante() == null ? null : restauranteRepository.findById(sedeRestauranteDTO.getRestaurante()).get();
+        sedeRestaurante.setRestaurante(restaurante);
+        return sedeRestaurante;
     }
 }

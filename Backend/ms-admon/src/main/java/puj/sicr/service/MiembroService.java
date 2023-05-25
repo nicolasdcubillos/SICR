@@ -9,9 +9,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import puj.sicr.dto.MiembroDTO;
 import puj.sicr.entidad.Miembro;
+import puj.sicr.entidad.SedeRestaurante;
+import puj.sicr.entidad.TipoMiembro;
 import puj.sicr.repository.MiembroRepository;
+import puj.sicr.repository.SedeRestauranteRepository;
+import puj.sicr.repository.TipoMiembroRepository;
 import puj.sicr.vo.RespuestaServicioVO;
+
+import java.util.List;
 
 @Service
 public class MiembroService {
@@ -21,11 +28,17 @@ public class MiembroService {
     @Autowired
     private MiembroRepository repository;
 
+    @Autowired
+    private SedeRestauranteRepository sedeRestauranteRepository;
+
+    @Autowired
+    private TipoMiembroRepository tipoMiembroRepository;
+
     public RespuestaServicioVO getById(Integer id) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
             Miembro miembro = repository.findById(id).get();
-            respuesta.setObjeto(miembro);
+            respuesta.setObjeto(mapToDTO(miembro));
             respuesta.setExitosa(true);
             respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
         } catch (DataAccessException e) {
@@ -45,9 +58,9 @@ public class MiembroService {
     public RespuestaServicioVO getAll() {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            Iterable<Miembro> coldatos = repository.findAll();
-            System.out.println(coldatos);
-            respuesta.setObjeto(coldatos);
+            List<Miembro> coldatos = repository.findAll();
+            List<MiembroDTO> respuestaObj = coldatos.stream().map((miembro) -> mapToDTO(miembro)).toList();
+            respuesta.setObjeto(respuestaObj);
             respuesta.setExitosa(true);
         } catch (Exception e) {
             respuesta.setObjeto(null);
@@ -93,10 +106,10 @@ public class MiembroService {
         return respuesta;
     }
 
-    public RespuestaServicioVO crear(Miembro miembro) {
+    public RespuestaServicioVO crear(MiembroDTO miembroDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = crearTX(miembro);
+            respuesta = crearTX(mapToEntity(miembroDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -120,10 +133,10 @@ public class MiembroService {
         return respuesta;
     }
 
-    public RespuestaServicioVO actualizar(Miembro miembro) {
+    public RespuestaServicioVO actualizar(MiembroDTO miembroDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = actualizarTX(miembro);
+            respuesta = actualizarTX(mapToEntity(miembroDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -191,5 +204,30 @@ public class MiembroService {
         respuesta.setExitosa(true);
         respuesta.setDescripcionRespuesta("Transacción exitosa.");
         return respuesta;
+    }
+
+    private MiembroDTO mapToDTO(final Miembro miembro) {
+        MiembroDTO miembroDTO = new MiembroDTO();
+        miembroDTO.setId(miembro.getId());
+        miembroDTO.setNombre(miembro.getNombre());
+        miembroDTO.setApellido(miembro.getApellido());
+        miembroDTO.setSalario(miembro.getSalario());
+        miembroDTO.setTelefono(miembro.getTelefono());
+        miembroDTO.setSedeRestaurante(miembro.getSedeRestaurante() == null ? null : miembro.getSedeRestaurante().getId());
+        miembroDTO.setTipoMiembro(miembro.getTipoMiembro() == null ? null : miembro.getTipoMiembro().getId());
+        return miembroDTO;
+    }
+
+    private Miembro mapToEntity(final MiembroDTO miembroDTO) {
+        Miembro miembro = new Miembro();
+        miembro.setNombre(miembroDTO.getNombre());
+        miembro.setApellido(miembroDTO.getApellido());
+        miembro.setSalario(miembroDTO.getSalario());
+        miembro.setTelefono(miembroDTO.getTelefono());
+        final SedeRestaurante sedeRestaurante = miembroDTO.getSedeRestaurante() == null ? null : sedeRestauranteRepository.findById(miembroDTO.getSedeRestaurante()).get();
+        miembro.setSedeRestaurante(sedeRestaurante);
+        final TipoMiembro tipoMiembro = miembroDTO.getTipoMiembro() == null ? null : tipoMiembroRepository.findById(miembroDTO.getTipoMiembro()).get();
+        miembro.setTipoMiembro(tipoMiembro);
+        return miembro;
     }
 }
