@@ -212,6 +212,7 @@ public class MenuService {
 
     private Menu mapToEntity(final MenuDTO menuDTO) {
         Menu menu = new Menu();
+        menu.setId(menuDTO.getId());
         menu.setNombre(menuDTO.getNombre());
         menu.setDescripcion(menuDTO.getDescripcion());
         final SedeRestaurante sedeRestaurante = menuDTO.getSedeRestaurante() == null ? null : sedeRestauranteRepository.findById(menuDTO.getSedeRestaurante()).get();

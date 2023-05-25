@@ -363,6 +363,7 @@ public class TransferenciaItemService {
 
     private TransferenciaItem mapToEntity(final TransferenciaItemDTO transferenciaItemDTO) {
         TransferenciaItem transferenciaItem = new TransferenciaItem();
+        transferenciaItem.setId(transferenciaItemDTO.getId());
         transferenciaItem.setCantidad(transferenciaItemDTO.getCantidad());
         final EstadoTransferenciaItem estadoTransferenciaItem = transferenciaItemDTO.getEstadoTransferenciaItem() == null ? null : estadoTransferenciaItemRepository.findById(transferenciaItemDTO.getEstadoTransferenciaItem()).get();
         transferenciaItem.setEstadoTransferenciaItem(estadoTransferenciaItem);

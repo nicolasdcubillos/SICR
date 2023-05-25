@@ -259,6 +259,7 @@ public class ItemSedeRestauranteService {
 
     private ItemSedeRestaurante mapToEntity(final ItemSedeRestauranteDTO itemSedeRestauranteDTO) {
         ItemSedeRestaurante itemSedeRestaurante = new ItemSedeRestaurante();
+        itemSedeRestaurante.setId(itemSedeRestauranteDTO.getId());
         itemSedeRestaurante.setCantidad(itemSedeRestauranteDTO.getCantidad());
         final Item item = itemSedeRestauranteDTO.getItem() == null ? null : itemRepository.findById(itemSedeRestauranteDTO.getItem()).get();
         itemSedeRestaurante.setItem(item);
