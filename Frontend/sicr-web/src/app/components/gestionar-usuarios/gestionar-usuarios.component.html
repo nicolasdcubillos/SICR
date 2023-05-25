@@ -84,7 +84,7 @@
             <td>{{user.telefono}}</td> 
             <td>{{user.email}}</td> 
             <td>{{user.direccion}}</td> 
-            <td><i class="fa-solid fa-pen-to-square" style="color: rgb(220, 210, 37);" [routerLink]="['/admin-adminSubastas', user._id]"></i></td>
+            <td><i class="fa-solid fa-pen-to-square" style="color: rgb(220, 210, 37);" [routerLink]="['/gestionar-usuarios', user.id]"></i></td>
             <td><i class="fa-solid fa-trash mr-5" style="color: rgb(255, 0, 0);" (click)="confirmarEliminar(user)"></i></td>
             </tr>
         </tbody>

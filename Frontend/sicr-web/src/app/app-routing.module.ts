@@ -25,6 +25,10 @@ const routes: Routes = [
       component: GestionarUsuariosComponent
     },
   	{
+      path: 'gestionar-usuarios/:id',
+      component: GestionarUsuariosComponent
+    },
+  	{
       path: 'gestionar-menu',
       component: GestionarMenuComponent
     },

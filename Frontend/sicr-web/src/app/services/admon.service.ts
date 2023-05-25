@@ -24,14 +24,23 @@ export class AdmonService {
     return this.http.get(api,{params: params});
   }
 
-  updateUsaurios(user:any){
+  updateUsaurios(user:any,userId:string){
     let api = `${this.endpoint}/Usuario/actualizar`;
-    return this.http.post(api,user);
+    let params = new HttpParams();
+    params = params.append('id', userId);
+    return this.http.post(api,user,{params: params});
   }
 
   crearUsaurio(user:any){
     let api = `${this.endpoint}/Usuario/crear`
     return this.http.post(api,user);
+  }
+
+  eliminarUsuario(userId:string){
+    let api = `${this.endpoint}/Usuario/eliminar`;
+    let params = new HttpParams();
+    params = params.append('id', userId);
+    return this.http.get(api,{params: params});
   }
 
   //Tipo Usuarios
