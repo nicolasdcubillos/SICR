@@ -5,6 +5,7 @@ import { SigninComponent } from './components/signin/signin.component';
 import { GestionarUsuariosComponent } from './components/gestionar-usuarios/gestionar-usuarios.component';
 import { HomeClienteComponent } from './components/home-cliente/home-cliente.component';
 import { HomeAdminComponent } from './components/home-admin/home-admin.component';
+import { GestionarMenuComponent } from './components/gestionar-menu/gestionar-menu.component';
 
 const routes: Routes = [
   	{
@@ -22,6 +23,10 @@ const routes: Routes = [
   	{
       path: 'gestionar-usuarios',
       component: GestionarUsuariosComponent
+    },
+  	{
+      path: 'gestionar-menu',
+      component: GestionarMenuComponent
     },
   	{
       path: 'gestionar-restaurantes',

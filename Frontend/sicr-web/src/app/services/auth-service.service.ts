@@ -39,4 +39,8 @@ export class AuthServiceService {
       }
     })
   }
+
+  getToken() {
+    return localStorage.getItem('sessionToken');
+  }
 }

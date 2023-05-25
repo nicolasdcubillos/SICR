@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,6 +19,7 @@ import { GestionarCategoriaComponent } from './components/gestionar-categoria/ge
 import { GestionarRestaurantesComponent } from './components/gestionar-restaurantes/gestionar-restaurantes.component';
 import { GestionarSedesComponent } from './components/gestionar-sedes/gestionar-sedes.component';
 import { HomeClienteComponent } from './components/home-cliente/home-cliente.component';
+import { AuthInterceptor } from './services/authconfig.interceptor';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,13 @@ import { HomeClienteComponent } from './components/home-cliente/home-cliente.com
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
