@@ -6,6 +6,8 @@ import { GestionarUsuariosComponent } from './components/gestionar-usuarios/gest
 import { HomeClienteComponent } from './components/home-cliente/home-cliente.component';
 import { HomeAdminComponent } from './components/home-admin/home-admin.component';
 import { GestionarMenuComponent } from './components/gestionar-menu/gestionar-menu.component';
+import { GestionarItemComponent } from './components/gestionar-item/gestionar-item.component';
+import { GestionarSedesComponent } from './components/gestionar-sedes/gestionar-sedes.component';
 
 const routes: Routes = [
   	{
@@ -27,6 +29,22 @@ const routes: Routes = [
   	{
       path: 'gestionar-usuarios/:id',
       component: GestionarUsuariosComponent
+    },
+  	{
+      path: 'gestionar-items',
+      component: GestionarItemComponent
+    },
+  	{
+      path: 'gestionar-items/:id',
+      component: GestionarItemComponent
+    },
+  	{
+      path: 'gestionar-sedes',
+      component: GestionarSedesComponent
+    },
+  	{
+      path: 'gestionar-sedes/:id',
+      component: GestionarSedesComponent
     },
   	{
       path: 'gestionar-menu',

@@ -12,7 +12,7 @@ export class AdmonService {
   constructor(private http: HttpClient) { }
 
 
-  //Usuarios
+  //USUARIOS
   getUsaurios(){
     return this.http.get(`${this.endpoint}/Usuario/getAll`);
   }
@@ -41,6 +41,73 @@ export class AdmonService {
     let params = new HttpParams();
     params = params.append('id', userId);
     return this.http.get(api,{params: params});
+  }
+
+  //ITEMS
+  getItems(){
+    return this.http.get(`${this.endpoint}/Item/getAll`);
+  }
+
+  getItemById(itemId:string){
+    let api = `${this.endpoint}/Item/getById`;
+    let params = new HttpParams();
+    params = params.append('id', itemId);
+    return this.http.get(api,{params: params});
+  }
+
+  updateItem(item:any,itemId:string){
+    let api = `${this.endpoint}/Item/actualizar`;
+    let params = new HttpParams();
+    params = params.append('id', itemId);
+    return this.http.post(api,item,{params: params});
+  }
+
+  crearItem(item:any){
+    let api = `${this.endpoint}/Item/crear`
+    return this.http.post(api,item);
+  }
+
+  eliminarItem(itemId:string){
+    let api = `${this.endpoint}/Item/eliminar`;
+    let params = new HttpParams();
+    params = params.append('id', itemId);
+    return this.http.get(api,{params: params});
+  }
+
+   //SEDES
+   getSedes(){
+    return this.http.get(`${this.endpoint}/SedeRestaurante/getAll`);
+  }
+
+  getSedeById(sedeId:string){
+    let api = `${this.endpoint}/SedeRestaurante/getById`;
+    let params = new HttpParams();
+    params = params.append('id', sedeId);
+    return this.http.get(api,{params: params});
+  }
+
+  updateSede(sede:any,sedeId:string){
+    let api = `${this.endpoint}/SedeRestaurante/actualizar`;
+    let params = new HttpParams();
+    params = params.append('id', sedeId);
+    return this.http.post(api,sede,{params: params});
+  }
+
+  crearSede(sede:any){
+    let api = `${this.endpoint}/SedeRestaurante/crear`
+    return this.http.post(api,sede);
+  }
+
+  eliminarSede(sedeId:string){
+    let api = `${this.endpoint}/SedeRestaurante/eliminar`;
+    let params = new HttpParams();
+    params = params.append('id', sedeId);
+    return this.http.get(api,{params: params});
+  }
+
+  //Restaurante
+  getRestaurantes(){
+    return this.http.get(`${this.endpoint}/Restaurante/getAll`);
   }
 
   //Tipo Usuarios

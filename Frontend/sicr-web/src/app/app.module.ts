@@ -20,6 +20,8 @@ import { GestionarRestaurantesComponent } from './components/gestionar-restauran
 import { GestionarSedesComponent } from './components/gestionar-sedes/gestionar-sedes.component';
 import { HomeClienteComponent } from './components/home-cliente/home-cliente.component';
 import { AuthInterceptor } from './services/authconfig.interceptor';
+import { GestionarItemComponent } from './components/gestionar-item/gestionar-item.component';
+import { GestionarProductoComponent } from './components/gestionar-producto/gestionar-producto.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import { AuthInterceptor } from './services/authconfig.interceptor';
     GestionarCategoriaComponent,
     GestionarRestaurantesComponent,
     GestionarSedesComponent,
-    HomeClienteComponent
+    HomeClienteComponent,
+    GestionarItemComponent,
+    GestionarProductoComponent
   ],
   imports: [
     BrowserModule,
