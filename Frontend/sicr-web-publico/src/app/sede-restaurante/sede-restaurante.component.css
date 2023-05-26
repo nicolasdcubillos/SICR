@@ -1,0 +1,45 @@
+.title-container {
+    text-align: center;
+    padding-top: 30px; /* Ajusta este valor según sea necesario */
+    padding-bottom: 30px; /* Ajusta este valor según sea necesario */
+  }
+  
+  .title {
+    font-size: 28px; /* Ajusta el tamaño de fuente según sea necesario */
+    font-family: "Roboto", sans-serif;
+  }
+
+  .logo-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  
+  .sede-title {
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+    font-family: "Roboto", sans-serif;
+    margin-bottom: 0;
+}
+
+.sede-address {
+    font-size: 25px;
+    text-align: center;
+    font-family: "Roboto", sans-serif;
+}
+
+.link-text {
+    padding-top: 120px; /* Ajusta este valor según sea necesario */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.separator {
+    height: 1px; /* Ajusta la altura de la barra separadora */
+    background-color: #808080; /* Cambia el color de fondo de la barra */
+    margin: 20px 0; /* Ajusta los márgenes superior e inferior de la barra */
+}

@@ -1,0 +1,67 @@
+.sede-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .logo-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  
+  .sede-title {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .sede-address {
+    font-size: 14px;
+    color: #888;
+  }
+  .navbar {
+    display: flex;
+  }
+  .sede-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .sede-row {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 20px; /* Ajusta el margen según tus necesidades */
+  }
+  
+  .sede-card {
+    width: 18%; /* Ajusta el ancho según tus necesidades */
+    /* Otros estilos para cada tarjeta */
+    transition: transform 0.3s ease;
+    font-family: "Roboto", sans-serif;
+  }
+  
+  .sede-card:hover {
+    transform: scale(1.1);
+  }
+
+  .title-container {
+    text-align: center;
+    padding-top: 30px; /* Ajusta este valor según sea necesario */
+    padding-bottom: 30px; /* Ajusta este valor según sea necesario */
+
+  }
+  
+  .title {
+    font-size: 24px; /* Ajusta el tamaño de fuente según sea necesario */
+    font-family: "Roboto", sans-serif;
+  }
+
+  .link-text {
+    text-decoration: none;
+    color: black; /* Cambia "black" al color deseado para los enlaces */
+  }
+  

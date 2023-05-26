@@ -13,9 +13,6 @@ public class ProductoDTO {
     private Integer id;
 
     @NotNull
-    private Integer sedeRestauranteId;
-
-    @NotNull
     @Size(max = 255)
     private String nombre;
 

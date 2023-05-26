@@ -14,4 +14,8 @@ import java.util.List;
 public interface MenuProductoRepository extends JpaRepository<MenuProducto, Integer> {
     @Query("SELECT c FROM EstadoProducto	c ")
     List<MenuProducto> getByPage(Pageable pageable);
+
+    @Query("SELECT mp FROM MenuProducto mp " +
+            "WHERE mp.menu.sedeRestaurante.id = :id")
+    List <MenuProducto> findBySedeRestauranteId(Integer id);
 }

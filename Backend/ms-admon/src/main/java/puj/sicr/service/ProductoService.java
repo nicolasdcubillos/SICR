@@ -68,7 +68,6 @@ public class ProductoService {
             respuesta.setDescripcionExcepcion(e.getMessage());
             logger.error(e.getMessage());
         }
-        ;
         return respuesta;
     }
 
@@ -209,7 +208,6 @@ public class ProductoService {
     private ProductoDTO mapToDTO(final Producto producto) {
         ProductoDTO productoDTO = new ProductoDTO();
         productoDTO.setId(producto.getId());
-        productoDTO.setSedeRestauranteId(producto.getSedeRestauranteId());
         productoDTO.setNombre(producto.getNombre());
         productoDTO.setCategoria(producto.getCategoria() == null ? null : producto.getCategoria().getId());
         productoDTO.setEstadoProducto(producto.getEstadoProducto() == null ? null : producto.getEstadoProducto().getId());
@@ -219,12 +217,28 @@ public class ProductoService {
     private Producto mapToEntity(final ProductoDTO productoDTO) {
         Producto producto = new Producto();
         producto.setId(productoDTO.getId());
-        producto.setSedeRestauranteId(productoDTO.getSedeRestauranteId());
         producto.setNombre(productoDTO.getNombre());
         final Categoria categoria = productoDTO.getCategoria() == null ? null : categoriaRepository.findById(productoDTO.getCategoria()).get();
         producto.setCategoria(categoria);
         final EstadoProducto estadoProducto = productoDTO.getEstadoProducto() == null ? null : estadoProductoRepository.findById(productoDTO.getEstadoProducto()).get();
         producto.setEstadoProducto(estadoProducto);
         return producto;
+    }
+
+    public RespuestaServicioVO getByCategoriaId(Integer id) {
+        RespuestaServicioVO respuesta = new RespuestaServicioVO();
+        try {
+            List<Producto> coldatos = repository.getByCategoriaId(id);
+            List<ProductoDTO> respuestaObj = coldatos.stream().map((producto) -> mapToDTO(producto)).toList();
+            respuesta.setObjeto(respuestaObj);
+            respuesta.setExitosa(true);
+        } catch (Exception e) {
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            respuesta.setDescripcionExcepcion(e.getMessage());
+            logger.error(e.getMessage());
+        }
+        ;
+        return respuesta;
     }
 }

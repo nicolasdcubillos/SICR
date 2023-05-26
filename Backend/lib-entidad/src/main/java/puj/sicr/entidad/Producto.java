@@ -29,10 +29,6 @@ public class Producto {
         strategy = GenerationType.IDENTITY
     )
     private Integer id;
-
-    @Column(nullable = false)
-    private Integer sedeRestauranteId;
-
     @Column(nullable = false)
     private String nombre;
 
@@ -57,5 +53,8 @@ public class Producto {
     @OneToMany(mappedBy = "producto")
     @JsonIgnore
      private List<ProductoItem> productoProductoItems;
+
+    @Column(nullable = false)
+    private Double precio;
 
 }

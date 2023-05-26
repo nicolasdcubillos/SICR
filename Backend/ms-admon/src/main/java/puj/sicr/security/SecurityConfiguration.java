@@ -38,6 +38,10 @@ public class SecurityConfiguration {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeHttpRequests()
                 .requestMatchers("/actuator/health**").permitAll()
+                .requestMatchers("/Menu/**").permitAll()
+                .requestMatchers("/SedeRestaurante/**").permitAll()
+                .requestMatchers("/Restaurante/**").permitAll()
+                .requestMatchers("/Categoria/getAll").permitAll()
                 .requestMatchers("/v3/api-docs", "/swagger-ui/**", "/configuration/ui", "/swagger-resources/**",
                         "/configuration/security", "/swagger-ui.html", "/webjars/**", "/error")
                 .permitAll().anyRequest().authenticated().and().exceptionHandling()
