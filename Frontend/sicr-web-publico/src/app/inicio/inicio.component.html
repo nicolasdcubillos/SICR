@@ -1,0 +1,21 @@
+<div class="title-container">
+  <h1 class="title">{{ restaurante.nombre }}: Sedes cerca de mi ubicación</h1>
+</div>
+
+<div class="navbar">
+  <div class="sede-container">
+    <ng-container *ngFor="let sede of sedes; let i = index;">
+      <div *ngIf="i % 5 === 0" class="sede-row">
+        <div *ngFor="let item of sedes.slice(i, i + 5)" class="sede-card">
+          <a [routerLink]="['/sede', item.id]" class="link-text">
+            <img src="assets/img/logo.jpg" alt="Logo del restaurante" class="logo-img">
+            <h3 class="sede-title">{{ item.nombre }}</h3>
+            <p class="sede-address">{{ item.direccion }}</p>
+          </a>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<router-outlet></router-outlet>
