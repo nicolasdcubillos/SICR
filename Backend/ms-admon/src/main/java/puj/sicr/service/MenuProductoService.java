@@ -227,4 +227,21 @@ public class MenuProductoService {
         menuProducto.setMenu(menu);
         return menuProducto;
     }
+
+    public RespuestaServicioVO getBySedeRestauranteId(Integer id) {
+        RespuestaServicioVO respuesta = new RespuestaServicioVO();
+        try {
+            List<MenuProducto> coldatos = repository.findBySedeRestauranteId(id);
+            List<MenuProductoDTO> respuestaObj = coldatos.stream().map((menuProducto) -> mapToDTO(menuProducto)).toList();
+            respuesta.setObjeto(respuestaObj);
+            respuesta.setExitosa(true);
+        } catch (Exception e) {
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            respuesta.setDescripcionExcepcion(e.getMessage());
+            logger.error(e.getMessage());
+        }
+        ;
+        return respuesta;
+    }
 }

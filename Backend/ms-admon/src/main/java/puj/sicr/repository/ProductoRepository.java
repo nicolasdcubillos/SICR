@@ -14,4 +14,8 @@ import java.util.List;
 public interface ProductoRepository extends JpaRepository<Producto, Integer> {
     @Query("SELECT c FROM EstadoProducto	c ")
     List<Producto> getByPage(Pageable pageable);
+
+    @Query("SELECT p FROM Producto p " +
+            "WHERE p.categoria.id = :id")
+    List <Producto> getByCategoriaId(Integer id);
 }

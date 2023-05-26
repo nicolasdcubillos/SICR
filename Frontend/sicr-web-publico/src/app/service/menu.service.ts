@@ -11,7 +11,7 @@ export class MenuService {
 
   constructor(private http: HttpClient) { }
 
-  getMenus() {
+  getAll() {
     return this.http.get(`${this.MS_ADMON_URL}/Menu/getAll`);
   }
 }

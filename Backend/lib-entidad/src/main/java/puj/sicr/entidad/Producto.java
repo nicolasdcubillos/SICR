@@ -54,4 +54,7 @@ public class Producto {
     @JsonIgnore
      private List<ProductoItem> productoProductoItems;
 
+    @Column(nullable = false)
+    private Double precio;
+
 }

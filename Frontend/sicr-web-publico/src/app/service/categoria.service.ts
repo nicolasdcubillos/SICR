@@ -5,17 +5,13 @@ import { environment } from 'src/environments/environment.development';
 @Injectable({
   providedIn: 'root'
 })
-export class SedeRestauranteService {
+export class CategoriaService {
 
   private MS_ADMON_URL = environment.MS_ADMON_URL;
 
   constructor(private http: HttpClient) { }
 
   getAll() {
-    return this.http.get(`${this.MS_ADMON_URL}/SedeRestaurante/getAll`);
-  }
-
-  getById(id: number) {
-    return this.http.get(`${this.MS_ADMON_URL}/SedeRestaurante/getById?id=${id}`);
+    return this.http.get(`${this.MS_ADMON_URL}/Categoria/getAll`);
   }
 }

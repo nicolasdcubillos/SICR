@@ -68,7 +68,6 @@ public class ProductoService {
             respuesta.setDescripcionExcepcion(e.getMessage());
             logger.error(e.getMessage());
         }
-        ;
         return respuesta;
     }
 
@@ -224,5 +223,22 @@ public class ProductoService {
         final EstadoProducto estadoProducto = productoDTO.getEstadoProducto() == null ? null : estadoProductoRepository.findById(productoDTO.getEstadoProducto()).get();
         producto.setEstadoProducto(estadoProducto);
         return producto;
+    }
+
+    public RespuestaServicioVO getByCategoriaId(Integer id) {
+        RespuestaServicioVO respuesta = new RespuestaServicioVO();
+        try {
+            List<Producto> coldatos = repository.getByCategoriaId(id);
+            List<ProductoDTO> respuestaObj = coldatos.stream().map((producto) -> mapToDTO(producto)).toList();
+            respuesta.setObjeto(respuestaObj);
+            respuesta.setExitosa(true);
+        } catch (Exception e) {
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            respuesta.setDescripcionExcepcion(e.getMessage());
+            logger.error(e.getMessage());
+        }
+        ;
+        return respuesta;
     }
 }

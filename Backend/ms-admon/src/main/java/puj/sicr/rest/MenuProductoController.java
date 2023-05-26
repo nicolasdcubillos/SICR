@@ -46,4 +46,10 @@ public class MenuProductoController {
     public @ResponseBody RespuestaServicioVO eliminar(Integer id) {
         return service.eliminar(id);
     }
+
+    @CrossOrigin(origins = origen)
+    @RequestMapping(value = "/getBySedeRestauranteId", method = RequestMethod.GET)
+    public @ResponseBody RespuestaServicioVO getBySedeRestauranteId(Integer id) {
+        return service.getBySedeRestauranteId(id);
+    }
 }
