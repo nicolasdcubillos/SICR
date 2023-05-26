@@ -16,7 +16,6 @@
   .sede-title {
     font-size: 18px;
     font-weight: bold;
-    margin-bottom: 5px;
   }
   
   .sede-address {
@@ -41,14 +40,18 @@
   .sede-card {
     width: 18%; /* Ajusta el ancho según tus necesidades */
     /* Otros estilos para cada tarjeta */
-    
+    transition: transform 0.3s ease;
     font-family: "Roboto", sans-serif;
   }
   
+  .sede-card:hover {
+    transform: scale(1.1);
+  }
+
   .title-container {
     text-align: center;
-    padding-top: 20px; /* Ajusta este valor según sea necesario */
-    padding-bottom: 20px; /* Ajusta este valor según sea necesario */
+    padding-top: 30px; /* Ajusta este valor según sea necesario */
+    padding-bottom: 30px; /* Ajusta este valor según sea necesario */
 
   }
   

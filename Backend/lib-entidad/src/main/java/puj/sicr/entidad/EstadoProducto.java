@@ -27,12 +27,6 @@ public class EstadoProducto {
     )
     private Integer id;
 
-    @Column(nullable = false)
-    private String nombre;
-
-    @Column(nullable = false)
-    private String descripcion;
-
     @OneToMany(mappedBy = "estadoProducto")
     @JsonIgnore
      private List<Producto> estadoProductoProductos;
