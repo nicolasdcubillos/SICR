@@ -55,6 +55,7 @@ public class SedeRestauranteService {
         try {
             List<SedeRestaurante> coldatos = repository.findAll();
             List<SedeRestauranteDTO> respuestaObj = coldatos.stream().map((sedeRestaurante) -> mapToDTO(sedeRestaurante)).toList();
+            respuesta.setObjeto(respuestaObj);
             respuesta.setExitosa(true);
         } catch (Exception e) {
             respuesta.setObjeto(null);

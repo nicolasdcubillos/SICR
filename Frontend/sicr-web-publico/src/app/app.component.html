@@ -1,0 +1,16 @@
+<nav class="navbar">
+  <div class="navbar-center">
+    <a class="navbar-logo" href="#">
+      <div class="container">
+        <img src="assets/img/logo-blanco.jpeg" alt="Logo">
+        <span class="restaurant-name">{{ restaurante.nombre }}</span>
+      </div>
+    </a>
+  </div>
+  <div class="navbar-right">
+    <button routerLink="/reservar" class="button-secundario">Reservar</button>
+    <button routerLink="/pedir-online" class="button-secundario">Pedir online</button>
+    <button class="login-button">Iniciar sesión</button>
+  </div>
+</nav>
+<router-outlet></router-outlet>
