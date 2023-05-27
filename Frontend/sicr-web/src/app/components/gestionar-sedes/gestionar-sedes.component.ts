@@ -16,7 +16,7 @@ export class GestionarSedesComponent implements OnInit {
 
   edit:boolean = false;
 
-  sedeEdit:any ;
+  sedeEdit:any ={};
   sedeEditSend:any={} ;
 
   sedes: any=[];
@@ -41,16 +41,17 @@ export class GestionarSedesComponent implements OnInit {
     this.getRestaurantes();
     if(params['id']) {
       this.edit=true;
-      this.admonService.getUsauriosById(params['id']).subscribe({
+      this.admonService.getSedeById(params['id']).subscribe({
         next:(res:any)=>{
           this.sedeEdit=res.objeto;
           console.log(this.sedeEdit)
           this.crearSedeForm.get('nombre')!.setValue(this.sedeEdit.nombre);
-          this.crearSedeForm.get('direccion')!.setValue(this.sedeEdit.direccion);
+          this.crearSedeForm.get('capacidad')!.setValue(this.sedeEdit.capacidad);
           this.crearSedeForm.get('fechaApertura')!.setValue(this.sedeEdit.fechaApertura);
           this.crearSedeForm.get('fechaCierre')!.setValue(this.sedeEdit.fechaCierre);
-          this.crearSedeForm.get('capacidad')!.setValue(this.sedeEdit.capacidad);
+          this.crearSedeForm.get('direccion')!.setValue(this.sedeEdit.direccion);
           this.crearSedeForm.get('restaurante')!.setValue(this.sedeEdit.restaurante);
+
         }
       })
     }
@@ -119,17 +120,14 @@ export class GestionarSedesComponent implements OnInit {
   }
 
   editarSede(){
-    this.sedeEdit.nombres = this.crearSedeForm.value.nombres
-    this.sedeEdit.apellidos = this.crearSedeForm.value.apellidos
-    this.sedeEdit.username = this.crearSedeForm.value.username
+    this.sedeEdit.nombre = this.crearSedeForm.value.nombre
     this.sedeEdit.direccion = this.crearSedeForm.value.direccion
-    this.sedeEdit.telefono = this.crearSedeForm.value.telefono
-    this.sedeEdit.email = this.crearSedeForm.value.email
-    this.sedeEdit.tipoUsuario = this.crearSedeForm.value.tipoUsuario
-    this.sedeEdit.password = this.crearSedeForm.value.password
-
-    console.log(this.sedeEdit);
-
+    this.sedeEdit.capacidad = this.crearSedeForm.value.capacidad
+    this.sedeEdit.restaurante = this.crearSedeForm.value.restaurante
+    var fechaAux = moment(this.crearSedeForm.value.fechaApertura);
+    var fechaAux2 = moment(this.crearSedeForm.value.fechaCierre);
+    this.sedeEdit.fechaApertura= new Date(fechaAux.format("YYYY-MM-DD HH:mm"))
+    this.sedeEdit.fechaCierre= new Date(fechaAux2.format("YYYY-MM-DD HH:mm"))
     this.admonService.updateSede(this.sedeEdit,this.sedeEdit.id).subscribe({
       next:(res:any)=>{
         if(res.exitosa){
@@ -139,8 +137,9 @@ export class GestionarSedesComponent implements OnInit {
             showCloseButton:true,
             confirmButtonText:"Aceptar",
             confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            this.router.navigate(['/gestionar-sedes'])
           })
-          this.router.navigate(['/gestionar-sedes'])
         }else{
           Swal.fire({
             title: 'Error',
@@ -178,8 +177,9 @@ export class GestionarSedesComponent implements OnInit {
             showCloseButton:true,
             confirmButtonText:"Aceptar",
             confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
           })
-          window.location.reload();
         }else{
           Swal.fire({
             title: 'Error',
@@ -188,6 +188,8 @@ export class GestionarSedesComponent implements OnInit {
             showCloseButton:true,
             confirmButtonText:"Aceptar",
             confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
           })
         }
       }

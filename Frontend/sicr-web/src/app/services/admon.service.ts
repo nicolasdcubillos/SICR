@@ -105,6 +105,47 @@ export class AdmonService {
     return this.http.get(api,{params: params});
   }
 
+  //Prodcuto
+   getProductos(){
+    return this.http.get(`${this.endpoint}/Producto/getAll`);
+  }
+
+  getProductoById(productoId:string){
+    let api = `${this.endpoint}/Producto/getById`;
+    let params = new HttpParams();
+    params = params.append('id', productoId);
+    return this.http.get(api,{params: params});
+  }
+
+  updateProducto(producto:any,productoId:string){
+    let api = `${this.endpoint}/Producto/actualizar`;
+    let params = new HttpParams();
+    params = params.append('id', productoId);
+    return this.http.post(api,producto,{params: params});
+  }
+
+  crearProducto(producto:any){
+    let api = `${this.endpoint}/Producto/crear`
+    return this.http.post(api,producto);
+  }
+
+  eliminarProducto(productoId:string){
+    let api = `${this.endpoint}/Producto/eliminar`;
+    let params = new HttpParams();
+    params = params.append('id', productoId);
+    return this.http.get(api,{params: params});
+  }
+
+  //EstadoProducto
+  getEstadosProducto(){
+    return this.http.get(`${this.endpoint}/EstadoProducto/getAll`);
+  }
+
+  //EstadoProducto
+  getCategorias(){
+    return this.http.get(`${this.endpoint}/Categoria/getAll`);
+  }
+
   //Restaurante
   getRestaurantes(){
     return this.http.get(`${this.endpoint}/Restaurante/getAll`);

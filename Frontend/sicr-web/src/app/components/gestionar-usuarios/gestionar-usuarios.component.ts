@@ -86,6 +86,8 @@ export class GestionarUsuariosComponent implements OnInit{
             showCloseButton:true,
             confirmButtonText:"Aceptar",
             confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
           })
         }else{
           Swal.fire({
@@ -95,9 +97,10 @@ export class GestionarUsuariosComponent implements OnInit{
             showCloseButton:true,
             confirmButtonText:"Aceptar",
             confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
           })
         }
-        window.location.reload();
       }
     })
   }
@@ -135,8 +138,9 @@ export class GestionarUsuariosComponent implements OnInit{
             showCloseButton:true,
             confirmButtonText:"Aceptar",
             confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            this.router.navigate(['/gestionar-usuarios'])
           })
-          this.router.navigate(['/gestionar-usuarios'])
         }else{
           Swal.fire({
             title: 'Error',
@@ -145,8 +149,9 @@ export class GestionarUsuariosComponent implements OnInit{
             showCloseButton:true,
             confirmButtonText:"Aceptar",
             confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            this.router.navigate(['/gestionar-usuarios'])
           })
-          this.router.navigate(['/gestionar-usuarios'])
         }
       }
     })
@@ -174,8 +179,9 @@ export class GestionarUsuariosComponent implements OnInit{
             showCloseButton:true,
             confirmButtonText:"Aceptar",
             confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
           })
-          window.location.reload();
         }else{
           Swal.fire({
             title: 'Error',

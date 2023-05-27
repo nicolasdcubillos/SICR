@@ -30,11 +30,11 @@
         <div class="row">           
             <div class="col-4">
                 <label class="mt-3" for="validationServer033">Fecha de Apertura</label>
-                <input type="date" class="auto_width form-control" formControlName="fechaApertura">
+                <input type="date" class="auto_width form-control" formControlName="fechaApertura" value="{{this.sedeEdit.fechaApertura | date:'YYYY-MM-dd'}}">
             </div>
             <div class="col-4">
                 <label class="mt-3" for="validationServer033">Fecha de Cierre</label>
-                <input type="date" class="auto_width form-control" formControlName="fechaCierre">
+                <input type="date" class="auto_width form-control" formControlName="fechaCierre" value="{{this.sedeEdit.fechaCierre| date:'YYYY-MM-dd'}}">
             </div>
             <div class="col-4" >
                 <label class="mt-3" for="validationServer033">Restaurante</label>
@@ -58,23 +58,23 @@
         <thead>
             <tr>
             <th scope="col">Nombre</th>
-            <th scope="col">Usuario</th>
-            <th scope="col">Telefono</th>
-            <th scope="col">Email</th>
             <th scope="col">Dirección</th>
+            <th scope="col">Capacidad</th>
+            <th scope="col">Fecha Apertura</th>
+            <th scope="col">Fecha Cierre</th>
             <th scope="col">Editar</th>
             <th scope="col">Eliminar</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let user of sedes">
-            <td>{{user.nombres}}</td> 
-            <td>{{user.username}}</td> 
-            <td>{{user.telefono}}</td> 
-            <td>{{user.email}}</td> 
-            <td>{{user.direccion}}</td> 
-            <td><i class="fa-solid fa-pen-to-square" style="color: rgb(220, 210, 37);" [routerLink]="['/gestionar-sedes', user.id]"></i></td>
-            <td><i class="fa-solid fa-trash mr-5" style="color: rgb(255, 0, 0);" (click)="confirmarEliminar(user)"></i></td>
+            <tr *ngFor="let sede of sedes">
+            <td>{{sede.nombre}}</td> 
+            <td>{{sede.direccion}}</td> 
+            <td>{{sede.capacidad}}</td> 
+            <td>{{sede.fechaApertura | date:'yyyy-MM-dd'}}</td> 
+            <td>{{sede.fechaCierre | date:'yyyy-MM-dd'}}</td> 
+            <td><i class="fa-solid fa-pen-to-square" style="color: rgb(220, 210, 37);" [routerLink]="['/gestionar-sedes', sede.id]"></i></td>
+            <td><i class="fa-solid fa-trash mr-5" style="color: rgb(255, 0, 0);" (click)="confirmarEliminar(sede)"></i></td>
             </tr>
         </tbody>
         </table>

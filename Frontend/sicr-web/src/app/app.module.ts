@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
@@ -22,6 +22,13 @@ import { HomeClienteComponent } from './components/home-cliente/home-cliente.com
 import { AuthInterceptor } from './services/authconfig.interceptor';
 import { GestionarItemComponent } from './components/gestionar-item/gestionar-item.component';
 import { GestionarProductoComponent } from './components/gestionar-producto/gestionar-producto.component';
+
+//Material
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -49,6 +56,11 @@ import { GestionarProductoComponent } from './components/gestionar-producto/gest
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    MatFormFieldModule,
+    MatChipsModule,
+    MatAutocompleteModule,
+    MatIconModule,
+    MatInputModule
   ],
   providers: [
     {
@@ -57,6 +69,7 @@ import { GestionarProductoComponent } from './components/gestionar-producto/gest
       multi: true
     }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

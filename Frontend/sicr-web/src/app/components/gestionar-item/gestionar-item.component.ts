@@ -63,6 +63,8 @@ export class GestionarItemComponent implements OnInit {
             showCloseButton:true,
             confirmButtonText:"Aceptar",
             confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
           })
         }else{
           Swal.fire({
@@ -72,9 +74,10 @@ export class GestionarItemComponent implements OnInit {
             showCloseButton:true,
             confirmButtonText:"Aceptar",
             confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
           })
         }
-        window.location.reload();
       }
     })
   }
@@ -106,8 +109,9 @@ export class GestionarItemComponent implements OnInit {
             showCloseButton:true,
             confirmButtonText:"Aceptar",
             confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            this.router.navigate(['/gestionar-items'])
           })
-          this.router.navigate(['/gestionar-items'])
         }else{
           Swal.fire({
             title: 'Error',
@@ -116,8 +120,9 @@ export class GestionarItemComponent implements OnInit {
             showCloseButton:true,
             confirmButtonText:"Aceptar",
             confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            this.router.navigate(['/gestionar-items'])
           })
-          this.router.navigate(['/gestionar-items'])
         }
       }
     })
@@ -145,8 +150,9 @@ export class GestionarItemComponent implements OnInit {
             showCloseButton:true,
             confirmButtonText:"Aceptar",
             confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
           })
-          window.location.reload();
         }else{
           Swal.fire({
             title: 'Error',
@@ -155,6 +161,8 @@ export class GestionarItemComponent implements OnInit {
             showCloseButton:true,
             confirmButtonText:"Aceptar",
             confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
           })
         }
       }
