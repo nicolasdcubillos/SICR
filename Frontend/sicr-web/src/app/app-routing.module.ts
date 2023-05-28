@@ -60,6 +60,10 @@ const routes: Routes = [
       component: GestionarMenuComponent
     },
   	{
+      path: 'gestionar-menu/:id',
+      component: GestionarMenuComponent
+    },
+  	{
       path: 'gestionar-restaurantes',
       component: GestionarUsuariosComponent
     },

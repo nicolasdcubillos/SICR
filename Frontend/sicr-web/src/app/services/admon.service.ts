@@ -178,7 +178,7 @@ export class AdmonService {
   }
 
   //Menu
-  getMenu(){
+  getMenus(){
     return this.http.get(`${this.endpoint}/Menu/getAll`);
   }
 
@@ -197,6 +197,34 @@ export class AdmonService {
   crearMenu(menu:any){
     let api = `${this.endpoint}/Menu/crear`
     return this.http.post(api,menu);
+  }
+
+  eliminarMenu(menuId:string){
+    let api = `${this.endpoint}/Menu/eliminar`;
+    let params = new HttpParams();
+    params = params.append('id', menuId);
+    return this.http.get(api,{params: params});
+  }
+
+  //MenuProducto
+
+  crearMenuProducto(productoItem:any){
+    let api = `${this.endpoint}/MenuProducto/crear`
+    return this.http.post(api,productoItem);
+  }
+
+  eliminarMenuProducto(productoItemId:string){
+    let api = `${this.endpoint}/MenuProducto/eliminar`;
+    let params = new HttpParams();
+    params = params.append('id', productoItemId);
+    return this.http.get(api,{params: params});
+  }
+
+  getProductosByMenuId(menuId:number,menu:any){
+    let api = `${this.endpoint}/MenuProducto/getByMenuId`;
+    let params = new HttpParams();
+    params = params.append('id', menuId);
+    return this.http.post(api,menu,{params: params});
   }
 
 }
