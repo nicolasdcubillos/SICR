@@ -22,4 +22,7 @@ public class ProductoDTO {
     @NotNull
     private Integer estadoProducto;
 
+    @NotNull
+    private Double precio;
+
 }

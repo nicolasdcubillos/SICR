@@ -3,10 +3,11 @@ package puj.sicr.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
-// Ejemplo de Data Transfer Object
 @Data
 public class CategoriaDto implements Serializable {
-    private String nombreCategoria;
-    private String tipo;
+    private Integer id;
+    private String nombre;
+    private List<ProductoDTO> productos;
 }
