@@ -2,6 +2,8 @@ package puj.sicr.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import puj.sicr.dto.PedidoDTO;
+import puj.sicr.dto.RealizarPedidoDTO;
 import puj.sicr.entidad.Pedido;
 import puj.sicr.service.PedidoService;
 import puj.sicr.vo.RespuestaServicioVO;
@@ -29,14 +31,12 @@ public class PedidoController {
 
     @CrossOrigin(origins = origen)
     @RequestMapping(value = "/crear", method = RequestMethod.POST)
-    public @ResponseBody RespuestaServicioVO crear(@RequestBody Pedido pedido) {
+    public @ResponseBody RespuestaServicioVO crear(@RequestBody PedidoDTO pedido) {
         return service.crear(pedido);
-
     }
-
     @CrossOrigin(origins = origen)
     @RequestMapping(value = "/actualizar", method = RequestMethod.POST)
-    public @ResponseBody RespuestaServicioVO actualizar(@RequestBody Pedido pedido) {
+    public @ResponseBody RespuestaServicioVO actualizar(@RequestBody PedidoDTO pedido) {
         return service.actualizar(pedido);
     }
 
@@ -44,5 +44,17 @@ public class PedidoController {
     @RequestMapping(value = "/eliminar", method = RequestMethod.GET)
     public @ResponseBody RespuestaServicioVO eliminar(Integer id) {
         return service.eliminar(id);
+    }
+
+    @CrossOrigin(origins = origen)
+    @RequestMapping(value = "/actualizarEstadoPedido", method = RequestMethod.POST)
+    public @ResponseBody RespuestaServicioVO actualizarEstadoPedido(Integer id) {
+        return service.actualizarEstadoPedido(id);
+    }
+
+    @CrossOrigin(origins = origen)
+    @RequestMapping(value = "/realizarPedido", method = RequestMethod.POST)
+    public @ResponseBody RespuestaServicioVO realizarPedido(RealizarPedidoDTO pedidoDTO) {
+        return service.realizarPedido(pedidoDTO);
     }
 }

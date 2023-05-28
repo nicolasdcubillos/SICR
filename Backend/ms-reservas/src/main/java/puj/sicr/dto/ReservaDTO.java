@@ -1,9 +1,10 @@
 package puj.sicr.dto;
 
 import jakarta.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.OffsetDateTime;
 
 
 @Getter
@@ -26,5 +27,4 @@ public class ReservaDTO {
 
     @NotNull
     private Integer sedeRestaurante;
-
 }
