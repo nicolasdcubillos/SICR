@@ -1,0 +1,96 @@
+
+<div class="navbar">
+    <div class="logo">
+        <img src="../../../assets/images/logoSICR_SinFondo.png" width="150" height="150" alt="Logo">
+    </div>
+</div>
+<main class="col-md-9 float-right col px-5 pl-md-2 pt-2 main content">
+    <!-- <a href="#" data-target="#sidebar" data-toggle="collapse"><i class="text-dark fa fa-navicon fa-lg py-2 p-1"></i></a>-->
+    <div class="page-header">
+        <h2 class="display-4 font-weight-light">Administrador de productos</h2>
+    </div>
+    <hr>
+    <form class="mt-4"
+    [formGroup]="crearProductoForm">
+        <div class="row">           
+            <div class="col-4">
+                <label  for="validationServer033">Nombre</label>
+                <input type="text" class="auto_width form-control" formControlName="nombre">
+            </div>
+            <div class="col-4">
+                <label class="mt-2" for="validationServer033">Categoria</label>
+                <select formControlName="categoria" class="auto_width form-control">
+                    <option value=""></option>
+                  <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</option>
+                </select>
+            </div>
+            <div class="col-4">
+                <label class="mt-2" for="validationServer033">Categoria</label>
+                <select formControlName="estadoProducto" class="auto_width form-control">
+                    <option value=""></option>
+                  <option *ngFor="let estado of estadosProducto" [value]="estado.id">{{ estado.id }}</option>
+                </select>
+            </div>
+        </div>
+    </form>
+    <form [formGroup]="crearProductoItemForm" *ngIf="edit==true">
+        <div class="row justify-content-center">       
+            <div class="col-6">
+                <label class="mt-3" for="validationServer033">Items Actuales del producto</label>
+                <ul>
+                    <li *ngFor="let item of itemsProducto">{{item.nombre}} <i class="fa-solid fa-trash ml-5" style="margin-left: 20%; color: red;" (click)="confirmDeleteItemProd(item.id)"></i></li>
+                </ul>
+            </div>    
+            <div class="col-6" >
+                <label class="mt-3" for="validationServer033">Items</label>
+                <div>
+                    <select formControlName="item">
+                        <option value="">-- Seleccionar --</option>
+                      <option *ngFor="let option of items" [value]="option.id">{{ option.nombre }}</option>
+                    </select>
+                    <button type="button" class="btn btn-success mb-5 mt-5" style="margin-left: 2%;" (click)="openModal()" >Agregar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+        <div style="text-align: center; margin-top: 2%;">
+            <button type="button" class="btn btn-success mb-5" (click)="crear()" [disabled]="!crearProductoForm.valid" [hidden]="edit==true">Agregar</button>
+            <button type="button" class="btn btn-success mb-5" (click)="confirmarEdicion()" [disabled]="!crearProductoForm.valid" [hidden]="edit==false">Editar</button>
+            <button type="button" class="btn btn-danger mb-5" style="margin-left: 5px;" routerLink="/home-admin">Cancelar</button>
+            </div>
+            
+
+    
+
+
+    <table class="table mt-5">
+        <thead>
+            <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let producto of productos">
+            <td>{{producto.nombre}}</td> 
+            <td><i class="fa-solid fa-pen-to-square" style="color: rgb(220, 210, 37);" [routerLink]="['/gestionar-productos', producto.id]"></i></td>
+            <td><i class="fa-solid fa-trash mr-5" style="color: rgb(255, 0, 0);" (click)="confirmarEliminar(producto)"></i></td>
+            </tr>
+        </tbody>
+        </table>
+
+</main>
+
+
+<div class="modal" *ngIf="showModal">
+    <form [formGroup]="crearProductoItemForm">
+        <div class="modal-content">
+            <span class="close" (click)="closeModal()">&times;</span>
+            <h2>Modal</h2>
+            <input type="number" formControlName="cantidad" placeholder="Cantidad">
+            <input type="number" formControlName="unidadMedida" placeholder="Unidad de medida">
+            <button (click)="addSelectedItem()">Guardar</button>
+        </div>
+    </form>
+  </div>

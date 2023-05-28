@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LeftNavbarComponent } from './left-navbar.component';
+import { GestionarItemComponent } from './gestionar-item.component';
 
-describe('LeftNavbarComponent', () => {
-  let component: LeftNavbarComponent;
-  let fixture: ComponentFixture<LeftNavbarComponent>;
+describe('GestionarItemComponent', () => {
+  let component: GestionarItemComponent;
+  let fixture: ComponentFixture<GestionarItemComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LeftNavbarComponent ]
+      declarations: [ GestionarItemComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(LeftNavbarComponent);
+    fixture = TestBed.createComponent(GestionarItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

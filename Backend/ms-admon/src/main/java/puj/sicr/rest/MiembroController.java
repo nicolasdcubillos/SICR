@@ -43,4 +43,12 @@ public class MiembroController {
     public @ResponseBody RespuestaServicioVO eliminar(Integer id) {
         return service.eliminar(id);
     }
+
+    @CrossOrigin(origins = origen)
+    @RequestMapping(value = "/getByIdSedeRestaurante", method = RequestMethod.GET)
+    public @ResponseBody RespuestaServicioVO getByIdSedeRestaurante(Integer id) {
+        return service.getByIdSedeRestaurante(id);
+    }
+
+
 }

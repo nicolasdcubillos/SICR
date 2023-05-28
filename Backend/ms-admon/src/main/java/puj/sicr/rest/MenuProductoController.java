@@ -52,4 +52,11 @@ public class MenuProductoController {
     public @ResponseBody RespuestaServicioVO getBySedeRestauranteId(Integer id) {
         return service.getBySedeRestauranteId(id);
     }
+
+    @CrossOrigin(origins = origen)
+    @RequestMapping(value = "/getByMenuId", method = RequestMethod.POST)
+    public @ResponseBody RespuestaServicioVO getByMenuId(Integer id) {
+        return service.getByMenuId(id);
+
+    }
 }

@@ -1,11 +1,6 @@
 <div class="navbar">
     <div class="logo">
-        <img src="ruta-de-la-imagen.png" alt="Logo">
-    </div>
-    <div class="nav-links">
-        <h3>Subtítulo 1</h3>
-        <h3>Subtítulo 2</h3>
-        <h3>Subtítulo 3</h3>
+        <img src="../../../assets/images/logoSICR_SinFondo.png" width="150" height="150" alt="Logo">
     </div>
 </div>
 <div class="content">
@@ -13,33 +8,40 @@
   </div>
   <div class="cards-container">
     <div class="card">
-        <h2>Título 1</h2>
-        <i class="fas fa-icono1"></i>
-        <p>Texto de la tarjeta 1</p>
-        <i class="fas fa-icono2"></i>
+        <h2>Usuarios</h2>
+        <p>Gestionar</p>
+        <i class="fa-solid fa-gear" routerLink="/gestionar-usuarios"></i>
     </div>
     <div class="card">
-        <h2>Título 2</h2>
-        <i class="fas fa-icono1"></i>
-        <p>Texto de la tarjeta 2</p>
-        <i class="fas fa-icono2"></i>
+        <h2>Menú</h2>
+        <p>Gestionar</p>
+        <i class="fa-solid fa-gear" routerLink="/gestionar-menu"></i>
     </div>
     <div class="card">
-        <h2>Título 3</h2>
-        <i class="fas fa-icono1"></i>
-        <p>Texto de la tarjeta 3</p>
-        <i class="fas fa-icono2"></i>
+        <h2>Items</h2>
+        <p>Gestionar</p>
+        <i class="fa-solid fa-gear" routerLink="/gestionar-items"></i>
     </div>
     <div class="card">
-        <h2>Título 4</h2>
-        <i class="fas fa-icono1"></i>
-        <p>Texto de la tarjeta 4</p>
-        <i class="fas fa-icono2"></i>
+        <h2>Productos</h2>
+        <p>Gestionar</p>
+        <i class="fa-solid fa-gear" routerLink="/gestionar-productos"></i>
     </div>
     <div class="card">
-        <h2>Título 5</h2>
-        <i class="fas fa-icono1"></i>
-        <p>Texto de la tarjeta 5</p>
-        <i class="fas fa-icono2"></i>
+        <h2>Sedes</h2>
+        <p>Gestionar</p>
+        <i class="fa-solid fa-gear" routerLink="/gestionar-sedes"></i>
     </div>
+    <div class="card">
+        <form [formGroup]="sedeAdmin">
+            <h2>Administrar sede</h2>
+            <label  for="validationServer033">Selecciona una sede</label>
+            <select formControlName="sedeId" class="auto_width form-control">
+                <option value=""></option>
+              <option *ngFor="let sede of sedes" [value]="sede.id">{{ sede.nombre }}</option>
+            </select>
+            <i class="fa-solid fa-gear" (click)="redirectAdminSede()"></i>
+        </form>
+    </div>
+    
 </div>

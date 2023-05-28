@@ -231,4 +231,26 @@ public class MiembroService {
         miembro.setTipoMiembro(tipoMiembro);
         return miembro;
     }
+
+    public RespuestaServicioVO getByIdSedeRestaurante(Integer id) {
+        RespuestaServicioVO respuesta = new RespuestaServicioVO();
+        try {
+            List<Miembro> miembros = repository.findBySedeRestauranteId(id);
+            List<MiembroDTO> respuestaObj = miembros.stream().map((miembro) -> mapToDTO(miembro)).toList();
+            respuesta.setObjeto(respuestaObj);
+            respuesta.setExitosa(true);
+            respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
+        } catch (DataAccessException e) {
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            logger.error(e.getMessage());
+        } catch (Exception e) {
+
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            respuesta.setDescripcionExcepcion(e.getMessage());
+            logger.error(e.getMessage());
+        }
+        return respuesta;
+    }
 }

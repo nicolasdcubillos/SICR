@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import puj.sicr.dto.ItemSedeDTO;
 import puj.sicr.dto.ItemSedeRestauranteDTO;
 import puj.sicr.dto.SolicitarInventarioDto;
 import puj.sicr.entidad.Item;
@@ -20,6 +21,7 @@ import puj.sicr.repository.ItemSedeRestauranteRepository;
 import puj.sicr.repository.SedeRestauranteRepository;
 import puj.sicr.vo.RespuestaServicioVO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -266,6 +268,38 @@ public class ItemSedeRestauranteService {
         final SedeRestaurante sedeRestaurante = itemSedeRestauranteDTO.getSedeRestaurante() == null ? null : sedeRestauranteRepository.findById(itemSedeRestauranteDTO.getSedeRestaurante()).get();
         itemSedeRestaurante.setSedeRestaurante(sedeRestaurante);
         return itemSedeRestaurante;
+    }
+
+    public RespuestaServicioVO getBySedeId(Integer id) {
+        RespuestaServicioVO respuesta = new RespuestaServicioVO();
+        try {
+            List<ItemSedeRestaurante> coldatos = repository.getBySedeId(id);
+            List<ItemSedeDTO> respuestaObj = new ArrayList();
+            for (ItemSedeRestaurante ItemSede: coldatos) {
+                ItemSedeDTO itemSedeDTO = new ItemSedeDTO();
+                itemSedeDTO.setId(ItemSede.getId());
+                itemSedeDTO.setCantidad(ItemSede.getCantidad());
+                itemSedeDTO.setItem(ItemSede.getItem().getId());
+                itemSedeDTO.setSedeRestaurante(ItemSede.getSedeRestaurante().getId());
+                itemSedeDTO.setNombre(ItemSede.getItem().getNombre());
+                itemSedeDTO.setCostoUnitario(ItemSede.getItem().getCostoUnitario());
+                respuestaObj.add(itemSedeDTO);
+            }
+            respuesta.setObjeto(respuestaObj);
+            respuesta.setExitosa(true);
+            respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
+        } catch (DataAccessException e) {
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            logger.error(e.getMessage());
+        } catch (Exception e) {
+
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            respuesta.setDescripcionExcepcion(e.getMessage());
+            logger.error(e.getMessage());
+        }
+        return respuesta;
     }
 
 

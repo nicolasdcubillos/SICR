@@ -1,1 +1,82 @@
-<p>gestionar-sedes works!</p>
+
+<div class="navbar">
+    <div class="logo">
+        <img src="../../../assets/images/logoSICR_SinFondo.png" width="150" height="150" alt="Logo">
+    </div>
+</div>
+<main class="col-md-9 float-right col px-5 pl-md-2 pt-2 main content">
+    <!-- <a href="#" data-target="#sidebar" data-toggle="collapse"><i class="text-dark fa fa-navicon fa-lg py-2 p-1"></i></a>-->
+    <div class="page-header">
+        <h2 class="display-4 font-weight-light">Administrador de sedes</h2>
+    </div>
+    <hr>
+    <form class="mt-4"
+    [formGroup]="crearSedeForm"
+    (ngSubmit)="crear()" >
+        <div class="row">           
+            <div class="col-4">
+                <label class="mt-3" for="validationServer033">Nombre</label>
+                <input type="text" class="auto_width form-control" formControlName="nombre">
+            </div>
+            <div class="col-4">
+                <label class="mt-3" for="validationServer033">Direccion</label>
+                <input type="text" class="auto_width form-control" formControlName="direccion">
+            </div>
+            <div class="col-4">
+                <label class="mt-3" for="validationServer033">Capacidad</label>
+                <input type="number" class="auto_width form-control" formControlName="capacidad">
+            </div> 
+        </div>
+        <div class="row">           
+            <div class="col-4">
+                <label class="mt-3" for="validationServer033">Fecha de Apertura</label>
+                <input type="date" class="auto_width form-control" formControlName="fechaApertura" value="{{this.sedeEdit.fechaApertura | date:'YYYY-MM-dd'}}">
+            </div>
+            <div class="col-4">
+                <label class="mt-3" for="validationServer033">Fecha de Cierre</label>
+                <input type="date" class="auto_width form-control" formControlName="fechaCierre" value="{{this.sedeEdit.fechaCierre| date:'YYYY-MM-dd'}}">
+            </div>
+            <div class="col-4" >
+                <label class="mt-3" for="validationServer033">Restaurante</label>
+                <select  type="text" class="form-control " id="validationServer033" formControlName="restaurante" >
+                    <option></option>
+                    <option *ngFor="let res of restaurantes" value="{{res.id}}">{{res.nombre}}</option>
+                </select>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 2%;">
+            <button type="button" class="btn btn-success mb-5" (click)="crear()" [disabled]="!crearSedeForm.valid" [hidden]="edit==true">Agregar</button>
+            <button type="button" class="btn btn-success mb-5" (click)="confirmarEdicion()" [disabled]="!crearSedeForm.valid" [hidden]="edit==false">Editar</button>
+            <button type="button" class="btn btn-danger mb-5" style="margin-left: 5px;" routerLink="/home-admin">Cancelar</button>
+            </div>
+            
+
+    </form>
+
+
+    <table class="table mt-5">
+        <thead>
+            <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Dirección</th>
+            <th scope="col">Capacidad</th>
+            <th scope="col">Fecha Apertura</th>
+            <th scope="col">Fecha Cierre</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let sede of sedes">
+            <td>{{sede.nombre}}</td> 
+            <td>{{sede.direccion}}</td> 
+            <td>{{sede.capacidad}}</td> 
+            <td>{{sede.fechaApertura | date:'yyyy-MM-dd'}}</td> 
+            <td>{{sede.fechaCierre | date:'yyyy-MM-dd'}}</td> 
+            <td><i class="fa-solid fa-pen-to-square" style="color: rgb(220, 210, 37);" [routerLink]="['/gestionar-sedes', sede.id]"></i></td>
+            <td><i class="fa-solid fa-trash mr-5" style="color: rgb(255, 0, 0);" (click)="confirmarEliminar(sede)"></i></td>
+            </tr>
+        </tbody>
+        </table>
+
+</main>

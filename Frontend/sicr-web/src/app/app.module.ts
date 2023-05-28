@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,7 +19,17 @@ import { GestionarCategoriaComponent } from './components/gestionar-categoria/ge
 import { GestionarRestaurantesComponent } from './components/gestionar-restaurantes/gestionar-restaurantes.component';
 import { GestionarSedesComponent } from './components/gestionar-sedes/gestionar-sedes.component';
 import { HomeClienteComponent } from './components/home-cliente/home-cliente.component';
-import { LeftNavbarComponent } from './components/left-navbar/left-navbar.component';
+import { AuthInterceptor } from './services/authconfig.interceptor';
+import { GestionarItemComponent } from './components/gestionar-item/gestionar-item.component';
+import { GestionarProductoComponent } from './components/gestionar-producto/gestionar-producto.component';
+
+
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatChipsModule} from '@angular/material/chips'
+import {MatIconModule} from '@angular/material/icon';
+import {MatSortModule} from '@angular/material/sort';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { DetalleSedeComponent } from './components/detalle-sede/detalle-sede.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +47,9 @@ import { LeftNavbarComponent } from './components/left-navbar/left-navbar.compon
     GestionarRestaurantesComponent,
     GestionarSedesComponent,
     HomeClienteComponent,
-    LeftNavbarComponent
+    GestionarItemComponent,
+    GestionarProductoComponent,
+    DetalleSedeComponent
   ],
   imports: [
     BrowserModule,
@@ -46,8 +58,20 @@ import { LeftNavbarComponent } from './components/left-navbar/left-navbar.compon
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    MatAutocompleteModule,
+    MatChipsModule,
+    MatIconModule,
+    MatSortModule,
+    MatFormFieldModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }
