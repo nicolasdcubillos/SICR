@@ -209,6 +209,7 @@ public class ProductoService {
         ProductoDTO productoDTO = new ProductoDTO();
         productoDTO.setId(producto.getId());
         productoDTO.setNombre(producto.getNombre());
+        productoDTO.setPrecio(producto.getPrecio());
         productoDTO.setCategoria(producto.getCategoria() == null ? null : producto.getCategoria().getId());
         productoDTO.setEstadoProducto(producto.getEstadoProducto() == null ? null : producto.getEstadoProducto().getId());
         return productoDTO;
@@ -218,6 +219,7 @@ public class ProductoService {
         Producto producto = new Producto();
         producto.setId(productoDTO.getId());
         producto.setNombre(productoDTO.getNombre());
+        producto.setPrecio(productoDTO.getPrecio());
         final Categoria categoria = productoDTO.getCategoria() == null ? null : categoriaRepository.findById(productoDTO.getCategoria()).get();
         producto.setCategoria(categoria);
         final EstadoProducto estadoProducto = productoDTO.getEstadoProducto() == null ? null : estadoProductoRepository.findById(productoDTO.getEstadoProducto()).get();

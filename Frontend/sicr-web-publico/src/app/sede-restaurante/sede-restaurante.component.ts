@@ -17,7 +17,6 @@ export class SedeRestauranteComponent {
     private menuProductoService: MenuProductoService,
     private categoriaService: CategoriaService,
     private sedeRestauranteService: SedeRestauranteService,
-    private productoService: ProductoService,
     private toastr: ToastrService,
     private spinner: NgxSpinnerService) { }
 

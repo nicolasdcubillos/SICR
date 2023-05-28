@@ -5,6 +5,12 @@
     text-align: center;
     margin-bottom: 20px;
   }
+
+  .image-container {
+    margin-left: auto; /* Centra horizontalmente el contenedor */
+    margin-right: auto; /* Centra horizontalmente el contenedor */
+  }
+  
   
   .logo-img {
     width: 80px;

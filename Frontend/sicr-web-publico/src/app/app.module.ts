@@ -32,7 +32,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     FormsModule,
     ToastrModule.forRoot(),
-    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' })
+    NgxSpinnerModule.forRoot({ type: 'ball-atom' })
   ],
   providers: [],
   bootstrap: [AppComponent]

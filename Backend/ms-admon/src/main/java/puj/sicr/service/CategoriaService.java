@@ -9,10 +9,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import puj.sicr.dto.CategoriaDto;
+import puj.sicr.dto.ProductoDTO;
 import puj.sicr.entidad.Categoria;
 import puj.sicr.entidad.Menu;
 import puj.sicr.repository.CategoriaRepository;
 import puj.sicr.vo.RespuestaServicioVO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CategoriaService {
@@ -21,13 +26,16 @@ public class CategoriaService {
 
     @Autowired
     private CategoriaRepository repository;
+
+    @Autowired
+    private ProductoService productoService;
     public RespuestaServicioVO getById(Integer id) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
             Categoria categoria = repository.findById(id).get();
             respuesta.setObjeto(categoria);
             respuesta.setExitosa(true);
-            respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
+            respuesta.setDescripcionRespuesta("Transacción exitosa.");
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -44,9 +52,25 @@ public class CategoriaService {
     public RespuestaServicioVO getAll() {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            Iterable<Categoria> coldatos = repository.findAll();
-            System.out.println(coldatos);
-            respuesta.setObjeto(coldatos);
+            List<Categoria> coldatos = repository.findAll();
+            List<CategoriaDto> respuestaObj = new ArrayList<>();
+            for (Categoria categoria : coldatos) {
+                CategoriaDto categoriaDto = new CategoriaDto();
+                categoriaDto.setId(categoria.getId());
+                categoriaDto.setNombre(categoria.getNombre());
+                RespuestaServicioVO respuestaProductos = productoService.getByCategoriaId(categoria.getId());
+                if (respuestaProductos.getExitosa()) {
+                    List<ProductoDTO> productos = (List<ProductoDTO>) respuestaProductos.getObjeto();
+                    categoriaDto.setProductos(productos);
+                    respuesta.setObjeto(respuestaObj);
+                    respuesta.setExitosa(true);
+                    respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
+                } else {
+                    return respuestaProductos;
+                }
+                respuestaObj.add(categoriaDto);
+            }
+            respuesta.setObjeto(respuestaObj);
             respuesta.setExitosa(true);
         } catch (Exception e) {
             respuesta.setObjeto(null);
