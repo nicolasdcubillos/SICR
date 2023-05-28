@@ -23,12 +23,12 @@ import { AuthInterceptor } from './services/authconfig.interceptor';
 import { GestionarItemComponent } from './components/gestionar-item/gestionar-item.component';
 import { GestionarProductoComponent } from './components/gestionar-producto/gestionar-producto.component';
 
-//Material
+
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatChipsModule} from '@angular/material/chips'
+import {MatIconModule} from '@angular/material/icon';
+import {MatSortModule} from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -56,11 +56,11 @@ import { MatInputModule } from '@angular/material/input';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    MatFormFieldModule,
-    MatChipsModule,
     MatAutocompleteModule,
+    MatChipsModule,
     MatIconModule,
-    MatInputModule
+    MatSortModule,
+    MatFormFieldModule
   ],
   providers: [
     {

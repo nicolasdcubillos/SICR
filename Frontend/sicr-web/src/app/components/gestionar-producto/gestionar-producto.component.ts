@@ -1,12 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { AdmonService } from 'src/app/services/admon.service';
 import Swal from 'sweetalert2';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+
 
 @Component({
   selector: 'app-gestionar-producto',
@@ -16,6 +13,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 export class GestionarProductoComponent implements OnInit {
 
   crearProductoForm:FormGroup;
+  crearProductoItemForm:FormGroup;
 
   edit:boolean = false;
 
@@ -27,12 +25,34 @@ export class GestionarProductoComponent implements OnInit {
   categorias: any=[];
   estadosProducto: any=[];
 
+  selectedOption: any;
+  selectedItems: string[] = [];
+
+  addSelectedItem(): void {
+    console.log(this.crearProductoItemForm.value);
+    // if (this.selectedOption) {
+    //   this.selectedItems.push(this.selectedOption);
+    //   this.selectedOption = '';
+    // }
+  }
+
+  eliminarItemSelec(){
+
+  }
+
   constructor(public fb: FormBuilder,private router:Router,private activatedRoute:ActivatedRoute, private admonService:AdmonService){
     this.crearProductoForm = this.fb.group({
       nombre: ['',[Validators.required]],
       categoria: ['',[Validators.required]],
       estadoProducto: ['',[Validators.required]],
     });
+    this.crearProductoItemForm = this.fb.group({
+      ItemId: [''],
+      ProductoId: [''],
+      Cantidad: [''],
+      UnidadMedida: [''],
+    })
+
   }
 
   ngOnInit(): void {
@@ -54,91 +74,6 @@ export class GestionarProductoComponent implements OnInit {
       })
     }
   }
-
-  //Chips
-  //Chips PropertyType
-
-  public chipSelectedProperty: any[] = [];
-  public filteredProperty!: Observable<String[]>;
-  private allowFreeTextAddProperty = false;
-  public propertyControl = new FormControl();
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-
-  @ViewChild('propertyInput') propertyInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('auto3') matAutocomplete3!: MatAutocomplete;
-
-  public addProperty(event: MatChipInputEvent): void {
-    if (!this.allowFreeTextAddProperty) {
-      console.log('allowFreeTextAddProperty is false');
-      return;
-    }
-    if (this.matAutocomplete3.isOpen) {
-      return;
-    }
-
-     const value = event.value;
-     if ((value || '').trim()) {
-      this.selectPropertyByName(value.trim());
-    }
-
-    this.resetInputs3();
-  }
-
-  public removeProperty(property: any): void {
-    const index = this.chipSelectedProperty.indexOf(property);
-    if (index >= 0) {
-      this.chipSelectedProperty.splice(index, 1);
-      this.resetInputs3();
-    }
-  }
-
-  public propertySelected(event: MatAutocompleteSelectedEvent): void {
-    this.selectPropertyByName(event.option.value);
-    this.resetInputs3();
-  }
-
-  private resetInputs3() {
-    this.propertyInput.nativeElement.value = '';
-    this.propertyControl.setValue(null); 
-  }
-  private filterOnValueChange3(propertyName: string | null): String[] {
-    let result: String[] = [];
-    let allPropertyLessSelected = this.items.filter((property: any) => this.chipSelectedProperty.indexOf(property) < 0);
-    if (propertyName) {
-      result = this.filterProperty(allPropertyLessSelected, propertyName);
-    } else {
-      result = allPropertyLessSelected.map((property: { name: any; }) => property.name);
-    }
-    return result;
-  }
-
-  private filterProperty(propertyList: any[], propertyName: String): String[] {
-    let filteredPropertyList: any[] = [];
-    const filterValue = propertyName.toLowerCase();
-    let propertiesMatchingPropertyName = propertyList.filter(property => property.name.toLowerCase().indexOf(filterValue) === 0);
-    if (propertiesMatchingPropertyName.length || this.allowFreeTextAddProperty) {
-
-      filteredPropertyList = propertiesMatchingPropertyName;
-    } else {
-
-      filteredPropertyList = propertyList;
-    }
-
-    return filteredPropertyList.map(city => city.name);
-  }
-
-  private selectPropertyByName(propertyName: string) {
-    let foundProperty = this.items.filter((property: { name: string; }) => property.name == propertyName);
-    if (foundProperty.length) {
-
-      this.chipSelectedProperty.push(foundProperty[0]);
-    } else {
-
-      let highestEmployeeId = Math.max(...this.chipSelectedProperty.map(property => property.id), 0);
-      this.chipSelectedProperty.push({ name: propertyName, id: highestEmployeeId  });
-    }
-  }
-
 
   getItems(){
     this.admonService.getItems().subscribe({
@@ -168,18 +103,20 @@ export class GestionarProductoComponent implements OnInit {
     this.admonService.getProductos().subscribe({
       next:(res:any)=>{
         this.productos = res.objeto;
-        console.log(this.productos);
       }
     })
   }
 
   crear(){
-    this.admonService.crearUsaurio(this.crearProductoForm.value).subscribe({
+    this.crearProductoForm.get('categoria')!.setValue(Number(this.crearProductoForm.value.categoria));
+    this.crearProductoForm.get('estadoProducto')!.setValue(Number(this.crearProductoForm.value.estadoProducto));
+    console.log(this.crearProductoForm.value)
+    this.admonService.crearProducto(this.crearProductoForm.value).subscribe({
       next:(res:any)=>{
         console.log(res);
         if(res.exitosa){
           Swal.fire({
-            title: 'Usuario Creado',
+            title: 'Producto Creado',
             icon: 'success',
             showCloseButton:true,
             confirmButtonText:"Aceptar",
