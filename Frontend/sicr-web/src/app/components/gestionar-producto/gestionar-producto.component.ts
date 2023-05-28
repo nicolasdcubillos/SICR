@@ -25,20 +25,9 @@ export class GestionarProductoComponent implements OnInit {
   categorias: any=[];
   estadosProducto: any=[];
 
-  selectedOption: any;
-  selectedItems: string[] = [];
-
-  addSelectedItem(): void {
-    console.log(this.crearProductoItemForm.value);
-    // if (this.selectedOption) {
-    //   this.selectedItems.push(this.selectedOption);
-    //   this.selectedOption = '';
-    // }
-  }
-
-  eliminarItemSelec(){
-
-  }
+  itemsProducto:any=[];
+  showModal = false;
+  idProductoEdit:string='';
 
   constructor(public fb: FormBuilder,private router:Router,private activatedRoute:ActivatedRoute, private admonService:AdmonService){
     this.crearProductoForm = this.fb.group({
@@ -47,10 +36,10 @@ export class GestionarProductoComponent implements OnInit {
       estadoProducto: ['',[Validators.required]],
     });
     this.crearProductoItemForm = this.fb.group({
-      ItemId: [''],
-      ProductoId: [''],
-      Cantidad: [''],
-      UnidadMedida: [''],
+      item: [''],
+      producto: [''],
+      cantidad: [''],
+      unidadMedida: [''],
     })
 
   }
@@ -63,6 +52,7 @@ export class GestionarProductoComponent implements OnInit {
     this.getItems();
     if(params['id']) {
       this.edit=true;
+      this.idProductoEdit=params['id'];
       this.admonService.getProductoById(params['id']).subscribe({
         next:(res:any)=>{
           this.productoEdit=res.objeto;
@@ -70,9 +60,95 @@ export class GestionarProductoComponent implements OnInit {
           this.crearProductoForm.get('nombre')!.setValue(this.productoEdit.nombre);
           this.crearProductoForm.get('categoria')!.setValue(this.productoEdit.categoria);
           this.crearProductoForm.get('estadoProducto')!.setValue(this.productoEdit.estadoProducto);
+          this.admonService.getItemsByProductId(Number(params['id']),this.productoEdit).subscribe({
+            next:(res:any)=>{
+              this.itemsProducto=res.objeto;
+              console.log(this.itemsProducto);
+            }
+          })
         }
       })
     }
+  }
+
+  addSelectedItem(): void {
+    this.crearProductoItemForm.value.producto=Number(this.idProductoEdit)
+    this.admonService.crearProductoItem(this.crearProductoItemForm.value).subscribe({
+      next:(res:any)=>{
+        console.log(res);
+        if(res.exitosa){
+          Swal.fire({
+            title: 'Item de Producto Creado',
+            icon: 'success',
+            showCloseButton:true,
+            confirmButtonText:"Aceptar",
+            confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
+          })
+        }else{
+          Swal.fire({
+            title: 'Error',
+            icon: 'error',
+            text: res.descripcionExcepcion,
+            showCloseButton:true,
+            confirmButtonText:"Aceptar",
+            confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
+          })
+        }
+      }
+    })
+    this.closeModal();
+    this.crearProductoItemForm.reset();
+  }
+
+  openModal(): void {
+    this.showModal = true;
+  }
+
+  closeModal(): void {
+    this.showModal = false;
+  }
+
+  confirmDeleteItemProd(itemPrductoId:string){
+    Swal.fire({
+      title: 'Seguro quiere eliminar el item del producto ?',
+      icon: 'warning',
+      showCloseButton:true,
+      confirmButtonText:"Aceptar",
+      confirmButtonColor: "#DD6B55",
+    }).then((result)=>{
+      if(result.isConfirmed)this.deleteProductoItem(itemPrductoId);
+    })
+  }
+
+  deleteProductoItem(itemPrductoId:string){
+    this.admonService.eliminarProductoItem(itemPrductoId).subscribe({
+      next:(res:any)=>{
+        if(res.exitosa){
+          Swal.fire({
+            title: 'Item del producto Eliminado',
+            icon: 'success',
+            showCloseButton:true,
+            confirmButtonText:"Aceptar",
+            confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
+          })
+        }else{
+          Swal.fire({
+            title: 'Error',
+            icon: 'error',
+            text: res.descripcionExcepcion,
+            showCloseButton:true,
+            confirmButtonText:"Aceptar",
+            confirmButtonColor: "#DD6B55",
+          })
+        }
+      }
+    })
   }
 
   getItems(){
@@ -142,33 +218,28 @@ export class GestionarProductoComponent implements OnInit {
 
   confirmarEdicion(){
     Swal.fire({
-      title: 'Esta seguro de editar este usuario ?',
+      title: 'Esta seguro de editar este producto ?',
       icon: 'warning',
       showCloseButton:true,
       confirmButtonText:"Aceptar",
       confirmButtonColor: "#DD6B55",
     }).then((result)=>{
-      if(result.isConfirmed)this.editarUsuario();
+      if(result.isConfirmed)this.editarProducto();
     })
   }
 
-  editarUsuario(){
-    this.productoEdit.nombres = this.crearProductoForm.value.nombres
-    this.productoEdit.apellidos = this.crearProductoForm.value.apellidos
-    this.productoEdit.username = this.crearProductoForm.value.username
-    this.productoEdit.direccion = this.crearProductoForm.value.direccion
-    this.productoEdit.telefono = this.crearProductoForm.value.telefono
-    this.productoEdit.email = this.crearProductoForm.value.email
-    this.productoEdit.tipoUsuario = this.crearProductoForm.value.tipoUsuario
-    this.productoEdit.password = this.crearProductoForm.value.password
+  editarProducto(){
+    this.productoEdit.nombre = this.crearProductoForm.value.nombre
+    this.productoEdit.categoria = Number(this.crearProductoForm.value.categoria)
+    this.productoEdit.estadoProducto = Number(this.crearProductoForm.value.estadoProducto)
 
     console.log(this.productoEdit);
 
-    this.admonService.updateUsaurios(this.productoEdit,this.productoEdit.id).subscribe({
+    this.admonService.updateProducto(this.productoEdit,this.productoEdit.id).subscribe({
       next:(res:any)=>{
         if(res.exitosa){
           Swal.fire({
-            title: 'Usuario Editado',
+            title: 'Producto Editado',
             icon: 'success',
             showCloseButton:true,
             confirmButtonText:"Aceptar",

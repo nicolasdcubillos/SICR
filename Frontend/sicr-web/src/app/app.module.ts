@@ -60,7 +60,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatChipsModule,
     MatIconModule,
     MatSortModule,
-    MatFormFieldModule
+    MatFormFieldModule,
   ],
   providers: [
     {

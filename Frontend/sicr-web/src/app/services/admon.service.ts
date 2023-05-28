@@ -74,6 +74,27 @@ export class AdmonService {
     return this.http.get(api,{params: params});
   }
 
+  //ProductoItem
+
+  crearProductoItem(productoItem:any){
+    let api = `${this.endpoint}/ProductoItem/crear`
+    return this.http.post(api,productoItem);
+  }
+
+  eliminarProductoItem(productoItemId:string){
+    let api = `${this.endpoint}/ProductoItem/eliminar`;
+    let params = new HttpParams();
+    params = params.append('id', productoItemId);
+    return this.http.get(api,{params: params});
+  }
+
+  getItemsByProductId(productId:number,producto:any){
+    let api = `${this.endpoint}/ProductoItem/getByProductoId`;
+    let params = new HttpParams();
+    params = params.append('id', productId);
+    return this.http.post(api,producto,{params: params});
+  }
+
    //SEDES
    getSedes(){
     return this.http.get(`${this.endpoint}/SedeRestaurante/getAll`);
