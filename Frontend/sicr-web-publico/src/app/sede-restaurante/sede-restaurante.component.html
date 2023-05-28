@@ -3,14 +3,12 @@
     <h3 class="sede-title">{{ sede.nombre }}</h3>
     <p class="sede-address">{{ sede.direccion }}</p>
   </a>
-
 <div class="separator"></div>
 
 <div class="title-container">
-    <ng-container *ngFor="let categoria of categorias;">
+  <button [routerLink]="['/reservar', sede.id]" class="button-secundario">Reservar</button>
+  <ng-container *ngFor="let categoria of categorias;">
         <h1 class="title">{{ categoria.nombre }}</h1>
     </ng-container>
   </div>
-
-  
   <router-outlet></router-outlet>
