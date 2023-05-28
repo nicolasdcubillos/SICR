@@ -1,14 +1,34 @@
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
 <a class="link-text">
-    <img src="assets/img/logo.jpg" alt="Logo del restaurante" class="logo-img">
-    <h3 class="sede-title">{{ sede.nombre }}</h3>
-    <p class="sede-address">{{ sede.direccion }}</p>
-  </a>
+  <img src="assets/img/logo.jpg" alt="Logo del restaurante" class="logo-img">
+  <h3 class="sede-title">{{ sede.nombre }}</h3>
+  <p class="sede-address">{{ sede.direccion }}</p>
+</a>
 <div class="separator"></div>
 
 <div class="title-container">
   <button [routerLink]="['/reservar', sede.id]" class="button-secundario">Reservar</button>
   <ng-container *ngFor="let categoria of categorias;">
-        <h1 class="title">{{ categoria.nombre }}</h1>
-    </ng-container>
+    <div class="category-divider">
+    
+    <div class="divider-line"></div>
+    <div class="divider-content">{{ categoria.nombre }}</div>
+    <div class="divider-line"></div>
   </div>
-  <router-outlet></router-outlet>
+    <div class="sede-row">
+      <ng-container *ngFor="let producto of categoria.productos; let i = index;">
+        <div class="sede-card" [ngClass]="{'break-row': i % 5 === 0 && i !== 0}">
+          <a class="link-text2">
+            <h3 class="prod-title">{{ producto.nombre }}</h3>
+            <p class="prod-address">${{ producto.precio }}</p>
+          </a>
+          <button class="carrito-button">
+            <img class="carrito-button" src="assets/img/carrito.png" alt="Carrito de compras">
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<router-outlet></router-outlet>

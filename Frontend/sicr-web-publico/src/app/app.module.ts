@@ -9,6 +9,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { SedeRestauranteComponent } from './sede-restaurante/sede-restaurante.component';
 import { ReservaComponent } from './reserva/reserva.component';
 import {FormsModule} from "@angular/forms";
+import { ToastrModule } from 'ngx-toastr';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 const routes: Routes = [
   { path: '', component: InicioComponent },
@@ -28,7 +30,9 @@ const routes: Routes = [
     AppRoutingModule,
     HttpClientModule,
     RouterModule.forRoot(routes),
-    FormsModule
+    FormsModule,
+    ToastrModule.forRoot(),
+    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' })
   ],
   providers: [],
   bootstrap: [AppComponent]
