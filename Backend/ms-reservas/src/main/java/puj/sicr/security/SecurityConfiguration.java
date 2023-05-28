@@ -40,7 +40,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/actuator/health**").permitAll()
                 .requestMatchers("/v3/api-docs", "/swagger-ui/**", "/configuration/ui", "/swagger-resources/**",
                         "/configuration/security", "/swagger-ui.html", "/webjars/**")
-                .permitAll().anyRequest().authenticated().and().exceptionHandling()
+                .permitAll().requestMatchers("/Reserva/**").permitAll().anyRequest().authenticated().and().exceptionHandling()
                 .authenticationEntryPoint(jwtEntryPoint).and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
