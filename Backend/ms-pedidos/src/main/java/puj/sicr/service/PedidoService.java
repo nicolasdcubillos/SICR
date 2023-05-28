@@ -9,9 +9,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import puj.sicr.entidad.Pedido;
-import puj.sicr.repository.PedidoRepository;
+import puj.sicr.dto.PedidoDTO;
+import puj.sicr.dto.PedidoProductoDTO;
+import puj.sicr.dto.RealizarPedidoDTO;
+import puj.sicr.entidad.*;
+import puj.sicr.repository.*;
 import puj.sicr.vo.RespuestaServicioVO;
+
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class PedidoService {
@@ -21,11 +31,44 @@ public class PedidoService {
     @Autowired
     private PedidoRepository repository;
 
+    @Autowired
+    private MiembroRepository miembroRepository;
+
+    @Autowired
+    private EstadoPedidoRepository estadoPedidoRepository;
+
+    @Autowired
+    private SedeRestauranteRepository sedeRestauranteRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private EstadoPedidoService estadoPedidoService;
+
+    @Autowired
+    private SedeRestauranteService sedeRestauranteService;
+
+    @Autowired
+    private ProductoPedidoService productoPedidoService;
+
+    @Autowired
+    private ItemSedeRestauranteService itemSedeRestauranteService;
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private MiembroService miembroService;
+
+    @Autowired
+    private ProductoService productoService;
+
     public RespuestaServicioVO getById(Integer id) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
             Pedido pedido = repository.findById(id).get();
-            respuesta.setObjeto(pedido);
+            respuesta.setObjeto(mapToDTO(pedido));
             respuesta.setExitosa(true);
             respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
         } catch (DataAccessException e) {
@@ -45,7 +88,8 @@ public class PedidoService {
     public RespuestaServicioVO getAll() {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            Iterable<Pedido> coldatos = repository.findAll();
+            List<Pedido> coldatos = repository.findAll();
+            List<PedidoDTO> respuestaObj = coldatos.stream().map((pedido) -> mapToDTO(pedido)).toList();
             System.out.println(coldatos);
             respuesta.setObjeto(coldatos);
             respuesta.setExitosa(true);
@@ -93,10 +137,10 @@ public class PedidoService {
         return respuesta;
     }
 
-    public RespuestaServicioVO crear(Pedido pedido) {
+    public RespuestaServicioVO crear(PedidoDTO pedidoDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = crearTX(pedido);
+            respuesta = crearTX(mapToEntity(pedidoDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -120,10 +164,10 @@ public class PedidoService {
         return respuesta;
     }
 
-    public RespuestaServicioVO actualizar(Pedido pedido) {
+    public RespuestaServicioVO actualizar(PedidoDTO pedidoDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            respuesta = actualizarTX(pedido);
+            respuesta = actualizarTX(mapToEntity(pedidoDTO));
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
             respuesta.setExitosa(false);
@@ -190,6 +234,197 @@ public class PedidoService {
         respuesta.setObjeto(null);
         respuesta.setExitosa(true);
         respuesta.setDescripcionRespuesta("Transacción exitosa.");
+        return respuesta;
+    }
+
+    private PedidoDTO mapToDTO(final Pedido pedido) {
+        PedidoDTO pedidoDTO = new PedidoDTO();
+        pedidoDTO.setId(pedido.getId());
+        pedidoDTO.setSubtotal(pedido.getSubtotal());
+        pedidoDTO.setTotal(pedido.getTotal());
+        pedidoDTO.setFecha(pedido.getFecha());
+        pedidoDTO.setMiembro(pedido.getMiembro() == null ? null : pedido.getMiembro().getId());
+        pedidoDTO.setEstadoPedido(pedido.getEstadoPedido() == null ? null : pedido.getEstadoPedido().getId());
+        pedidoDTO.setSedeRestaurante(pedido.getSedeRestaurante() == null ? null : pedido.getSedeRestaurante().getId());
+        pedidoDTO.setUsuario(pedido.getUsuario() == null ? null : pedido.getUsuario().getId());
+        return pedidoDTO;
+    }
+
+    private Pedido mapToEntity(final PedidoDTO pedidoDTO) {
+        Pedido pedido = new Pedido();
+        pedido.setId(pedidoDTO.getId());
+        pedido.setSubtotal(pedidoDTO.getSubtotal());
+        pedido.setTotal(pedidoDTO.getTotal());
+        pedido.setFecha(pedidoDTO.getFecha());
+        final Miembro miembro = pedidoDTO.getMiembro() == null ? null : miembroRepository.findById(pedidoDTO.getMiembro()).get();
+        pedido.setMiembro(miembro);
+        final EstadoPedido estadoPedido = pedidoDTO.getEstadoPedido() == null ? null : estadoPedidoRepository.findById(pedidoDTO.getEstadoPedido()).get();
+        pedido.setEstadoPedido(estadoPedido);
+        final SedeRestaurante sedeRestaurante = pedidoDTO.getSedeRestaurante() == null ? null : sedeRestauranteRepository.findById(pedidoDTO.getSedeRestaurante()).get();
+        pedido.setSedeRestaurante(sedeRestaurante);
+        final Usuario usuario = pedidoDTO.getUsuario() == null ? null : usuarioRepository.findById(pedidoDTO.getUsuario()).get();
+        pedido.setUsuario(usuario);
+        return pedido;
+    }
+
+    public RespuestaServicioVO actualizarEstadoPedido(Integer id) {
+        RespuestaServicioVO respuesta = new RespuestaServicioVO();
+        RespuestaServicioVO respuestaPedido = this.getById(id);
+        if (respuestaPedido.getExitosa()) {
+            Pedido pedido = (Pedido) respuestaPedido.getObjeto();
+            if (pedido.getEstadoPedido().getId() < 3) {//Preparando, Enviado y Entregado son los estados
+                Integer nuevoEstadoId = pedido.getEstadoPedido().getId() + 1;
+                RespuestaServicioVO respuestaNuevoEstado = estadoPedidoService.getById(nuevoEstadoId);
+                if (respuestaNuevoEstado.getExitosa()){
+                    EstadoPedido nuevoEstado = (EstadoPedido) respuestaNuevoEstado.getObjeto();
+                    pedido.setEstadoPedido(nuevoEstado);
+                    RespuestaServicioVO respuestaActualizar =this.actualizarTX(pedido);
+                    if (respuestaActualizar.getExitosa()) {
+                        respuesta.setObjeto(nuevoEstado.getNombre());
+                        respuesta.setExitosa(true);
+                        respuesta.setDescripcionRespuesta("Transacción exitosa.");
+                    } else {
+                        return respuestaActualizar;
+                    }
+                } else {
+                    respuesta.setObjeto(null);
+                    respuesta.setExitosa(false);
+                    respuesta.setDescripcionRespuesta("El estado al que se quiere actualizar no existe");
+                }
+            } else{
+                respuesta.setObjeto(null);
+                respuesta.setExitosa(false);
+                respuesta.setDescripcionRespuesta("El estado en el que se encuentra el pedido (" + pedido.getEstadoPedido().getNombre() + ") no se puede actualizar.");
+            }
+        } else {
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(true);
+            respuesta.setDescripcionRespuesta("No existe un pedido por el id ingresado.");
+        }
+        return respuesta;
+    }
+
+    public RespuestaServicioVO realizarPedido(RealizarPedidoDTO pedidoDTO) {
+        RespuestaServicioVO respuesta = new RespuestaServicioVO();
+        RespuestaServicioVO respuestaSedeResaturante = sedeRestauranteService.getById(pedidoDTO.getSedeRestaurante());
+        if (respuestaSedeResaturante.getExitosa()){
+            SedeRestaurante sedeRestaurante = (SedeRestaurante) respuestaSedeResaturante.getObjeto();
+            List<Producto> productoList = new ArrayList();
+            for (PedidoProductoDTO pedidoProductoDTO : pedidoDTO.getPedidoProductos()){
+                RespuestaServicioVO respuestaProducto = productoService.getById(pedidoProductoDTO.getPedidoProductoId());
+                if (respuestaProducto.getExitosa()){
+                    productoList.add((Producto) respuestaProducto.getObjeto());
+                }
+            }
+            if (productoList.size() > 0){
+                List <Item> itemSede = new ArrayList();
+                Map<Item, Integer> disponibilidadItems = new HashMap<>();
+                List <ItemSedeRestaurante> itemSedeRestauranteList = sedeRestaurante.getSedeRestauranteItemSedeRestaurantes();
+                for (ItemSedeRestaurante item : itemSedeRestauranteList){
+                    Item itemS = item.getItem();
+                    itemSede.add(itemS);//Tengo todos los items de la sede
+                    Integer cantidadDisponible = item.getCantidad();
+                    disponibilidadItems.put(itemS, cantidadDisponible);
+                }
+                Integer j=0;
+                outerLoop:
+                for (Producto producto : productoList){
+                    List<ProductoItem> itemList = producto.getProductoProductoItems();
+                    for (int i = 0; i < itemList.size(); i++){
+                        Item item = itemList.get(i).getItem();//saco el item i de uno de los productos del pedido
+                        Integer totalItems = itemList.get(i).getCantidad() * pedidoDTO.getPedidoProductos().get(j).getPedidoProductoCantidad(); //cantidad de items total con base en la canntidad de productos
+                        if (itemSede.contains(item) && disponibilidadItems.getOrDefault(item, 0) >= totalItems){
+                            ItemSedeRestaurante itemSedeRestauranteActualizado = itemSedeRestauranteList.get(i);
+                            int cantidadActual = itemSedeRestauranteActualizado.getCantidad();
+                            int nuevaCantidad = cantidadActual - totalItems;
+                            itemSedeRestauranteActualizado.setCantidad(nuevaCantidad);
+                            RespuestaServicioVO respuestaItemSedeRestaurante = itemSedeRestauranteService.actualizarTX(itemSedeRestauranteActualizado);
+                            if (respuestaItemSedeRestaurante.getExitosa()){
+                                respuesta.setObjeto(respuestaItemSedeRestaurante.getObjeto());
+                                respuesta.setExitosa(true);
+                                respuesta.setDescripcionRespuesta("Transacción exitosa.");
+                            } else {
+                                respuesta.setObjeto(null);
+                                respuesta.setExitosa(false);
+                                respuesta.setDescripcionRespuesta("Error interno al actualizar el inventario del item");
+                                break outerLoop;
+                            }
+                        } else {
+                            respuesta.setObjeto(null);
+                            respuesta.setExitosa(false);
+                            respuesta.setDescripcionRespuesta("El item " + item + " no está presente en la lista de items de la sede o no tiene disponibilidad suficiente.");
+                            break outerLoop;
+                        }
+                        j++;
+                    }
+                }
+                if (respuesta.getExitosa()){
+                    Pedido pedido = new Pedido();
+                    Usuario usuario = new Usuario();
+                    RespuestaServicioVO respuestaNuevoEstado = estadoPedidoService.getById(1);
+                    if (respuestaNuevoEstado.getExitosa()) {
+                        RespuestaServicioVO respuestaUsuario = usuarioService.getById(pedidoDTO.getUsuario());//cambiar por el que viene del DTO
+                        if (respuestaUsuario.getExitosa()) {
+                            if (pedidoDTO.getMiembro() != null && pedidoDTO.getMiembro() != 0){
+                                RespuestaServicioVO respuestaMiembro = miembroService.getById(pedidoDTO.getMiembro());
+                                pedido.setMiembro((Miembro) respuestaMiembro.getObjeto());
+                            }
+                            EstadoPedido nuevoEstado = (EstadoPedido) respuestaNuevoEstado.getObjeto();
+                            Usuario usuarioPedido = (Usuario) respuestaUsuario.getObjeto();
+                            OffsetDateTime fechaHoraActual = OffsetDateTime.now(ZoneOffset.UTC);
+                            pedido.setEstadoPedido(nuevoEstado);
+                            pedido.setUsuario(usuarioPedido);
+                            pedido.setFecha(fechaHoraActual);
+                            pedido.setTotal(pedidoDTO.getTotal());
+                            pedido.setSubtotal(pedidoDTO.getSubtotal());
+                            pedido.setSedeRestaurante(sedeRestaurante);
+                            RespuestaServicioVO respuestaPedido = this.crearTX(pedido);
+                            if (respuestaPedido.getExitosa()){
+                                Pedido pedidoRetornado = (Pedido) respuestaPedido.getObjeto();
+                                List<ProductoPedido> productosPedido = new ArrayList();
+                                j=0;
+                                for (Producto producto : productoList){
+                                    ProductoPedido productoPedido = new ProductoPedido();
+                                    productoPedido.setProducto(producto);
+                                    productoPedido.setCantidad(pedidoDTO.getPedidoProductos().get(j).getPedidoProductoCantidad());
+                                    productoPedido.setPedido(pedidoRetornado);
+                                    productosPedido.add(productoPedido);
+                                    j++;
+                                }
+                                j=0;
+                                for (ProductoPedido productoPedido : productosPedido){
+                                    RespuestaServicioVO respuestaProductoPedido = productoPedidoService.crear(productoPedido);
+                                    if (!respuestaProductoPedido.getExitosa()){
+                                        j++;
+                                    }
+                                }
+                                if (j > 0){
+                                    respuesta.setObjeto(null);
+                                    respuesta.setExitosa(false);
+                                    respuesta.setDescripcionRespuesta("No se pudieron agregar " + j + " productos al pedido");
+                                } else {
+                                    respuesta.setObjeto(pedido);
+                                    respuesta.setExitosa(true);
+                                    respuesta.setDescripcionRespuesta("Transacción exitosa.");
+                                }
+                            }
+                        } else {
+                            respuesta.setObjeto(null);
+                            respuesta.setExitosa(false);
+                            respuesta.setDescripcionRespuesta("El usuario asociado al pedido no existe");
+                        }
+                    } else {
+                        respuesta.setObjeto(null);
+                        respuesta.setExitosa(false);
+                        respuesta.setDescripcionRespuesta("El estado inicial del pedido no existe");
+                    }
+                }
+            }
+        } else {
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            respuesta.setDescripcionRespuesta("No existe una sede restaurante con el ID ingresado.");
+        }
         return respuesta;
     }
 }
