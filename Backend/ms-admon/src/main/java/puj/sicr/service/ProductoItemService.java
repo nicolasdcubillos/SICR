@@ -1,5 +1,7 @@
 package puj.sicr.service;
 
+import org.hibernate.Hibernate;
+import org.hibernate.proxy.HibernateProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ import puj.sicr.repository.ProductoItemRepository;
 import puj.sicr.repository.ProductoRepository;
 import puj.sicr.vo.RespuestaServicioVO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class ProductoItemService {
 
@@ -31,6 +36,9 @@ public class ProductoItemService {
 
     @Autowired
     private ProductoRepository productoRepository;
+
+    @Autowired
+    private ProductoService productoService;
 
     public RespuestaServicioVO getById(Integer id) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
@@ -225,4 +233,37 @@ public class ProductoItemService {
         productoItem.setProducto(producto);
         return productoItem;
     }
+
+    public RespuestaServicioVO getByProductoId(Integer id) {
+        RespuestaServicioVO respuesta = new RespuestaServicioVO();
+        try {
+            Producto producto = productoRepository.getById(id);
+            Hibernate.initialize(producto.getProductoProductoItems());
+
+            List<ProductoItem> productoItem = producto.getProductoProductoItems();
+            List<Item> itemProducto = new ArrayList();
+            for (ProductoItem productoI:productoItem) {
+                Item item = productoI.getItem();
+                if (item instanceof HibernateProxy) {
+                    item = (Item) ((HibernateProxy) item).getHibernateLazyInitializer().getImplementation();
+                }
+                itemProducto.add(item);
+            }
+            respuesta.setObjeto(itemProducto);
+            respuesta.setExitosa(true);
+            respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
+        } catch (DataAccessException e) {
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            logger.error(e.getMessage());
+        } catch (Exception e) {
+
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            respuesta.setDescripcionExcepcion(e.getMessage());
+            logger.error(e.getMessage());
+        }
+        return respuesta;
+    }
+
 }

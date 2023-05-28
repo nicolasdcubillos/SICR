@@ -9,6 +9,7 @@ import { GestionarMenuComponent } from './components/gestionar-menu/gestionar-me
 import { GestionarItemComponent } from './components/gestionar-item/gestionar-item.component';
 import { GestionarSedesComponent } from './components/gestionar-sedes/gestionar-sedes.component';
 import { GestionarProductoComponent } from './components/gestionar-producto/gestionar-producto.component';
+import { DetalleSedeComponent } from './components/detalle-sede/detalle-sede.component';
 
 const routes: Routes = [
   	{
@@ -46,6 +47,10 @@ const routes: Routes = [
   	{
       path: 'gestionar-sedes/:id',
       component: GestionarSedesComponent
+    },
+  	{
+      path: 'detalle-sede/:id',
+      component: DetalleSedeComponent
     },
   	{
       path: 'gestionar-productos',

@@ -25,4 +25,8 @@ public interface ItemSedeRestauranteRepository extends JpaRepository<ItemSedeRes
     @Query("SELECT c FROM ItemSedeRestaurante c" +
             " WHERE c.sedeRestaurante.id = :sedeRestauranteId and c.item.id = :itemId")
     ItemSedeRestaurante getByItemIdAndSedeRestauranteId(Integer itemId, Integer sedeRestauranteId);
+
+    @Query("SELECT c FROM ItemSedeRestaurante c" +
+            " WHERE c.sedeRestaurante.id = :sedeRestauranteId")
+    List<ItemSedeRestaurante> getBySedeId(Integer sedeRestauranteId);
 }

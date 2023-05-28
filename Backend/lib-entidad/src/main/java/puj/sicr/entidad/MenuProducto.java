@@ -26,12 +26,6 @@ public class MenuProducto {
     )
     private Integer id;
 
-    @Column(nullable = false)
-    private String nombre;
-
-    @Column(nullable = false)
-    private String descripcion;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productoId", nullable = false)
     @JsonIgnore

@@ -177,6 +177,45 @@ export class AdmonService {
     return this.http.get(`${this.endpoint}/TipoUsuario/getAll`);
   }
 
+  //Tipo Miembros
+  getTipoMiembros(){
+    return this.http.get(`${this.endpoint}/TipoMiembro/getAll`);
+  }
+
+  //Miembros
+  getMiembroBySedeId(sedeId: string){
+    let api = `${this.endpoint}/Miembro/getByIdSedeRestaurante`;
+    let params = new HttpParams();
+    params = params.append('id', sedeId);
+    return this.http.get(api,{params: params});
+  }
+  getMiembroById(miembroId:string){
+    let api = `${this.endpoint}/Miembro/getById`;
+    let params = new HttpParams();
+    params = params.append('id', miembroId);
+    return this.http.get(api,{params: params});
+  }
+
+  updateMiembro(miembro:any,miembroId:string){
+    let api = `${this.endpoint}/Miembro/actualizar`;
+    let params = new HttpParams();
+    params = params.append('id', miembroId);
+    return this.http.post(api,miembro,{params: params});
+  }
+
+  crearMiembro(miembro:any){
+    let api = `${this.endpoint}/Miembro/crear`
+    return this.http.post(api,miembro);
+  }
+
+  eliminarMiembro(miembroId:string){
+    let api = `${this.endpoint}/Miembro/eliminar`;
+    let params = new HttpParams();
+    params = params.append('id', miembroId);
+    return this.http.get(api,{params: params});
+  }
+
+
   //Menu
   getMenus(){
     return this.http.get(`${this.endpoint}/Menu/getAll`);

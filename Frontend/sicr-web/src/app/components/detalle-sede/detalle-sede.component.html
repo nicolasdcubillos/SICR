@@ -1,0 +1,111 @@
+
+<div class="navbar">
+    <div class="logo">
+        <img src="../../../assets/images/logoSICR_SinFondo.png" width="150" height="150" alt="Logo">
+    </div>
+</div>
+<main class="col-md-9 float-right col px-5 pl-md-2 pt-2 main content">
+    <!-- <a href="#" data-target="#sidebar" data-toggle="collapse"><i class="text-dark fa fa-navicon fa-lg py-2 p-1"></i></a>-->
+    <div class="page-header">
+        <h2 class="display-4 font-weight-light">Administrador de Sede</h2>
+    </div>
+    <hr>
+    <!-- INFORMACION SEDE -->
+    <h3>Informacion de la sede</h3>
+    <div class="row">
+        <div class="col-4">
+            <label><strong>Nombre</strong></label>
+            <p>{{sede.nombre}}</p>
+        </div>
+        <div class="col-4">
+            <label><strong>Dirección</strong></label>
+            <p>{{sede.direccion}}</p>
+        </div>
+        <div class="col-4">
+            <label><strong>Capacidad</strong></label>
+            <p>{{sede.capacidad}} - Personas</p>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <label><strong>Fecha de Apertura</strong></label>
+            <p>{{sede.fechaApertura | date:'YYYY-MM-dd'}}</p>
+        </div>
+        <div class="col-4">
+            <label><strong>Fecha de Cierre</strong></label>
+            <p>{{sede.fechaCierre | date:'YYYY-MM-dd'}}</p>
+        </div>
+    </div>
+    <hr>
+    <!-- INFORMACION SEDE -->
+    <!-- MIEMBROS -->
+    <h3>Miembros</h3>
+    <form class="mt-4"
+    [formGroup]="crearMiembroForm">
+        <div class="row">           
+            <div class="col-4">
+                <label class="mt-3" for="validationServer033">Nombre</label>
+                <input type="text" class="auto_width form-control" formControlName="nombre">
+            </div>
+            <div class="col-4">
+                <label class="mt-3" for="validationServer033">Apellido</label>
+                <input type="text" class="auto_width form-control" formControlName="apellido">
+            </div>
+            <div class="col-4">
+                <label class="mt-3" for="validationServer033">Salario</label>
+                <input type="number" class="auto_width form-control" formControlName="salario">
+            </div> 
+        </div>
+        <div class="row justify-content-center">           
+            <div class="col-4">
+                <label class="mt-3" for="validationServer033">Telefono</label>
+                <input type="text" class="auto_width form-control" formControlName="telefono">
+            </div>
+            <div class="col-4" >
+                <label class="mt-3" for="validationServer033">Tipo Miembro</label>
+                <select  type="text" class="form-control " id="validationServer033" formControlName="tipoMiembro" >
+                    <option></option>
+                    <option *ngFor="let tipo of tiposMiembro" value="{{tipo.id}}">{{tipo.nombre}}</option>
+                </select>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 2%;">
+            <button type="button" class="btn btn-success mb-5" (click)="crearMiembro()" [disabled]="!crearMiembroForm.valid" [hidden]="editMiembro==true">Agregar Miembro</button>
+            <button type="button" class="btn btn-success mb-5" (click)="confirmarEdicionMiembro()" [disabled]="!crearMiembroForm.valid" [hidden]="editMiembro==false">Editar Miembro</button>
+            <button type="button" class="btn btn-danger mb-5" style="margin-left: 5px;" (click)="cancellEdit()">Cancelar</button>
+            </div>
+            
+
+    </form>
+
+
+    <table class="table mt-5">
+        <thead>
+            <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Salario</th>
+            <th scope="col">Telefono</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let miembro of miembros">
+            <td>{{miembro.nombre}}</td> 
+            <td>{{miembro.apellido}}</td> 
+            <td>{{miembro.salario}}</td> 
+            <td>{{miembro.telefono}}</td> 
+            <td><i class="fa-solid fa-pen-to-square" style="color: rgb(220, 210, 37);" (click)="buscarMiembroEdit(miembro)"></i></td>
+            <td><i class="fa-solid fa-trash mr-5" style="color: rgb(255, 0, 0);" (click)="confirmarEliminarMiembro(miembro)"></i></td>
+            </tr>
+        </tbody>
+        </table>
+        <hr>
+    <!-- MIEMBROS -->
+    <!-- INVENTARIO -->
+    <h3>Inventario</h3>
+    
+
+
+</main>

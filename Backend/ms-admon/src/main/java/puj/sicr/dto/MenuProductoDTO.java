@@ -13,14 +13,6 @@ public class MenuProductoDTO {
     private Integer id;
 
     @NotNull
-    @Size(max = 255)
-    private String nombre;
-
-    @NotNull
-    @Size(max = 255)
-    private String descripcion;
-
-    @NotNull
     private Integer producto;
 
     @NotNull

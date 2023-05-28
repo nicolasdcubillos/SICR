@@ -46,4 +46,12 @@ public class ProductoItemController {
     public @ResponseBody RespuestaServicioVO eliminar(Integer id) {
         return service.eliminar(id);
     }
+
+    @CrossOrigin(origins = origen)
+    @RequestMapping(value = "/getByProductoId", method = RequestMethod.POST)
+    public @ResponseBody RespuestaServicioVO getByProductoId(Integer id) {
+        return service.getByProductoId(id);
+
+    }
+
 }

@@ -1,5 +1,7 @@
 package puj.sicr.service;
 
+import org.hibernate.Hibernate;
+import org.hibernate.proxy.HibernateProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +12,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import puj.sicr.dto.MenuProductoDTO;
-import puj.sicr.entidad.Menu;
-import puj.sicr.entidad.MenuProducto;
-import puj.sicr.entidad.Producto;
+import puj.sicr.entidad.*;
 import puj.sicr.repository.MenuProductoRepository;
 import puj.sicr.repository.MenuRepository;
 import puj.sicr.repository.ProductoRepository;
 import puj.sicr.vo.RespuestaServicioVO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -209,8 +210,6 @@ public class MenuProductoService {
     private MenuProductoDTO mapToDTO(final MenuProducto menuProducto) {
         MenuProductoDTO menuProductoDTO = new MenuProductoDTO();
         menuProductoDTO.setId(menuProducto.getId());
-        menuProductoDTO.setNombre(menuProducto.getNombre());
-        menuProductoDTO.setDescripcion(menuProducto.getDescripcion());
         menuProductoDTO.setProducto(menuProducto.getProducto() == null ? null : menuProducto.getProducto().getId());
         menuProductoDTO.setMenu(menuProducto.getMenu() == null ? null : menuProducto.getMenu().getId());
         return menuProductoDTO;
@@ -219,8 +218,6 @@ public class MenuProductoService {
     private MenuProducto mapToEntity(final MenuProductoDTO menuProductoDTO) {
         MenuProducto menuProducto = new MenuProducto();
         menuProducto.setId(menuProductoDTO.getId());
-        menuProducto.setNombre(menuProductoDTO.getNombre());
-        menuProducto.setDescripcion(menuProductoDTO.getDescripcion());
         final Producto producto = menuProductoDTO.getProducto() == null ? null : productoRepository.findById(menuProductoDTO.getProducto()).get();
         menuProducto.setProducto(producto);
         final Menu menu = menuProductoDTO.getMenu() == null ? null : menuRepository.findById(menuProductoDTO.getMenu()).get();
@@ -242,6 +239,38 @@ public class MenuProductoService {
             logger.error(e.getMessage());
         }
         ;
+        return respuesta;
+    }
+
+    public RespuestaServicioVO getByMenuId(Integer id) {
+        RespuestaServicioVO respuesta = new RespuestaServicioVO();
+        try {
+            Menu menu = menuRepository.getById(id);
+            Hibernate.initialize(menu.getMenuMenuProductos());
+
+            List<MenuProducto> menuProducto = menu.getMenuMenuProductos();
+            List<Producto> productoMenu = new ArrayList();
+            for (MenuProducto menuP:menuProducto) {
+                Producto producto = menuP.getProducto();
+                if (producto instanceof HibernateProxy) {
+                    producto = (Producto) ((HibernateProxy) producto).getHibernateLazyInitializer().getImplementation();
+                }
+                productoMenu.add(producto);
+            }
+            respuesta.setObjeto(productoMenu);
+            respuesta.setExitosa(true);
+            respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
+        } catch (DataAccessException e) {
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            logger.error(e.getMessage());
+        } catch (Exception e) {
+
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            respuesta.setDescripcionExcepcion(e.getMessage());
+            logger.error(e.getMessage());
+        }
         return respuesta;
     }
 }

@@ -29,6 +29,7 @@ import {MatChipsModule} from '@angular/material/chips'
 import {MatIconModule} from '@angular/material/icon';
 import {MatSortModule} from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { DetalleSedeComponent } from './components/detalle-sede/detalle-sede.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     GestionarSedesComponent,
     HomeClienteComponent,
     GestionarItemComponent,
-    GestionarProductoComponent
+    GestionarProductoComponent,
+    DetalleSedeComponent
   ],
   imports: [
     BrowserModule,

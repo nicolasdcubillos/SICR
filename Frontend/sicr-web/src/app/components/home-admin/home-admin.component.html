@@ -32,5 +32,16 @@
         <p>Gestionar</p>
         <i class="fa-solid fa-gear" routerLink="/gestionar-sedes"></i>
     </div>
+    <div class="card">
+        <form [formGroup]="sedeAdmin">
+            <h2>Administrar sede</h2>
+            <label  for="validationServer033">Selecciona una sede</label>
+            <select formControlName="sedeId" class="auto_width form-control">
+                <option value=""></option>
+              <option *ngFor="let sede of sedes" [value]="sede.id">{{ sede.nombre }}</option>
+            </select>
+            <i class="fa-solid fa-gear" (click)="redirectAdminSede()"></i>
+        </form>
+    </div>
     
 </div>
