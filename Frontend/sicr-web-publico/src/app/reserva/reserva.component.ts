@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ReservaService } from '../service/reserva.service';
 import {ActivatedRoute} from "@angular/router";
 import {SedeRestauranteService} from "../service/sede-restaurante.service"; // Reemplaza 'path-to-your-reserva-service' con la ubicación real de tu servicio de reserva
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-reserva',
@@ -14,7 +15,8 @@ export class ReservaComponent {
   constructor(private route: ActivatedRoute,
               private reservaService: ReservaService,
               private sedeRestauranteService: SedeRestauranteService,
-              private router: Router) {}
+              private router: Router,
+              private toastr: ToastrService) {}
 
   sedes: any;
   asientos: any;
@@ -33,7 +35,7 @@ export class ReservaComponent {
       if (response.exitosa) {
         this.sedes = response.objeto;
       } else {
-        //this.toastr.error('No se pudo traer la información de los menús. Intente más tarde.', 'Error')
+        this.toastr.error('No se pudo traer la información de la sede. Intente más tarde.', 'Error')
       }
     });
   }
@@ -46,34 +48,35 @@ export class ReservaComponent {
       usuario: 1,
       sedeRestaurante: this.sedeId
     };
+    
     const currentDate = new Date().toISOString();
     const currentDateTimePlusOneHour = new Date();
     currentDateTimePlusOneHour.setHours(currentDateTimePlusOneHour.getHours() + 1);
+
     if(this.asientos <= 20){
       if(reservaData.fecha > currentDate){
         if (reservaData.fecha > currentDateTimePlusOneHour.toISOString()){
           if (reservaData.horas <= 8){
             this.reservaService.crearReserva(reservaData).subscribe((response: any) => {
-              console.log(response);
               if (response.exitosa) {
-                if (confirm('Reserva creada exitosamente.')) {
+                if (this.toastr.success('Reserva creada exitosamente.', 'Reserva confirmada')) {
                   this.router.navigate(['/sede', this.sedeId]);
                 }
               } else {
-                confirm(response.descripcionRespuesta)
+                this.toastr.error(response.descripcionRespuesta, 'Error');
               }
             });
           } else {
-            confirm('No se pueden hacer reservas con duración de más de 8 horas en línea.');
+            this.toastr.error('No se pueden hacer reservas con duración de más de 8 horas en línea.', 'Error');
           }
         } else {
-          confirm('La hora seleccionada debe ser al menos 1 hora después de la hora actual.');
+          this.toastr.error('La hora seleccionada debe ser al menos 1 hora después de la hora actual.', 'Error');
         }
       } else {
-        confirm('La fecha seleccionada debe ser mayor o igual a la fecha actual.')
+        this.toastr.error('La fecha seleccionada debe ser mayor o igual a la fecha actual.', 'Error');
       }
     } else {
-      confirm('No se pueden hacer reservas para más de 20 personas en línea.')
+      this.toastr.error('No se pueden hacer reservas para más de 20 personas en línea.', 'Error');
     }
   }
 }
