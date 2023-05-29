@@ -1,7 +1,7 @@
 
 <div class="navbar">
     <div class="logo">
-        <img src="../../../assets/images/logoSICR_SinFondo.png" width="150" height="150" alt="Logo">
+        <img src="../../../assets/images/logoSICR_SinFondo.png" width="150" height="150" alt="Logo" routerLink="/home-admin">
     </div>
 </div>
 <main class="col-md-9 float-right col px-5 pl-md-2 pt-2 main content">
@@ -72,7 +72,7 @@
         <div style="text-align: center; margin-top: 2%;">
             <button type="button" class="btn btn-success mb-5" (click)="crearMiembro()" [disabled]="!crearMiembroForm.valid" [hidden]="editMiembro==true">Agregar Miembro</button>
             <button type="button" class="btn btn-success mb-5" (click)="confirmarEdicionMiembro()" [disabled]="!crearMiembroForm.valid" [hidden]="editMiembro==false">Editar Miembro</button>
-            <button type="button" class="btn btn-danger mb-5" style="margin-left: 5px;" (click)="cancellEdit()">Cancelar</button>
+            <button type="button" class="btn btn-danger mb-5" style="margin-left: 5px;" (click)="cancellEditMiembro()">Cancelar</button>
             </div>
             
 
@@ -105,7 +105,52 @@
     <!-- MIEMBROS -->
     <!-- INVENTARIO -->
     <h3>Inventario</h3>
-    
+    <form class="mt-4"
+    [formGroup]="crearItemSedeForm">
+        <div class="row justify-content-center">           
+            <div class="col-4" >
+                <label class="mt-3" for="validationServer033">Item</label>
+                <select  type="text" class="form-control " id="validationServer033" formControlName="item" >
+                    <option></option>
+                    <option *ngFor="let item of items" value="{{item.id}}">{{item.nombre}}</option>
+                </select>
+            </div>
+            <div class="col-4">
+                <label class="mt-3" for="validationServer033">Cantidad</label>
+                <input type="number" class="auto_width form-control" formControlName="cantidad">
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 2%;">
+            <button type="button" class="btn btn-success mb-5" (click)="crearItemSede()" [disabled]="!crearItemSedeForm.valid" [hidden]="editItemSede==true">Agregar Item a la Sede</button>
+            <button type="button" class="btn btn-success mb-5" (click)="confirmarEdicionItemSede()" [disabled]="!crearItemSedeForm.valid" [hidden]="editItemSede==false">Editar Item de la Sede</button>
+            <button type="button" class="btn btn-danger mb-5" style="margin-left: 5px;" (click)="cancellEditItemSede()">Cancelar</button>
+            </div>
+            
+
+    </form>
+
+
+    <table class="table mt-5">
+        <thead>
+            <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Costo Unitario</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of itemsSede">
+            <td>{{item.nombre}}</td> 
+            <td>{{item.cantidad}}</td> 
+            <td>{{item.costoUnitario}}</td> 
+            <td><i class="fa-solid fa-pen-to-square" style="color: rgb(220, 210, 37);" (click)="buscarItemSedeEdit(item)"></i></td>
+            <td><i class="fa-solid fa-trash mr-5" style="color: rgb(255, 0, 0);" (click)="confirmarEliminarItemSede(item)"></i></td>
+            </tr>
+        </tbody>
+        </table>
+        <hr>
 
 
 </main>

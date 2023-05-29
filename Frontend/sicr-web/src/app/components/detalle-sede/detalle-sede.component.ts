@@ -12,14 +12,20 @@ import Swal from 'sweetalert2';
 export class DetalleSedeComponent implements OnInit {
 
   editMiembro:boolean = false;
+  editItemSede:boolean = false;
   miembroEdit:any={};
+  itemSedeEdit:any={};
 
   sede:any ={};
   idSedeEdit:string='';
   crearMiembroForm:FormGroup;
+  crearItemSedeForm:FormGroup;
+  
 
   tiposMiembro: any=[];
   miembros: any=[];
+  itemsSede:any=[];
+  items:any=[];
 
   constructor(public fb: FormBuilder,private router:Router,private activatedRoute:ActivatedRoute, private admonService:AdmonService){
     this.crearMiembroForm = this.fb.group({
@@ -30,14 +36,21 @@ export class DetalleSedeComponent implements OnInit {
       sedeRestaurante: [''],
       tipoMiembro: ['',[Validators.required]],
     });
+    this.crearItemSedeForm = this.fb.group({
+      cantidad: ['',[Validators.required]],
+      item: ['',[Validators.required]],
+      sedeRestaurante: [''],
+    })
   }
 
   ngOnInit(): void {
     const params =  this.activatedRoute.snapshot.params;
     this.getTiposMiembro();
+    this.getItems();
     if(params['id']) {
       this.idSedeEdit=params['id'];
       this.getMiembrosSede();
+      this.getItemsSede();
       this.admonService.getSedeById(params['id']).subscribe({
         next:(res:any)=>{
           this.sede=res.objeto;
@@ -45,6 +58,155 @@ export class DetalleSedeComponent implements OnInit {
         }
       })
     }
+  }
+
+  //ItemSede
+  getItemsSede(){
+    this.admonService.getItemsBySedeId(this.idSedeEdit).subscribe({
+      next:(res:any)=>{
+        this.itemsSede=res.objeto;
+      }
+    })
+  }
+
+  getItems(){
+    this.admonService.getItems().subscribe({
+      next:(res:any)=>{
+        this.items = res.objeto;
+      }
+    })
+  }
+
+  crearItemSede(){
+    this.crearItemSedeForm.get('item')!.setValue(Number(this.crearItemSedeForm.value.item));
+    this.crearItemSedeForm.get('sedeRestaurante')!.setValue(Number(this.idSedeEdit));
+    console.log(this.crearItemSedeForm.value)
+    this.admonService.crearItemSede(this.crearItemSedeForm.value).subscribe({
+      next:(res:any)=>{
+        console.log(res);
+        if(res.exitosa){
+          Swal.fire({
+            title: 'Item de la Sede Creado',
+            icon: 'success',
+            showCloseButton:true,
+            confirmButtonText:"Aceptar",
+            confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
+          })
+        }else{
+          Swal.fire({
+            title: 'Error',
+            icon: 'error',
+            text: res.descripcionExcepcion,
+            showCloseButton:true,
+            confirmButtonText:"Aceptar",
+            confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
+          })
+        }
+      }
+    })
+  }
+
+  confirmarEdicionItemSede(){
+    Swal.fire({
+      title: 'Esta seguro de editar este Item de la Sede ?',
+      icon: 'warning',
+      showCloseButton:true,
+      confirmButtonText:"Aceptar",
+      confirmButtonColor: "#DD6B55",
+    }).then((result)=>{
+      if(result.isConfirmed)this.editarItemSede();
+    })
+  }
+
+  editarItemSede(){
+    this.itemSedeEdit.cantidad = this.crearItemSedeForm.value.cantidad
+    this.itemSedeEdit.item = Number(this.crearItemSedeForm.value.item)
+    this.admonService.updateItemSede(this.itemSedeEdit,this.itemSedeEdit.id).subscribe({
+      next:(res:any)=>{
+        if(res.exitosa){
+          Swal.fire({
+            title: 'Item de la sede Editado',
+            icon: 'success',
+            showCloseButton:true,
+            confirmButtonText:"Aceptar",
+            confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
+          })
+        }else{
+          Swal.fire({
+            title: 'Error',
+            icon: 'error',
+            text: res.descripcionExcepcion,
+            showCloseButton:true,
+            confirmButtonText:"Aceptar",
+            confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
+          })
+        }
+      }
+    })
+  }
+
+  cancellEditItemSede(){
+    this.editMiembro=false;
+    this.crearItemSedeForm.reset();
+  }
+
+  buscarItemSedeEdit(itemSede:any){
+    this.admonService.getItemSedeById(itemSede.id).subscribe({
+      next:(res:any)=>{
+        this.itemSedeEdit=res.objeto;
+        console.log(this.itemSedeEdit)
+        this.editItemSede=true;
+        this.crearItemSedeForm.get('cantidad')!.setValue(this.itemSedeEdit.cantidad);
+        this.crearItemSedeForm.get('item')!.setValue(this.itemSedeEdit.item);
+      }
+    })
+  }
+
+  confirmarEliminarItemSede(itemSede:any){
+    Swal.fire({
+      title: 'Esta seguro de eliminar este Item de la sede ?',
+      icon: 'warning',
+      showCloseButton:true,
+      confirmButtonText:"Aceptar",
+      confirmButtonColor: "#DD6B55",
+    }).then((result)=>{
+      if(result.isConfirmed)this.eliminarItemSede(itemSede);
+    })
+  }
+
+  eliminarItemSede(itemSede:any){
+    this.admonService.eliminarItemSede(itemSede.id).subscribe({
+      next:(res:any)=>{
+        if(res.exitosa){
+          Swal.fire({
+            title: 'Item de la Sede Eliminado',
+            icon: 'success',
+            showCloseButton:true,
+            confirmButtonText:"Aceptar",
+            confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
+          })
+        }else{
+          Swal.fire({
+            title: 'Error',
+            icon: 'error',
+            text: res.descripcionExcepcion,
+            showCloseButton:true,
+            confirmButtonText:"Aceptar",
+            confirmButtonColor: "#DD6B55",
+          })
+        }
+      }
+    })
   }
 
   //Miembros
@@ -82,7 +244,7 @@ export class DetalleSedeComponent implements OnInit {
     })
   }
 
-  cancellEdit(){
+  cancellEditMiembro(){
     this.editMiembro=false;
     this.crearMiembroForm.reset();
   }

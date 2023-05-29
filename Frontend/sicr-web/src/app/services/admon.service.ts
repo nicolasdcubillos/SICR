@@ -216,6 +216,40 @@ export class AdmonService {
   }
 
 
+  //ItemSede
+  getItemsBySedeId(sedeId: string){
+    let api = `${this.endpoint}/ItemSedeRestaurante/getBySedeId`;
+    let params = new HttpParams();
+    params = params.append('id', sedeId);
+    return this.http.get(api,{params: params});
+  }
+  getItemSedeById(ItemSedeId:string){
+    let api = `${this.endpoint}/ItemSedeRestaurante/getById`;
+    let params = new HttpParams();
+    params = params.append('id', ItemSedeId);
+    return this.http.get(api,{params: params});
+  }
+
+  updateItemSede(itemSede:any,ItemSedeId:string){
+    let api = `${this.endpoint}/ItemSedeRestaurante/actualizar`;
+    let params = new HttpParams();
+    params = params.append('id', ItemSedeId);
+    return this.http.post(api,itemSede,{params: params});
+  }
+
+  crearItemSede(itemSede:any){
+    let api = `${this.endpoint}/ItemSedeRestaurante/crear`
+    return this.http.post(api,itemSede);
+  }
+
+  eliminarItemSede(ItemSedeId:string){
+    let api = `${this.endpoint}/ItemSedeRestaurante/eliminar`;
+    let params = new HttpParams();
+    params = params.append('id', ItemSedeId);
+    return this.http.get(api,{params: params});
+  }
+
+
   //Menu
   getMenus(){
     return this.http.get(`${this.endpoint}/Menu/getAll`);
