@@ -20,6 +20,7 @@ export class DetalleSedeComponent implements OnInit {
   idSedeEdit:string='';
   crearMiembroForm:FormGroup;
   crearItemSedeForm:FormGroup;
+  crearSolicitudInventarioForm:FormGroup;
   
 
   tiposMiembro: any=[];
@@ -41,6 +42,12 @@ export class DetalleSedeComponent implements OnInit {
       item: ['',[Validators.required]],
       sedeRestaurante: [''],
     })
+    this.crearSolicitudInventarioForm = this.fb.group({
+      restauranteId: [''],
+      sedeOrigenId: [''],
+      itemId: ['',[Validators.required]],
+      cantidad: ['',[Validators.required]],
+    })
   }
 
   ngOnInit(): void {
@@ -58,6 +65,47 @@ export class DetalleSedeComponent implements OnInit {
         }
       })
     }
+  }
+
+  //Inventario
+
+  //SolicitarInventario
+  solicitarInventario(){
+    this.crearSolicitudInventarioForm.get('sedeOrigenId')!.setValue(Number(this.idSedeEdit));
+    this.crearSolicitudInventarioForm.get('restauranteId')!.setValue(1);
+    this.crearSolicitudInventarioForm.get('itemId')!.setValue(Number(this.crearSolicitudInventarioForm.value.itemId));
+    console.log(this.crearSolicitudInventarioForm.value);
+    this.admonService.solicitarInventario(this.crearSolicitudInventarioForm.value).subscribe({
+      next:(res:any)=>{
+        console.log(res);
+        if(res.exitosa){
+          Swal.fire({
+            title: 'Solicitud de inventario Creada',
+            icon: 'success',
+            showCloseButton:true,
+            confirmButtonText:"Aceptar",
+            confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            // window.location.reload();
+          })
+        }else{
+          Swal.fire({
+            title: 'Error',
+            icon: 'error',
+            text: res.descripcionExcepcion,
+            showCloseButton:true,
+            confirmButtonText:"Aceptar",
+            confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            // window.location.reload();
+          })
+        }
+      }
+    })
+  }
+
+  cancelarSolicitudInventario(){
+    this.crearSolicitudInventarioForm.reset();
   }
 
   //ItemSede

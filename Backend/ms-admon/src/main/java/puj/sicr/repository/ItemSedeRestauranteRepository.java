@@ -18,8 +18,9 @@ public interface ItemSedeRestauranteRepository extends JpaRepository<ItemSedeRes
     @Query("SELECT c FROM ItemSedeRestaurante c" +
             " WHERE c.cantidad >= :cantidad AND c.item.id = :id " +
             " AND c.sedeRestaurante.restaurante.id = :restauranteId" +
+            " AND c.sedeRestaurante.id != :sedeSolicitante " +
             " ORDER BY c.cantidad")
-    List <ItemSedeRestaurante> findByItemIdDisponiblesAndRestauranteId(Integer id, Integer restauranteId, Integer cantidad);
+    List <ItemSedeRestaurante> findByItemIdDisponiblesAndRestauranteId(Integer id, Integer restauranteId, Integer cantidad, Integer sedeSolicitante);
 
 
     @Query("SELECT c FROM ItemSedeRestaurante c" +

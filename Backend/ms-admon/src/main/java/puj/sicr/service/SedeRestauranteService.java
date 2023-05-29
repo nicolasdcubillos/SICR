@@ -215,7 +215,7 @@ public class SedeRestauranteService {
         return sedeRestauranteDTO;
     }
 
-    private SedeRestaurante mapToEntity(final SedeRestauranteDTO sedeRestauranteDTO) {
+    public SedeRestaurante mapToEntity(final SedeRestauranteDTO sedeRestauranteDTO) {
         SedeRestaurante sedeRestaurante = new SedeRestaurante();
         sedeRestaurante.setId(sedeRestauranteDTO.getId());
         sedeRestaurante.setNombre(sedeRestauranteDTO.getNombre());

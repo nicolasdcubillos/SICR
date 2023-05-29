@@ -57,4 +57,10 @@ public class TransferenciaItemController {
     public @ResponseBody RespuestaServicioVO actualizarEstadoTransferencia(Integer id) {
         return service.actualizarEstadoTransferencia(id);
     }
+
+    @CrossOrigin(origins = origen)
+    @RequestMapping(value = "/getBySedeId", method = RequestMethod.GET)
+    public @ResponseBody RespuestaServicioVO getBySedeId(Integer idSede, Boolean sede) {
+        return service.getBySedeId(idSede,sede);
+    }
 }

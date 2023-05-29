@@ -249,6 +249,13 @@ export class AdmonService {
     return this.http.get(api,{params: params});
   }
 
+  //Inventario - TransferenciaItem
+
+  solicitarInventario(solicitudInventario:any){
+    let api = `${this.endpoint}/TransferenciaItem/solicitarInventario`
+    return this.http.post(api,solicitudInventario);
+  }
+
 
   //Menu
   getMenus(){
