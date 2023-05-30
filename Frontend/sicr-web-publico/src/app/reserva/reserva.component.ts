@@ -47,7 +47,7 @@ export class ReservaComponent {
       asientos: this.asientos,
       fecha: new Date(this.fecha).toISOString(), // Convierte la fecha a formato ISO
       horas: this.horas,
-      usuario: 1,
+      usuario: this.user.usuarioId,
       sedeRestaurante: this.sedeId
     };
     
