@@ -56,5 +56,4 @@ public class Producto {
 
     @Column(nullable = false)
     private Double precio;
-
 }

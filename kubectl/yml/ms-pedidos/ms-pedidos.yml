@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-pedidos-service
+spec:
+  selector:
+    app: ms-pedidos
+  ports:
+    - protocol: TCP
+      port: 8082
+      targetPort: 8082
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-pedidos-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ms-pedidos
+  template:
+    metadata:
+      labels:
+        app: ms-pedidos
+    spec:
+      containers:
+        - name: ms-pedidos-container
+          image: nicolasdcubillos/img-ms-pedidos:v1.0
+          ports:
+            - containerPort: 8082
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              memory: 512Mi
