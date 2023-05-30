@@ -37,7 +37,12 @@ export class SedeRestauranteComponent {
 
   showModal = false;
 
+
+  user:any={};
+
   ngOnInit() {
+
+    this.user = JSON.parse(localStorage.getItem('user')!);
     this.spinner.show();
 
     this.route.paramMap.subscribe(params => {
@@ -104,15 +109,20 @@ export class SedeRestauranteComponent {
   }
 
   procederCompra(){
-    this.totalCompra = this.subTotalCompra * 1.20;
-    this.realizarPedidoDTO.subTotal = this.subTotalCompra;
-    this.realizarPedidoDTO.total = this.totalCompra;
-    this.realizarPedidoDTO.fecha = new Date();
-    this.realizarPedidoDTO.miembro  = 0;
-    this.realizarPedidoDTO.sedeRestaurante  = this.sedeId;
-    this.realizarPedidoDTO.usuario  = 1;
-    this.realizarPedidoDTO.pedidoProductos=this.productosCarritos;
-    this.openModal();
+    if(this.productosCarritos.length>0){
+      this.totalCompra = this.subTotalCompra * 1.20;
+      this.realizarPedidoDTO.subTotal = this.subTotalCompra;
+      this.realizarPedidoDTO.total = this.totalCompra;
+      this.realizarPedidoDTO.fecha = new Date();
+      this.realizarPedidoDTO.miembro  = 1;
+      this.realizarPedidoDTO.sedeRestaurante  = Number(this.sedeId);
+      this.realizarPedidoDTO.usuario  = Number(this.user.usuarioId);
+      this.realizarPedidoDTO.pedidoProductos=this.productosCarritos;
+      console.log(this.realizarPedidoDTO);
+      this.openModal();
+    }else{
+      this.toastr.info('No tienes productos en el carrito', 'Info')
+    }
   }
 
   openModal() {
@@ -124,19 +134,23 @@ export class SedeRestauranteComponent {
   }
 
   agregarCarrito(producto:any){
-    let productoDTO :any = {};
-    const indiceEncontrado = this.productosCarritos.findIndex((elemento) => elemento.pedidoProductoId === producto.id);
-    if (indiceEncontrado !== -1) {
-      this.productosCarritos[indiceEncontrado].pedidoProductoCantidad += 1;
-      this.productosCarritosNombreCant[indiceEncontrado].cant += 1;
-      this.subTotalCompra += producto.precio;
-    } else {
-      productoDTO.pedidoProductoId = producto.id;
-      productoDTO.pedidoProductoCantidad = 1;
-      this.productosCarritos.push(productoDTO);
-      this.productosCarritosNombreCant.push({cant:productoDTO.pedidoProductoCantidad, name:producto.nombre});
-      this.toastr.success('Producto Agregado al carrito.', 'Success')
-      this.subTotalCompra += producto.precio;
+    if(this.user == null){
+      this.toastr.info('Debes estar loggeado para agregar productos.', 'Info')
+    }else{
+      let productoDTO :any = {};
+      const indiceEncontrado = this.productosCarritos.findIndex((elemento) => elemento.pedidoProductoId === producto.id);
+      if (indiceEncontrado !== -1) {
+        this.productosCarritos[indiceEncontrado].pedidoProductoCantidad += 1;
+        this.productosCarritosNombreCant[indiceEncontrado].cant += 1;
+        this.subTotalCompra += producto.precio;
+      } else {
+        productoDTO.pedidoProductoId = producto.id;
+        productoDTO.pedidoProductoCantidad = 1;
+        this.productosCarritos.push(productoDTO);
+        this.productosCarritosNombreCant.push({cant:productoDTO.pedidoProductoCantidad, name:producto.nombre});
+        this.toastr.success('Producto Agregado al carrito.', 'Success')
+        this.subTotalCompra += producto.precio;
+      }
     }
   }
 }
