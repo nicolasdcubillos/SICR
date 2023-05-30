@@ -7,7 +7,10 @@
 <div class="separator"></div>
 
 <div class="title-container">
-  <button [routerLink]="['/reservar', sede.id]" class="button-secundario">Reservar</button>
+    <button  [routerLink]="['/reservar', sede.id]" class="button-secundario ">Reservar</button>
+    <button class="carrito-button floating-button" (click)="procederCompra()">
+      <img class="carrito-button btn" src="assets/img/carrito.png" alt="Carrito de compras">
+    </button>
   <ng-container *ngFor="let categoria of categorias;">
     <div class="category-divider">
     
@@ -22,13 +25,34 @@
             <h3 class="prod-title">{{ producto.nombre }}</h3>
             <p class="prod-address">${{ producto.precio }}</p>
           </a>
-          <button class="carrito-button">
+          <button class="carrito-button" (click)="agregarCarrito(producto)">
             <img class="carrito-button" src="assets/img/carrito.png" alt="Carrito de compras">
           </button>
         </div>
       </ng-container>
     </div>
   </ng-container>
+</div>
+
+<div class="modal-container" [ngClass]="{ 'modal-open': showModal }">
+  <div class="modal-content">
+    <h2>Resumen Compra</h2>
+    <hr>
+    <p><strong>Usuario: </strong>LOGIN</p>
+    <p><strong>Sede Restaurante: </strong>{{sede.nombre}}</p>
+    <p><strong>Direccion Sede Restaurante: </strong>{{sede.direccion}}</p>
+    <p><strong>Fecha Pedido: </strong>{{realizarPedidoDTO.fecha | date:"YYYY-MM-dd"}}</p>
+    <p><strong>Lista de productos: </strong></p>
+    <ul>
+      <li *ngFor="let prod of productosCarritosNombreCant"><strong>Nombre: </strong>{{prod.name}} <strong> Cantidad: </strong>{{prod.cant}}</li>
+    </ul>
+    <p><strong>Subtotal: </strong>{{realizarPedidoDTO.subTotal | currency}}</p>
+    <p><strong>Total: </strong>{{realizarPedidoDTO.total | currency}}</p>
+    <div class="row">
+      <button class="button-secundario" (click)="closeModal()">Cerrar</button>
+      <button class="button-secundario2" (click)="confirmarCompra()" style="margin-left: 5%;">Confirmar compra</button>
+    </div>
+  </div>
 </div>
 
 <router-outlet></router-outlet>
