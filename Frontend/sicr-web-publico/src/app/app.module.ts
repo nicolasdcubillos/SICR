@@ -11,6 +11,8 @@ import { ReservaComponent } from './reserva/reserva.component';
 import {FormsModule} from "@angular/forms";
 import { ToastrModule } from 'ngx-toastr';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 const routes: Routes = [
   { path: '', component: InicioComponent },
@@ -29,6 +31,7 @@ const routes: Routes = [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot(routes),
     FormsModule,
     ToastrModule.forRoot(),
