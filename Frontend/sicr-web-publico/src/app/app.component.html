@@ -8,7 +8,83 @@
     </a>
   </div>
   <div class="navbar-right">
-    <button class="login-button">Iniciar sesión</button>
+    <button class="login-button" (click)="openModal()">Iniciar sesión</button>
   </div>
 </nav>
+
+<div class="modal-container" [ngClass]="{ 'modal-open': showModal }">
+  <div class="modal-content">
+    <h2>LOGIN</h2>
+    <hr>
+    <form [formGroup]="loginForm">
+      <div class="row">
+        <div>
+          <label>Usuario</label>
+          <input type="text" class="form-control" placeholder="Usuario" formControlName="username">
+        </div>
+        <div>
+          <label>Contraseña</label>
+          <input type="password" class="form-control" placeholder="Contraseña" formControlName="password">
+        </div>
+
+      </div>
+
+    </form>
+    <div class="row">
+      <button class="button-secundario" (click)="closeModal()">Cerrar</button>
+      <button class="button-secundario" (click)="registrarse()">Registrarse</button>
+      <button class="button-secundario2" (click)="iniciarSesion()">Iniciar Sesión</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-container" [ngClass]="{ 'modal-open': showModal2 }">
+  <div class="modal-content">
+    <h2>Registro</h2>
+    <hr>
+    <form [formGroup]="registroForm">
+      <div class="row">
+        <div>
+          <label>Usuario</label>
+          <input type="text" class="form-control" placeholder="Usuario" formControlName="username">
+        </div>
+        <div>
+          <label>Contraseña</label>
+          <input type="password" class="form-control" placeholder="Contraseña" formControlName="password">
+        </div>
+        <div>
+          <label>Nombres</label>
+          <input type="text" class="form-control" placeholder="Usuario" formControlName="nombres">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Apellidos</label>
+          <input type="text" class="form-control" placeholder="Contraseña" formControlName="apellidos">
+        </div>
+        <div>
+          <label>Email</label>
+          <input type="text" class="form-control" placeholder="Usuario" formControlName="email">
+        </div>
+        <div>
+          <label>Telefono</label>
+          <input type="text" class="form-control" placeholder="Contraseña" formControlName="telefono">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Dirección</label>
+          <input type="text" class="form-control" placeholder="Contraseña" formControlName="direccion">
+        </div>
+      </div>
+
+      
+
+    </form>
+    <div class="row">
+      <button class="button-secundario" (click)="closeModal2()">Cerrar</button>
+      <button class="button-secundario2" (click)="confirmarRegistro()" [disabled]="!registroForm.valid">Registrarse</button>
+    </div>
+  </div>
+</div>
 <router-outlet></router-outlet>

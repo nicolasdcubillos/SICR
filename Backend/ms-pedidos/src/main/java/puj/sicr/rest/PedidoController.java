@@ -54,7 +54,7 @@ public class PedidoController {
 
     @CrossOrigin(origins = origen)
     @RequestMapping(value = "/realizarPedido", method = RequestMethod.POST)
-    public @ResponseBody RespuestaServicioVO realizarPedido(RealizarPedidoDTO pedidoDTO) {
+    public @ResponseBody RespuestaServicioVO realizarPedido(@RequestBody RealizarPedidoDTO pedidoDTO) {
         return service.realizarPedido(pedidoDTO);
     }
 }
