@@ -216,6 +216,62 @@ export class AdmonService {
   }
 
 
+  //ItemSede
+  getItemsBySedeId(sedeId: string){
+    let api = `${this.endpoint}/ItemSedeRestaurante/getBySedeId`;
+    let params = new HttpParams();
+    params = params.append('id', sedeId);
+    return this.http.get(api,{params: params});
+  }
+  getItemSedeById(ItemSedeId:string){
+    let api = `${this.endpoint}/ItemSedeRestaurante/getById`;
+    let params = new HttpParams();
+    params = params.append('id', ItemSedeId);
+    return this.http.get(api,{params: params});
+  }
+
+  updateItemSede(itemSede:any,ItemSedeId:string){
+    let api = `${this.endpoint}/ItemSedeRestaurante/actualizar`;
+    let params = new HttpParams();
+    params = params.append('id', ItemSedeId);
+    return this.http.post(api,itemSede,{params: params});
+  }
+
+  crearItemSede(itemSede:any){
+    let api = `${this.endpoint}/ItemSedeRestaurante/crear`
+    return this.http.post(api,itemSede);
+  }
+
+  eliminarItemSede(ItemSedeId:string){
+    let api = `${this.endpoint}/ItemSedeRestaurante/eliminar`;
+    let params = new HttpParams();
+    params = params.append('id', ItemSedeId);
+    return this.http.get(api,{params: params});
+  }
+
+  //Inventario - TransferenciaItem
+
+  solicitarInventario(solicitudInventario:any){
+    let api = `${this.endpoint}/TransferenciaItem/solicitarInventario`
+    return this.http.post(api,solicitudInventario);
+  }
+
+  solicitudesInventarioBySedeId(idSede:number,sede:boolean){
+    let api = `${this.endpoint}/TransferenciaItem/getBySedeId`;
+    let params = new HttpParams();
+    params = params.append('idSede', idSede);
+    params = params.append('sede', sede);
+    return this.http.get(api,{params: params});
+  }
+
+  actualizarEstadoTransferencia(idTransferencia:number,transferencia:any){
+    let api = `${this.endpoint}/TransferenciaItem/actualizarEstadoTransferencia`;
+    let params = new HttpParams();
+    params = params.append('id', idTransferencia);
+    return this.http.post(api,transferencia,{params: params});
+  }
+
+
   //Menu
   getMenus(){
     return this.http.get(`${this.endpoint}/Menu/getAll`);
@@ -264,6 +320,14 @@ export class AdmonService {
     let params = new HttpParams();
     params = params.append('id', menuId);
     return this.http.post(api,menu,{params: params});
+  }
+
+  //Reservas
+  getReservasBySedeId(sedeId: string){
+    let api = `${this.endpoint}/Reserva/getBySedeId`;
+    let params = new HttpParams();
+    params = params.append('id', sedeId);
+    return this.http.get(api,{params: params});
   }
 
 }

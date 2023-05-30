@@ -9,9 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import puj.sicr.dto.SolicitarInventarioDto;
-import puj.sicr.dto.SolicitarInventarioRespuestaDto;
-import puj.sicr.dto.TransferenciaItemDTO;
+import puj.sicr.dto.*;
 import puj.sicr.entidad.*;
 import puj.sicr.repository.EstadoTransferenciaItemRepository;
 import puj.sicr.repository.ItemRepository;
@@ -19,6 +17,7 @@ import puj.sicr.repository.SedeRestauranteRepository;
 import puj.sicr.repository.TransferenciaItemRepository;
 import puj.sicr.vo.RespuestaServicioVO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -233,14 +232,14 @@ public class TransferenciaItemService {
             Restaurante restaurante = (Restaurante) respuestaRestaurante.getObjeto();
             RespuestaServicioVO respuestaSedeRestaurante = sedeRestauranteService.getById(solicitarInventarioDto.getSedeOrigenId());
             if (respuestaSedeRestaurante.getExitosa()) {
-                SedeRestaurante sedeRestauranteSolicitante = (SedeRestaurante) respuestaSedeRestaurante.getObjeto();
+                SedeRestauranteDTO sedeRestauranteSolicitante = (SedeRestauranteDTO) respuestaSedeRestaurante.getObjeto();
                 RespuestaServicioVO respuestaItem = itemService.getById(solicitarInventarioDto.getItemId());
                 if (respuestaItem.getExitosa()) {
                     Item item = (Item) respuestaItem.getObjeto();
                     if (solicitarInventarioDto.getCantidad() > 0) {
                         RespuestaServicioVO respuestaItemsSedesDisponibles
                                 = itemSedeRestauranteService.findByItemIdDisponiblesAndRestauranteId
-                                (item.getId(), solicitarInventarioDto.getRestauranteId(), solicitarInventarioDto.getCantidad());
+                                (item.getId(), solicitarInventarioDto.getRestauranteId(), solicitarInventarioDto.getCantidad(), solicitarInventarioDto.getSedeOrigenId());
                         if (respuestaItemsSedesDisponibles.getExitosa()) {
                             List<ItemSedeRestaurante> itemSedeRestaurantesDisponibles = (List<ItemSedeRestaurante>) respuestaItemsSedesDisponibles.getObjeto();
                             if (!itemSedeRestaurantesDisponibles.isEmpty()) {
@@ -263,7 +262,7 @@ public class TransferenciaItemService {
                                 transferenciaItem.setItem(item);
                                 transferenciaItem.setEstadoTransferenciaItem(estadoTransferenciaItem);
                                 transferenciaItem.setSedeRestauranteOrigen(sedeRestaurante);
-                                transferenciaItem.setSedeRestauranteDestino(sedeRestauranteSolicitante);
+                                transferenciaItem.setSedeRestauranteDestino(sedeRestauranteService.mapToEntity(sedeRestauranteSolicitante));
 
                                 RespuestaServicioVO respuestaCrearTransferenciaItem = this.crearTX(transferenciaItem);
                                 if (respuestaCrearTransferenciaItem.getExitosa()) {
@@ -308,7 +307,8 @@ public class TransferenciaItemService {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         RespuestaServicioVO respuestaTransferenciaItem = this.getById(id);
         if (respuestaTransferenciaItem.getExitosa()) {
-            TransferenciaItem transferenciaItem = (TransferenciaItem) respuestaTransferenciaItem.getObjeto();
+            TransferenciaItemDTO transferenciaItemDTO = (TransferenciaItemDTO) respuestaTransferenciaItem.getObjeto();
+            TransferenciaItem transferenciaItem = mapToEntity(transferenciaItemDTO);
             if (transferenciaItem.getEstadoTransferenciaItem().getId() < 3) {
                 Integer nuevoEstadoId = transferenciaItem.getEstadoTransferenciaItem().getId() + 1;
 
@@ -321,9 +321,19 @@ public class TransferenciaItemService {
                 } else if (nuevoEstadoId == 3) { // Recibido por la sede destino.
                     RespuestaServicioVO respuestaItemSedeRestaurante =
                             itemSedeRestauranteService.getByItemIdAndSedeRestauranteId(transferenciaItem.getItem().getId(), transferenciaItem.getSedeRestauranteDestino().getId());
-                    ItemSedeRestaurante itemSedeRestaurante = (ItemSedeRestaurante) respuestaItemSedeRestaurante.getObjeto();
-                    itemSedeRestaurante.setCantidad(itemSedeRestaurante.getCantidad() + transferenciaItem.getCantidad());
-                    itemSedeRestauranteService.actualizarTX(itemSedeRestaurante);
+                    if(respuestaItemSedeRestaurante.getObjeto() != null){
+                        ItemSedeRestaurante itemSedeRestaurante = (ItemSedeRestaurante) respuestaItemSedeRestaurante.getObjeto();
+                        itemSedeRestaurante.setCantidad(itemSedeRestaurante.getCantidad() + transferenciaItem.getCantidad());
+                        itemSedeRestauranteService.actualizarTX(itemSedeRestaurante);
+                    }else{
+                        ItemSedeRestaurante itemSedeRestaurante = new ItemSedeRestaurante();
+                        itemSedeRestaurante.setCantidad(transferenciaItem.getCantidad());
+                        itemSedeRestaurante.setSedeRestaurante(transferenciaItem.getSedeRestauranteDestino());
+                        itemSedeRestaurante.setItem(transferenciaItem.getItem());
+                        itemSedeRestauranteService.crearTX(itemSedeRestaurante);
+                    }
+
+
                 }
 
                 RespuestaServicioVO respuestaNuevoEstado = estadoTransferenciaItemService.getById(nuevoEstadoId);
@@ -374,5 +384,31 @@ public class TransferenciaItemService {
         final SedeRestaurante sedeRestauranteOrigen = transferenciaItemDTO.getSedeRestauranteOrigen() == null ? null : sedeRestauranteRepository.findById(transferenciaItemDTO.getSedeRestauranteOrigen()).get();
         transferenciaItem.setSedeRestauranteOrigen(sedeRestauranteOrigen);
         return transferenciaItem;
+    }
+
+    public RespuestaServicioVO getBySedeId(Integer idSede, Boolean sede) {
+        RespuestaServicioVO respuesta = new RespuestaServicioVO();
+        try {
+            List<SolicitudTransferenciaInventarioDTO> coldatos ;
+            if(sede){
+                coldatos = repository.getBySedeIdOrigen(idSede);
+            }else{
+                coldatos = repository.getBySedeIdDestino(idSede);
+            }
+            respuesta.setObjeto(coldatos);
+            respuesta.setExitosa(true);
+            respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
+        } catch (DataAccessException e) {
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            logger.error(e.getMessage());
+        } catch (Exception e) {
+
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            respuesta.setDescripcionExcepcion(e.getMessage());
+            logger.error(e.getMessage());
+        }
+        return respuesta;
     }
 }

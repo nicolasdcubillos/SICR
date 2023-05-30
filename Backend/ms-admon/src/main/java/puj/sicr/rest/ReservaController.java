@@ -43,4 +43,10 @@ public class ReservaController {
     public @ResponseBody RespuestaServicioVO eliminar(Integer id) {
         return service.eliminar(id);
     }
+
+    @CrossOrigin(origins = origen)
+    @RequestMapping(value = "/getBySedeId", method = RequestMethod.GET)
+    public @ResponseBody RespuestaServicioVO getBySedeId(Integer id) {
+        return service.getBySedeId(id);
+    }
 }

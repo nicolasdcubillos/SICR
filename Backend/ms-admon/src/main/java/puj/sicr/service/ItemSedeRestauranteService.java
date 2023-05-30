@@ -209,10 +209,10 @@ public class ItemSedeRestauranteService {
         return respuesta;
     }
 
-    public RespuestaServicioVO findByItemIdDisponiblesAndRestauranteId(Integer id, Integer restauranteId, Integer cantidad) {
+    public RespuestaServicioVO findByItemIdDisponiblesAndRestauranteId(Integer id, Integer restauranteId, Integer cantidad, Integer sedeSolicitante) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
-            List <ItemSedeRestaurante> itemSedeRestaurante = repository.findByItemIdDisponiblesAndRestauranteId(id, restauranteId, cantidad);
+            List <ItemSedeRestaurante> itemSedeRestaurante = repository.findByItemIdDisponiblesAndRestauranteId(id, restauranteId, cantidad, sedeSolicitante);
             respuesta.setObjeto(itemSedeRestaurante);
             respuesta.setExitosa(true);
             respuesta.setDescripcionRespuesta("La transacción fue exitosa.");
