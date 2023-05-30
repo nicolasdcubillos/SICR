@@ -1,0 +1,52 @@
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - DELETE
+              - PUT
+              - OPTIONS
+      routes:
+        - id: route-ms-admon
+          uri: http://localhost:8080/
+          predicates:
+            - Path=/ms-admon/**
+          filters:
+            - StripPrefix=1
+
+        - id: route-ms-pagos
+          uri: http://localhost:8081/
+          predicates:
+            - Path=/ms-pagos/**
+          filters:
+            - StripPrefix=1
+
+        - id: route-ms-pedidos
+          uri: http://localhost:8082/
+          predicates:
+            - Path=/ms-pedidos/**
+          filters:
+            - StripPrefix=1
+
+        - id: route-ms-seguridad
+          uri: http://159.122.181.248:31022/
+          predicates:
+            - Path=/ms-seguridad/**
+          filters:
+            - StripPrefix=1
+
+        - id: route-ms-reservas
+          uri: http://localhost:8084/
+          predicates:
+            - Path=/ms-reservas/**
+          filters:
+            - StripPrefix=1
+
+server:
+  port: 9000
