@@ -15,6 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthInterceptor } from './service/authconfig.interceptor';
 
 
+
 const routes: Routes = [
   { path: '', component: InicioComponent },
   { path: 'sede', component: SedeRestauranteComponent },
