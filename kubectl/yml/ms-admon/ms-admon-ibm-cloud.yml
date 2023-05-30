@@ -15,6 +15,7 @@ spec:
       containers:
       - name: ms-admon-container
         image: nicolasdcubillos/img-ms-admon:v1.0
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
 

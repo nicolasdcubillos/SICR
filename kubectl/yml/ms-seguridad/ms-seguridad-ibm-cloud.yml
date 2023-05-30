@@ -15,6 +15,7 @@ spec:
       containers:
       - name: ms-seguridad-container
         image: nicolasdcubillos/img-ms-seguridad:v1.0
+        imagePullPolicy: Always
         ports:
         - containerPort: 8085
 
