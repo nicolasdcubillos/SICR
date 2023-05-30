@@ -7,7 +7,7 @@
 <div class="separator"></div>
 
 <div class="title-container">
-    <button  [routerLink]="['/reservar', sede.id]" class="button-secundario ">Reservar</button>
+    <button  [routerLink]="['/reservar', sede.id]" class="button-secundario "[hidden]="user==null">Reservar</button>
     <button class="carrito-button floating-button" (click)="procederCompra()">
       <img class="carrito-button btn" src="assets/img/carrito.png" alt="Carrito de compras">
     </button>

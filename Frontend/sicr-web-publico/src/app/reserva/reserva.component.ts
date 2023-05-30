@@ -24,8 +24,10 @@ export class ReservaComponent {
   horas: any;
   usuario: any;
   sedeId:any;
+  user:any={};
 
   ngOnInit() {
+    this.user = JSON.parse(localStorage.getItem('user')!);
     this.route.paramMap.subscribe(params => {
       this.sedeId = params.get('idSede');
     });

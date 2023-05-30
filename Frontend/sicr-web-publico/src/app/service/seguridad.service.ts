@@ -15,7 +15,7 @@ export class SeguridadService {
   
   login(user:any){
     return this.http
-    .post(`${this.endpoint}/IniciarSesion`,user)
+    .post(`${this.endpoint}/Seguridad/IniciarSesion`,user)
     .subscribe({
       next:(res:any)=>{
         localStorage.clear();
