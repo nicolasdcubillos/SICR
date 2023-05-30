@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import puj.sicr.dto.ReservaDTO;
+import puj.sicr.dto.ReservaVisualDTO;
 import puj.sicr.entidad.Reserva;
 import puj.sicr.entidad.SedeRestaurante;
 import puj.sicr.entidad.Usuario;
@@ -229,5 +230,22 @@ public class ReservaService {
         final SedeRestaurante sedeRestaurante = reservaDTO.getSedeRestaurante() == null ? null : sedeRestauranteRepository.findById(reservaDTO.getSedeRestaurante()).get();
         reserva.setSedeRestaurante(sedeRestaurante);
         return reserva;
+    }
+
+    public RespuestaServicioVO getBySedeId(Integer sedeId) {
+        RespuestaServicioVO respuesta = new RespuestaServicioVO();
+        try {
+            List<ReservaVisualDTO> coldatos = repository.findBySedeId(sedeId);
+            System.out.println(coldatos);
+            respuesta.setObjeto(coldatos);
+            respuesta.setExitosa(true);
+        } catch (Exception e) {
+            respuesta.setObjeto(null);
+            respuesta.setExitosa(false);
+            respuesta.setDescripcionExcepcion(e.getMessage());
+            logger.error(e.getMessage());
+        }
+        ;
+        return respuesta;
     }
 }

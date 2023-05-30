@@ -16,7 +16,7 @@ spring:
   datasource:
     url: jdbc:mysql://database-sicr.cbtbx79jvpr1.us-east-2.rds.amazonaws.com/sicr_db
     username: admin
-    password: password
+    password: password123*
     driver-class-name: com.mysql.cj.jdbc.Driver
 server:
   port: 8080

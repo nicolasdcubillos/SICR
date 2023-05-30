@@ -79,29 +79,31 @@
     </form>
 
 
-    <table class="table mt-5">
-        <thead>
-            <tr>
-            <th scope="col">Nombre</th>
-            <th scope="col">Apellido</th>
-            <th scope="col">Salario</th>
-            <th scope="col">Telefono</th>
-            <th scope="col">Editar</th>
-            <th scope="col">Eliminar</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let miembro of miembros">
-            <td>{{miembro.nombre}}</td> 
-            <td>{{miembro.apellido}}</td> 
-            <td>{{miembro.salario}}</td> 
-            <td>{{miembro.telefono}}</td> 
-            <td><i class="fa-solid fa-pen-to-square" style="color: rgb(220, 210, 37);" (click)="buscarMiembroEdit(miembro)"></i></td>
-            <td><i class="fa-solid fa-trash mr-5" style="color: rgb(255, 0, 0);" (click)="confirmarEliminarMiembro(miembro)"></i></td>
-            </tr>
-        </tbody>
+    <div *ngIf="miembros.length>0">
+        <table class="table mt-5">
+            <thead>
+                <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">Salario</th>
+                <th scope="col">Telefono</th>
+                <th scope="col">Editar</th>
+                <th scope="col">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let miembro of miembros">
+                <td>{{miembro.nombre}}</td> 
+                <td>{{miembro.apellido}}</td> 
+                <td>{{miembro.salario}}</td> 
+                <td>{{miembro.telefono}}</td> 
+                <td><i class="fa-solid fa-pen-to-square" style="color: rgb(220, 210, 37);" (click)="buscarMiembroEdit(miembro)"></i></td>
+                <td><i class="fa-solid fa-trash mr-5" style="color: rgb(255, 0, 0);" (click)="confirmarEliminarMiembro(miembro)"></i></td>
+                </tr>
+            </tbody>
         </table>
         <hr>
+    </div>
     <!-- MIEMBROS -->
     <!-- INVENTARIO -->
     <h3>Inventario</h3>
@@ -130,27 +132,29 @@
     </form>
 
 
-    <table class="table mt-5">
-        <thead>
-            <tr>
-            <th scope="col">Nombre</th>
-            <th scope="col">Cantidad</th>
-            <th scope="col">Costo Unitario</th>
-            <th scope="col">Editar</th>
-            <th scope="col">Eliminar</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let item of itemsSede">
-            <td>{{item.nombre}}</td> 
-            <td>{{item.cantidad}}</td> 
-            <td>{{item.costoUnitario}}</td> 
-            <td><i class="fa-solid fa-pen-to-square" style="color: rgb(220, 210, 37);" (click)="buscarItemSedeEdit(item)"></i></td>
-            <td><i class="fa-solid fa-trash mr-5" style="color: rgb(255, 0, 0);" (click)="confirmarEliminarItemSede(item)"></i></td>
-            </tr>
-        </tbody>
+    <div *ngIf="itemsSede.length>0">
+        <table class="table mt-5">
+            <thead>
+                <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Costo Unitario</th>
+                <th scope="col">Editar</th>
+                <th scope="col">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of itemsSede">
+                <td>{{item.nombre}}</td> 
+                <td>{{item.cantidad}}</td> 
+                <td>{{item.costoUnitario}}</td> 
+                <td><i class="fa-solid fa-pen-to-square" style="color: rgb(220, 210, 37);" (click)="buscarItemSedeEdit(item)"></i></td>
+                <td><i class="fa-solid fa-trash mr-5" style="color: rgb(255, 0, 0);" (click)="confirmarEliminarItemSede(item)"></i></td>
+                </tr>
+            </tbody>
         </table>
         <hr>
+    </div>
     <!-- INVENTARIO -->
     <!-- Transferencia de Inventario  -->
     <h3>Solicitar Inventario</h3>
@@ -176,7 +180,89 @@
             
 
     </form>
+    <hr>
     <!-- Transferencia de Inventario  -->
+    <!-- Llegada de inventario -->
+    <div *ngIf="llegadaInventario.length>0">
+        <h3>Llegada de Inventario</h3>
+        <table class="table mt-5">
+            <thead>
+                <tr>
+                <th scope="col">Sede Origen</th>
+                <th scope="col">Nombre Item</th>
+                <th scope="col">Cantidad Item</th>
+                <th scope="col">Estado Envio</th>
+                <th scope="col">Accion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let transfer of llegadaInventario">
+                    <td>{{transfer.nombreSede}}</td> 
+                    <td>{{transfer.nombreItem}}</td> 
+                    <td>{{transfer.cantidadItem}}</td> 
+                    <td>{{transfer.nombreEstado}}</td> 
+                    <td *ngIf="transfer.estadoId == 3"><strong style="color: green;">RECIBIDO</strong></td>
+                    <td *ngIf="transfer.estadoId == 2"><button type="button" class="btn btn-success mb-5" (click)="confirmarLlegadaInventario(transfer)">Confirmar Llegada</button></td>
+                    <td *ngIf="transfer.estadoId == 1"><strong style="color: rgb(128, 0, 0);">ESPERANDO ENVIO</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        <hr>
+    </div>
+    <!-- Llegada de inventario -->
+    <!-- Salida de inventario -->
+    <div *ngIf="salidaInventario.length>0">
+        <h3>Salida de Inventario</h3>
+        <table class="table mt-5">
+            <thead>
+                <tr>
+                <th scope="col">Sede Destino</th>
+                <th scope="col">Nombre Item</th>
+                <th scope="col">Cantidad Item</th>
+                <th scope="col">Estado Envio</th>
+                <th scope="col">Accion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let transfer of salidaInventario">
+                    <td>{{transfer.nombreSede}}</td> 
+                    <td>{{transfer.nombreItem}}</td> 
+                    <td>{{transfer.cantidadItem}}</td> 
+                    <td>{{transfer.nombreEstado}}</td> 
+                    <td *ngIf="transfer.estadoId == 3"><strong style="color: green;">RECIBIDO</strong></td>
+                    <td *ngIf="transfer.estadoId == 2"><strong style="color: rgb(128, 0, 0);">ESPERANDO LLEGADA</strong></td>
+                    <td *ngIf="transfer.estadoId == 1"><button type="button" class="btn btn-success mb-5" (click)="confirmarLlegadaInventario(transfer)">Confirmar Salida</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <hr>
+    </div>
+    <!-- Salida de inventario -->
+    <!-- Reservas -->
+    <div *ngIf="reservas.length>0">
+        <h3>Reservas</h3>
+        <table class="table mt-5">
+            <thead>
+                <tr>
+                <th scope="col">Usuario de Reserva</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Horas</th>
+                <th scope="col">Asientos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let reserva of reservas">
+                    <td>{{reserva.usuarioNombre}}</td> 
+                    <td>{{reserva.fecha | date:"YYYY-MM-dd HH:mm"}}</td> 
+                    <td>{{reserva.horas}} Horas</td> 
+                    <td>{{reserva.asientos}}</td> 
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <!-- Reservas -->
+
 
 
 

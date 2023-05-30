@@ -256,6 +256,21 @@ export class AdmonService {
     return this.http.post(api,solicitudInventario);
   }
 
+  solicitudesInventarioBySedeId(idSede:number,sede:boolean){
+    let api = `${this.endpoint}/TransferenciaItem/getBySedeId`;
+    let params = new HttpParams();
+    params = params.append('idSede', idSede);
+    params = params.append('sede', sede);
+    return this.http.get(api,{params: params});
+  }
+
+  actualizarEstadoTransferencia(idTransferencia:number,transferencia:any){
+    let api = `${this.endpoint}/TransferenciaItem/actualizarEstadoTransferencia`;
+    let params = new HttpParams();
+    params = params.append('id', idTransferencia);
+    return this.http.post(api,transferencia,{params: params});
+  }
+
 
   //Menu
   getMenus(){
@@ -305,6 +320,14 @@ export class AdmonService {
     let params = new HttpParams();
     params = params.append('id', menuId);
     return this.http.post(api,menu,{params: params});
+  }
+
+  //Reservas
+  getReservasBySedeId(sedeId: string){
+    let api = `${this.endpoint}/Reserva/getBySedeId`;
+    let params = new HttpParams();
+    params = params.append('id', sedeId);
+    return this.http.get(api,{params: params});
   }
 
 }

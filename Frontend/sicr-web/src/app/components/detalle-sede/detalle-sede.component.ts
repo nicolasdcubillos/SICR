@@ -27,6 +27,9 @@ export class DetalleSedeComponent implements OnInit {
   miembros: any=[];
   itemsSede:any=[];
   items:any=[];
+  llegadaInventario:any=[];
+  salidaInventario:any=[];
+  reservas:any=[];
 
   constructor(public fb: FormBuilder,private router:Router,private activatedRoute:ActivatedRoute, private admonService:AdmonService){
     this.crearMiembroForm = this.fb.group({
@@ -58,6 +61,9 @@ export class DetalleSedeComponent implements OnInit {
       this.idSedeEdit=params['id'];
       this.getMiembrosSede();
       this.getItemsSede();
+      this.getLlegadaInventario();
+      this.getSalidaInventario();
+      this.getReservas();
       this.admonService.getSedeById(params['id']).subscribe({
         next:(res:any)=>{
           this.sede=res.objeto;
@@ -67,7 +73,63 @@ export class DetalleSedeComponent implements OnInit {
     }
   }
 
+  //Reservas
+  getReservas(){
+    this.admonService.getReservasBySedeId(this.idSedeEdit).subscribe({
+      next:(res:any)=>{
+        this.reservas = res.objeto;
+      }
+    })
+  }
+
   //Inventario
+  getLlegadaInventario(){
+    this.admonService.solicitudesInventarioBySedeId(Number(this.idSedeEdit),false).subscribe({
+      next:(res:any)=>{
+        this.llegadaInventario = res.objeto;
+        console.log(this.llegadaInventario)
+      }
+    })
+  }
+  getSalidaInventario(){
+    this.admonService.solicitudesInventarioBySedeId(Number(this.idSedeEdit),true).subscribe({
+      next:(res:any)=>{
+        this.salidaInventario = res.objeto;
+        console.log(this.salidaInventario)
+      }
+    })
+  }
+
+  confirmarLlegadaInventario(transfer:any){
+    this.admonService.actualizarEstadoTransferencia(transfer.idSolicitud,transfer).subscribe({
+      next:(res:any)=>{
+        console.log(res);
+        if(res.exitosa){
+          Swal.fire({
+            title: 'Estado de la transferencia actualizado',
+            icon: 'success',
+            text:  res.descripcionRespuesta,
+            showCloseButton:true,
+            confirmButtonText:"Aceptar",
+            confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
+          })
+        }else{
+          Swal.fire({
+            title: 'Error',
+            icon: 'error',
+            text: res.descripcionExcepcion,
+            showCloseButton:true,
+            confirmButtonText:"Aceptar",
+            confirmButtonColor: "#DD6B55",
+          }).then(()=>{
+            window.location.reload();
+          })
+        }
+      }
+    })
+  }
 
   //SolicitarInventario
   solicitarInventario(){
@@ -82,11 +144,12 @@ export class DetalleSedeComponent implements OnInit {
           Swal.fire({
             title: 'Solicitud de inventario Creada',
             icon: 'success',
+            text:'La sede de '+res.objeto.nombreSedeRestaurante+' realizara el envio',
             showCloseButton:true,
             confirmButtonText:"Aceptar",
             confirmButtonColor: "#DD6B55",
           }).then(()=>{
-            // window.location.reload();
+            //window.location.reload();
           })
         }else{
           Swal.fire({
@@ -97,7 +160,7 @@ export class DetalleSedeComponent implements OnInit {
             confirmButtonText:"Aceptar",
             confirmButtonColor: "#DD6B55",
           }).then(()=>{
-            // window.location.reload();
+            window.location.reload();
           })
         }
       }
