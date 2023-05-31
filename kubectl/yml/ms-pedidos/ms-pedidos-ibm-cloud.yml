@@ -15,6 +15,7 @@ spec:
       containers:
       - name: ms-pedidos-container
         image: nicolasdcubillos/img-ms-pedidos:v1.0
+        imagePullPolicy: Always
         ports:
         - containerPort: 8082
 
