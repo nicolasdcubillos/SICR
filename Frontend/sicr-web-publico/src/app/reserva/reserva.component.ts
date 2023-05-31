@@ -24,8 +24,10 @@ export class ReservaComponent {
   horas: any;
   usuario: any;
   sedeId:any;
+  user:any={};
 
   ngOnInit() {
+    this.user = JSON.parse(localStorage.getItem('user')!);
     this.route.paramMap.subscribe(params => {
       this.sedeId = params.get('idSede');
     });
@@ -45,7 +47,7 @@ export class ReservaComponent {
       asientos: this.asientos,
       fecha: new Date(this.fecha).toISOString(), // Convierte la fecha a formato ISO
       horas: this.horas,
-      usuario: 1,
+      usuario: this.user.usuarioId,
       sedeRestaurante: this.sedeId
     };
     

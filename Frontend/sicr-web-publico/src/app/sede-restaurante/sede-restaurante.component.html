@@ -7,7 +7,7 @@
 <div class="separator"></div>
 
 <div class="title-container">
-    <button  [routerLink]="['/reservar', sede.id]" class="button-secundario ">Reservar</button>
+    <button  [routerLink]="['/reservar', sede.id]" class="button-secundario "[hidden]="user==null">Reservar</button>
     <button class="carrito-button floating-button" (click)="procederCompra()">
       <img class="carrito-button btn" src="assets/img/carrito.png" alt="Carrito de compras">
     </button>
@@ -46,7 +46,7 @@
     <ul>
       <li *ngFor="let prod of productosCarritosNombreCant"><strong>Nombre: </strong>{{prod.name}} <strong> Cantidad: </strong>{{prod.cant}}</li>
     </ul>
-    <p><strong>Subtotal: </strong>{{realizarPedidoDTO.subTotal | currency}}</p>
+    <p><strong>Subtotal: </strong>{{realizarPedidoDTO.subtotal | currency}}</p>
     <p><strong>Total: </strong>{{realizarPedidoDTO.total | currency}}</p>
     <div class="row">
       <button class="button-secundario" (click)="closeModal()">Cerrar</button>

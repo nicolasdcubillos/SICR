@@ -30,7 +30,7 @@ spring:
             - StripPrefix=1
 
         - id: route-ms-pedidos
-          uri: http://localhost:8082/
+          uri: http://169.51.206.232:30913/
           predicates:
             - Path=/ms-pedidos/**
           filters:

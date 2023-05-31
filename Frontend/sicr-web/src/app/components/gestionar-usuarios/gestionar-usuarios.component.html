@@ -23,7 +23,7 @@
                 <input type="text" class="auto_width form-control" formControlName="apellidos">
             </div>
             <div class="col-4">
-                <label class="mt-3" for="validationServer033">Usaurio</label>
+                <label class="mt-3" for="validationServer033">Usuario</label>
                 <input type="text" class="auto_width form-control" formControlName="username">
             </div> 
         </div>
@@ -43,7 +43,7 @@
         </div>
         <div class="row justify-content-center">   
             <div class="col-4" >
-                <label class="mt-3" for="validationServer033">Tipo Usaurio</label>
+                <label class="mt-3" for="validationServer033">Tipo Usuario</label>
                 <select  type="text" class="form-control " id="validationServer033" formControlName="tipoUsuario" >
                     <option></option>
                     <option *ngFor="let tipo of tipoUsuarios" value="{{tipo.id}}">{{tipo.rol}}</option>

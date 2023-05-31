@@ -103,6 +103,8 @@ export class SedeRestauranteComponent {
               }
             }
           })
+        }else{
+          this.toastr.error(res.descripcionRespuesta, 'Error')
         }
       }
     })
@@ -111,7 +113,7 @@ export class SedeRestauranteComponent {
   procederCompra(){
     if(this.productosCarritos.length>0){
       this.totalCompra = this.subTotalCompra * 1.20;
-      this.realizarPedidoDTO.subTotal = this.subTotalCompra;
+      this.realizarPedidoDTO.subtotal = this.subTotalCompra;
       this.realizarPedidoDTO.total = this.totalCompra;
       this.realizarPedidoDTO.fecha = new Date();
       this.realizarPedidoDTO.miembro  = 1;

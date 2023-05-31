@@ -7,6 +7,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 })
 export class AdmonService {
   endpoint:string= environment.API_URI.ms_admon;
+  endpointPedido:string= environment.API_URI.ms_pedidos;
   headers = new HttpHeaders().set('Content-Type', 'application/json');
 
   constructor(private http: HttpClient) { }
@@ -328,6 +329,12 @@ export class AdmonService {
     let params = new HttpParams();
     params = params.append('id', sedeId);
     return this.http.get(api,{params: params});
+  }
+
+  //Pedidos
+  realizarPedido(pedidoDTO:any){
+    let api = `${this.endpointPedido}/realizarPedido`
+    return this.http.post(api,pedidoDTO);
   }
 
 }
