@@ -29,6 +29,7 @@ spec:
       containers:
         - name: ms-pagos-container
           image: nicolasdcubillos/img-ms-pagos:v1.0
+          imagePullPolicy: Always
           ports:
             - containerPort: 8081
           resources:
