@@ -29,7 +29,7 @@ public class ItemSedeRestaurante {
     @Column(nullable = false)
     private Integer cantidad;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "itemId", nullable = false)
     @JsonIgnore
     private Item item;
