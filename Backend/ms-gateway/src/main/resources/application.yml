@@ -16,7 +16,7 @@ spring:
               - OPTIONS
       routes:
         - id: route-ms-admon
-          uri: http://localhost:8080/
+          uri: http://169.51.194.59:32235/
           predicates:
             - Path=/ms-admon/**
           filters:
@@ -44,7 +44,7 @@ spring:
             - StripPrefix=1
 
         - id: route-ms-reservas
-          uri: http://localhost:8084/
+          uri: http://169.51.195.252:30177/
           predicates:
             - Path=/ms-reservas/**
           filters:

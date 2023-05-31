@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ms-pedidos-deployment
+  name: ms-reservas-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ms-pedidos
+      app: ms-reservas
   template:
     metadata:
       labels:
-        app: ms-pedidos
+        app: ms-reservas
     spec:
       containers:
-      - name: ms-pedidos-container
-        image: nicolasdcubillos/img-ms-pedidos:v1.0
+      - name: ms-reservas-container
+        image: nicolasdcubillos/img-ms-reservas:v1.0
         imagePullPolicy: Always
         ports:
         - containerPort: 8084
@@ -23,10 +23,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ms-pedidos-service
+  name: ms-reservas-service
 spec:
   selector:
-    app: ms-pedidos
+    app: ms-reservas
   ports:
     - protocol: TCP
       port: 80
