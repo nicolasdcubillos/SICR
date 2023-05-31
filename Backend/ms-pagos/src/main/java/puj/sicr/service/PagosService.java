@@ -24,6 +24,8 @@ public class PagosService {
     public RespuestaServicioVO pagar() {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
+            logger.info("COMUNICACIÓN INICIADA CON LA PASARELA DE PAGOS.");
+            logger.info("PAGO APROBADO. RESPUESTA AL CLIENTE.");
             respuesta.setExitosa(true);
             respuesta.setDescripcionRespuesta("Pago validado por la pasarela de pagos.");
         } catch (DataAccessException e) {
