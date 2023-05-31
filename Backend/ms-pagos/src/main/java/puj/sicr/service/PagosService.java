@@ -13,20 +13,22 @@ import puj.sicr.entidad.Categoria;
 import puj.sicr.repository.CategoriaRepository;
 import puj.sicr.vo.RespuestaServicioVO;
 
+import java.net.InetAddress;
+
 @Service
 public class PagosService {
 
     Logger logger = LoggerFactory.getLogger(PagosService.class);
 
-    @Autowired
-    private CategoriaRepository repository;
-
     public RespuestaServicioVO pagar() {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
         try {
+            String ip = InetAddress.getLocalHost().getHostAddress();
+
             logger.info("COMUNICACIÓN INICIADA CON LA PASARELA DE PAGOS.");
             logger.info("PAGO APROBADO. RESPUESTA AL CLIENTE.");
             respuesta.setExitosa(true);
+            respuesta.setObjeto(ip);
             respuesta.setDescripcionRespuesta("Pago validado por la pasarela de pagos.");
         } catch (DataAccessException e) {
             respuesta.setObjeto(null);
