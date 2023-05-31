@@ -16,7 +16,7 @@ spring:
               - OPTIONS
       routes:
         - id: route-ms-admon
-          uri: http://169.51.194.59:32235/
+          uri: http://169.51.194.59:30774/
           predicates:
             - Path=/ms-admon/**
           filters:
