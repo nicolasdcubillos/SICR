@@ -44,6 +44,9 @@ public class PedidoService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
+    private ItemRepository itemRepository;
+
+    @Autowired
     private EstadoPedidoService estadoPedidoService;
 
     @Autowired
@@ -306,6 +309,7 @@ public class PedidoService {
 
     public RespuestaServicioVO realizarPedido(RealizarPedidoDTO pedidoDTO) {
         RespuestaServicioVO respuesta = new RespuestaServicioVO();
+        respuesta.setExitosa(false);
         RespuestaServicioVO respuestaSedeResaturante = sedeRestauranteService.getById(pedidoDTO.getSedeRestaurante());
         if (respuestaSedeResaturante.getExitosa()){
             SedeRestaurante sedeRestaurante = (SedeRestaurante) respuestaSedeResaturante.getObjeto();
@@ -329,33 +333,40 @@ public class PedidoService {
                 Integer j=0;
                 outerLoop:
                 for (Producto producto : productoList){
-                    List<ProductoItem> itemList = producto.getProductoProductoItems();
-                    for (int i = 0; i < itemList.size(); i++){
-                        Item item = itemList.get(i).getItem();//saco el item i de uno de los productos del pedido
-                        Integer totalItems = itemList.get(i).getCantidad() * pedidoDTO.getPedidoProductos().get(j).getPedidoProductoCantidad(); //cantidad de items total con base en la canntidad de productos
-                        if (itemSede.contains(item) && disponibilidadItems.getOrDefault(item, 0) >= totalItems){
-                            ItemSedeRestaurante itemSedeRestauranteActualizado = itemSedeRestauranteList.get(i);
-                            int cantidadActual = itemSedeRestauranteActualizado.getCantidad();
-                            int nuevaCantidad = cantidadActual - totalItems;
-                            itemSedeRestauranteActualizado.setCantidad(nuevaCantidad);
-                            RespuestaServicioVO respuestaItemSedeRestaurante = itemSedeRestauranteService.actualizarTX(itemSedeRestauranteActualizado);
-                            if (respuestaItemSedeRestaurante.getExitosa()){
-                                respuesta.setObjeto(respuestaItemSedeRestaurante.getObjeto());
-                                respuesta.setExitosa(true);
-                                respuesta.setDescripcionRespuesta("Transacción exitosa.");
+                    if (producto.getProductoProductoItems().size() > 0) {
+                        List<ProductoItem> itemList = producto.getProductoProductoItems();
+                        for (int i = 0; i < itemList.size(); i++){
+                            Item item = itemRepository.getItemByProductoItemId(itemList.get(i).getId());
+                            Integer totalItems = itemList.get(i).getCantidad() * pedidoDTO.getPedidoProductos().get(j).getPedidoProductoCantidad(); //cantidad de items total con base en la canntidad de productos
+                            if (itemSede.contains(item) && disponibilidadItems.getOrDefault(item, 0) >= totalItems){
+                                ItemSedeRestaurante itemSedeRestauranteActualizado = itemSedeRestauranteList.get(i);
+                                int cantidadActual = itemSedeRestauranteActualizado.getCantidad();
+                                int nuevaCantidad = cantidadActual - totalItems;
+                                itemSedeRestauranteActualizado.setCantidad(nuevaCantidad);
+                                RespuestaServicioVO respuestaItemSedeRestaurante = itemSedeRestauranteService.actualizarTX(itemSedeRestauranteActualizado);
+                                if (respuestaItemSedeRestaurante.getExitosa()){
+                                    respuesta.setObjeto(respuestaItemSedeRestaurante.getObjeto());
+                                    respuesta.setExitosa(true);
+                                    respuesta.setDescripcionRespuesta("Transacción exitosa.");
+                                } else {
+                                    respuesta.setObjeto(null);
+                                    respuesta.setExitosa(false);
+                                    respuesta.setDescripcionRespuesta("Error interno al actualizar el inventario del item");
+                                    break outerLoop;
+                                }
                             } else {
                                 respuesta.setObjeto(null);
                                 respuesta.setExitosa(false);
-                                respuesta.setDescripcionRespuesta("Error interno al actualizar el inventario del item");
+                                respuesta.setDescripcionRespuesta("El item " + item + " no está presente en la lista de items de la sede o no tiene disponibilidad suficiente.");
                                 break outerLoop;
                             }
-                        } else {
-                            respuesta.setObjeto(null);
-                            respuesta.setExitosa(false);
-                            respuesta.setDescripcionRespuesta("El item " + item + " no está presente en la lista de items de la sede o no tiene disponibilidad suficiente.");
-                            break outerLoop;
+                            j++;
                         }
-                        j++;
+                    } else {
+                        respuesta.setObjeto(null);
+                        respuesta.setExitosa(false);
+                        respuesta.setDescripcionRespuesta("El producto no cuenta con items asociados.");
+                        break;
                     }
                 }
                 if (respuesta.getExitosa()){
