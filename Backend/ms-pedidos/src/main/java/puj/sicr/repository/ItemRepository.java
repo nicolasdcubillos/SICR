@@ -14,4 +14,7 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Integer> {
     @Query("SELECT c FROM EstadoProducto	c ")
     List<Item> getByPage(Pageable pageable);
+
+    @Query("SELECT i FROM Item i INNER JOIN ProductoItem pi ON i.id = pi.item.id WHERE pi.id =:id ")
+    Item getItemByProductoItemId(Integer id);
 }
