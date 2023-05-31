@@ -50,4 +50,10 @@ export class HomeAdminComponent implements OnInit{
     }
   }
 
+  logout(){
+    localStorage.removeItem('sessionToken');
+    localStorage.removeItem('user');
+    this.router.navigate(['/login']);
+  }
+
 }

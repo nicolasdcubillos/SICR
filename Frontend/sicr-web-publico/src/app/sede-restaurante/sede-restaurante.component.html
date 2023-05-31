@@ -46,7 +46,7 @@
     <ul>
       <li *ngFor="let prod of productosCarritosNombreCant"><strong>Nombre: </strong>{{prod.name}} <strong> Cantidad: </strong>{{prod.cant}}</li>
     </ul>
-    <p><strong>Subtotal: </strong>{{realizarPedidoDTO.subTotal | currency}}</p>
+    <p><strong>Subtotal: </strong>{{realizarPedidoDTO.subtotal | currency}}</p>
     <p><strong>Total: </strong>{{realizarPedidoDTO.total | currency}}</p>
     <div class="row">
       <button class="button-secundario" (click)="closeModal()">Cerrar</button>

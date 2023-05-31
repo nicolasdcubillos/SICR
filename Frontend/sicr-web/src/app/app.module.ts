@@ -30,6 +30,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatSortModule} from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DetalleSedeComponent } from './components/detalle-sede/detalle-sede.component';
+import { RealizarPedidoComponent } from './components/realizar-pedido/realizar-pedido.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { DetalleSedeComponent } from './components/detalle-sede/detalle-sede.com
     HomeClienteComponent,
     GestionarItemComponent,
     GestionarProductoComponent,
-    DetalleSedeComponent
+    DetalleSedeComponent,
+    RealizarPedidoComponent
   ],
   imports: [
     BrowserModule,

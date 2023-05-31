@@ -25,7 +25,7 @@
                 </select>
             </div>
             <div class="col-4">
-                <label class="mt-2" for="validationServer033">Categoria</label>
+                <label class="mt-2" for="validationServer033">Estado Producto</label>
                 <select formControlName="estadoProducto" class="auto_width form-control">
                     <option value=""></option>
                   <option *ngFor="let estado of estadosProducto" [value]="estado.id">{{ estado.id }}</option>

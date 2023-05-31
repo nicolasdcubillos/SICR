@@ -1,0 +1,75 @@
+
+<div class="navbar">
+    <div class="logo">
+        <img src="../../../assets/images/logoSICR_SinFondo.png" width="150" height="150" alt="Logo" routerLink="/home-admin">
+    </div>
+</div>
+<main class="col-md-9 float-right col px-5 pl-md-2 pt-2 main content">
+    <button class="btn-static" (click)="logout()">LOGOUT</button>
+    <!-- <a href="#" data-target="#sidebar" data-toggle="collapse"><i class="text-dark fa fa-navicon fa-lg py-2 p-1"></i></a>-->
+    <div class="page-header">
+        <h2 class="display-4 font-weight-light">Crear  Pedido</h2>
+    </div>
+    <hr>
+    <form class="mt-4"
+    [formGroup]="crearPedidoForm" >
+        <div class="row justify-content-center">   
+            
+            <div class="col-4">
+                <label class="mt-2" for="validationServer033">Sedes de Restaurante</label>
+                <select formControlName="sedeRestaurante" class="auto_width form-control">
+                    <option value=""></option>
+                  <option *ngFor="let sede of sedes" [value]="sede.id">{{ sede.nombre }}</option>
+                </select>
+            </div>
+                    
+        </div>
+    </form>
+    <form [formGroup]="crearProductoPedidoForm">
+        <div class="row justify-content-center">       
+            <div class="col-6">
+                <table class="table mt-5">
+                    <thead>
+                        <tr>
+                            <th scope="col">Productos Actuales</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let prod of productosPedido">
+                            <td>{{prod.nombre}}</td> 
+                            <td>{{prod.precio}}</td> 
+                            <td>{{prod.cantidad}}</td> 
+                            <td><i class="fa-solid fa-trash mr-5" style="color: rgb(255, 0, 0);" (click)="confirmDeleteItemProd(prod.id)"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>    
+            <div class="col-6" >
+                <label class="mt-3" for="validationServer033"><strong>Elegir Productos del Menú</strong></label>
+                    <div class="col-6">
+                        <select formControlName="pedidoProductoId">
+                            <option value="">-- Seleccionar --</option>
+                          <option *ngFor="let option of productos" [value]="option.id">{{ option.nombre }}</option>
+                        </select>
+                    </div>
+                    <div class="col-6 mt-5">
+                        <label><strong>Cantidad</strong></label>
+                        <input formControlName="cantidad" type="number" class="auto_width form-control">
+                    </div>
+                    <button type="button" class="btn btn-success mb-5 mt-5" style="margin-left: 2%;" (click)="addSelectedProduct()" [disabled]="!crearProductoPedidoForm.valid" >Agregar</button>
+            </div>
+        </div>
+    </form>
+    <div style="text-align: center; margin-top: 2%;">
+        <p><strong>SUBTOTAL: {{subtotal}}</strong></p>
+        <p><strong>TOTAL: {{total}}</strong></p>
+    </div>
+    <div style="text-align: center; margin-top: 2%;">
+        <button type="button" class="btn btn-success mb-5" (click)="crear()" [disabled]="!crearPedidoForm.valid">Agregar</button>
+        <button type="button" class="btn btn-danger mb-5" style="margin-left: 5px;" routerLink="/home-admin">Cancelar</button>
+    </div>
+
+</main>

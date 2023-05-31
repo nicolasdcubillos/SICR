@@ -21,21 +21,33 @@ export class AuthServiceService {
     .post(`${this.endpoint}/IniciarSesion`,user)
     .subscribe({
       next:(res:any)=>{
-        localStorage.clear();
-        console.log(res);
-        localStorage.setItem('sessionToken',res.objeto.token);
-        Swal.fire({
-          title: 'Bienvenido a SICR '+res.objeto.rolNombre,
-          icon: 'success',
-          text: res.objeto.nombres +' ' + res.objeto.apellidos,
-          showCloseButton:true,
-          confirmButtonText:"Aceptar",
-          confirmButtonColor: "#DD6B55",
-        })
-        .then((result)=>{
-          if(res.objeto.rolId=='1')this.router.navigate(['/home-admin']);
-          
-        });
+        if(res.exitosa != false){
+          localStorage.clear();
+          console.log(res);
+          localStorage.setItem('sessionToken',res.objeto.token);
+          localStorage.setItem('user',JSON.stringify(res.objeto));
+          Swal.fire({
+            title: 'Bienvenido a SICR '+res.objeto.rolNombre,
+            icon: 'success',
+            text: res.objeto.nombres +' ' + res.objeto.apellidos,
+            showCloseButton:true,
+            confirmButtonText:"Aceptar",
+            confirmButtonColor: "#DD6B55",
+          })
+          .then((result)=>{
+            if(res.objeto.rolId=='1')this.router.navigate(['/home-admin']);
+            if(res.objeto.rolId=='3')this.router.navigate(['/realizar-pedido']);
+          });
+        }else{
+          Swal.fire({
+            title: 'Error en la autenticación',
+            icon: 'error',
+            text: res.descripcionRespuesta,
+            showCloseButton:true,
+            confirmButtonText:"Aceptar",
+            confirmButtonColor: "#DD6B55",
+          })
+        }
       }
     })
   }
